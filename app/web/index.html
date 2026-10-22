@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Riesgo · Analista</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l9 3.4v6.8c0 5-3.8 9.3-9 10-5.2-.7-9-5-9-10V5.4z' fill='%231f5fbf'/%3E%3Cpath d='M8 12.2l2.8 2.8L16.5 9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/static/estilos.css">
+  <script>
+    // Aplica el tema guardado antes de pintar, para que no parpadee el tema equivocado.
+    try {
+      var tema = localStorage.getItem("tema");
+      if (tema === "claro" || tema === "oscuro") document.documentElement.dataset.tema = tema;
+    } catch (e) { /* sin almacenamiento: se usa el del sistema */ }
+  </script>
+  <script type="module" src="/static/js/principal.js"></script>
+</head>
+<body>
+  <a class="saltar" href="#detalle">Saltar al detalle del caso</a>
+
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-escudo" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></symbol>
+      <symbol id="i-inicio" viewBox="0 0 24 24"><path d="M7 4.5l12 7.5-12 7.5z"/></symbol>
+      <symbol id="i-estado" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></symbol>
+      <symbol id="i-modelo" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M18.5 16.5l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></symbol>
+      <symbol id="i-herramienta" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3.5 17.5l3 3 5.8-5.8a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></symbol>
+      <symbol id="i-resultado" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></symbol>
+      <symbol id="i-alerta" viewBox="0 0 24 24"><path d="M12 3.5l9 16H3z"/><path d="M12 10v4M12 17v.01"/></symbol>
+      <symbol id="i-cambio" viewBox="0 0 24 24"><path d="M4 8h14l-3.5-3.5M20 16H6l3.5 3.5"/></symbol>
+      <symbol id="i-limite" viewBox="0 0 24 24"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8z"/><path d="M8.5 12h7"/></symbol>
+      <symbol id="i-propuesta" viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></symbol>
+      <symbol id="i-documento" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></symbol>
+      <symbol id="i-cache" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></symbol>
+      <symbol id="i-error" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></symbol>
+      <symbol id="i-fin" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></symbol>
+      <symbol id="i-texto" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+      <symbol id="i-sol" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M2.5 12h2M19.5 12h2M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol>
+      <symbol id="i-luna" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z"/></symbol>
+      <symbol id="i-ajustes" viewBox="0 0 24 24"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></symbol>
+      <symbol id="i-regenerar" viewBox="0 0 24 24"><path d="M20 11.5a8 8 0 1 1-2.4-5.7M20 4v5h-5"/></symbol>
+      <symbol id="i-enviar" viewBox="0 0 24 24"><path d="M4 12l16-8-6 16-2.5-6.5z"/></symbol>
+      <symbol id="i-buscar" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></symbol>
+      <symbol id="i-cerrar" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+      <symbol id="i-reloj" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></symbol>
+    </defs>
+  </svg>
+
+  <header class="barra">
+    <div class="marca">
+      <svg class="marca__icono" aria-hidden="true"><use href="#i-escudo"/></svg>
+      <div>
+        <p class="marca__titulo">Riesgo · Analista</p>
+        <p class="marca__sub">Casos marcados por el motor de fraude</p>
+      </div>
+    </div>
+    <ul class="sistema" id="estado-sistema" aria-label="Estado del sistema"></ul>
+    <div class="barra__acciones">
+      <button type="button" class="boton boton--fantasma" id="boton-demo" hidden>
+        <svg class="icono" aria-hidden="true"><use href="#i-ajustes"/></svg><span>Demo</span>
+      </button>
+      <button type="button" class="boton boton--fantasma boton--icono" id="boton-tema" aria-label="Cambiar tema">
+        <svg class="icono icono--sol" aria-hidden="true"><use href="#i-sol"/></svg>
+        <svg class="icono icono--luna" aria-hidden="true"><use href="#i-luna"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="banda banda--global" id="banda-global" role="alert" hidden></div>
+
+  <main class="tablero">
+    <!-- Columna 1: bandeja ---------------------------------------------------------->
+    <section class="columna columna--bandeja" aria-labelledby="titulo-bandeja">
+      <div class="bandeja__cabecera">
+        <h1 class="titulo-columna" id="titulo-bandeja">Bandeja</h1>
+        <span class="bandeja__total" id="bandeja-total" aria-live="polite"></span>
+      </div>
+      <div class="contadores" id="contadores" role="group" aria-label="Filtrar por recomendación"></div>
+      <form class="filtros" id="filtros" role="search" aria-label="Filtros de la bandeja">
+        <label class="campo campo--busqueda">
+          <span class="solo-lector">Buscar</span>
+          <svg class="icono" aria-hidden="true"><use href="#i-buscar"/></svg>
+          <input type="search" id="filtro-q" name="q" placeholder="Caso o últimos 4 de la tarjeta" autocomplete="off" maxlength="100">
+        </label>
+        <div class="filtros__fila">
+          <label class="campo campo--select"><span class="solo-lector">Fuente</span>
+            <select id="filtro-fuente" name="fuente">
+              <option value="">Todas las fuentes</option>
+              <option value="sparkov">Sparkov</option>
+              <option value="sinteticos">Sintéticos</option>
+            </select>
+          </label>
+          <label class="campo campo--select"><span class="solo-lector">Estado</span>
+            <select id="filtro-estado" name="estado">
+              <option value="">Todos los estados</option>
+              <option value="pendiente">Pendientes</option>
+              <option value="bloqueo_confirmado">Bloqueo confirmado</option>
+              <option value="escalado">Escalados</option>
+              <option value="descartado">Descartados</option>
+            </select>
+          </label>
+          <label class="campo campo--select"><span class="solo-lector">Orden</span>
+            <select id="filtro-orden" name="orden">
+              <option value="score">Mayor riesgo primero</option>
+              <option value="fecha">Más recientes primero</option>
+            </select>
+          </label>
+        </div>
+      </form>
+      <ol class="lista-casos" id="lista-casos" role="listbox" tabindex="0" aria-label="Casos marcados. Use flecha arriba y abajo para moverse."></ol>
+      <p class="atajos" aria-hidden="true"><kbd>↑</kbd> <kbd>↓</kbd> para moverse entre casos</p>
+    </section>
+
+    <!-- Columna 2: detalle ------------------------------------------------------------>
+    <section class="columna columna--detalle" id="detalle" tabindex="-1" aria-label="Detalle del caso">
+      <div class="vacio" id="detalle-vacio">
+        <svg class="vacio__icono" aria-hidden="true"><use href="#i-documento"/></svg>
+        <p class="vacio__titulo">Selecciona un caso de la bandeja</p>
+        <p class="vacio__texto">Verás qué pasó, por qué es un riesgo para ese cliente y qué se recomienda bloquear, con la evidencia que lo respalda.</p>
+      </div>
+
+      <div class="detalle" id="detalle-contenido" hidden>
+        <div class="banda" id="banda-caso" role="alert" hidden></div>
+
+        <header class="caso" id="caso-cabecera">
+          <div class="caso__fila">
+            <h2 class="caso__id" id="caso-id"></h2>
+            <span class="caso__tarjeta mono" id="caso-tarjeta"></span>
+            <span class="etiqueta" id="caso-fuente"></span>
+            <span class="estado" id="caso-estado"></span>
+          </div>
+          <div class="veredicto" id="caso-veredicto">
+            <p class="veredicto__nivel" id="caso-nivel"></p>
+            <p class="veredicto__motivo" id="caso-motivo"></p>
+          </div>
+          <dl class="datos-caso" id="caso-datos"></dl>
+        </header>
+
+        <section class="seccion seccion--explicacion" aria-labelledby="titulo-explicacion">
+          <div class="seccion__cabecera">
+            <h3 class="seccion__titulo" id="titulo-explicacion">Explicación del agente</h3>
+            <span class="origen" id="explicacion-origen" hidden></span>
+            <button type="button" class="boton boton--secundario boton--chico" id="boton-regenerar">
+              <svg class="icono" aria-hidden="true"><use href="#i-regenerar"/></svg><span>Regenerar</span>
+            </button>
+          </div>
+          <p class="estado-vivo" id="explicacion-estado" aria-live="polite"></p>
+          <div class="bloques" id="explicacion-bloques" aria-live="off">
+            <article class="bloque" data-campo="que_paso">
+              <h4 class="bloque__titulo">Qué pasó</h4>
+              <p class="bloque__texto"></p>
+            </article>
+            <article class="bloque" data-campo="por_que_es_riesgo">
+              <h4 class="bloque__titulo">Por qué es riesgo</h4>
+              <p class="bloque__texto"></p>
+              <div class="senales" id="senales-citadas" aria-label="Señales citadas"></div>
+            </article>
+            <article class="bloque bloque--recomendacion" data-campo="recomendacion">
+              <h4 class="bloque__titulo">Recomendación</h4>
+              <p class="bloque__objetivo" id="recomendacion-objetivo"></p>
+              <p class="bloque__texto"></p>
+              <p class="bloque__nota" id="recomendacion-nivel"></p>
+            </article>
+            <article class="bloque" data-campo="lo_que_no_se_sabe">
+              <h4 class="bloque__titulo">Lo que no se sabe</h4>
+              <p class="bloque__texto"></p>
+            </article>
+          </div>
+
+          <div class="propuestas" id="propuestas"></div>
+
+          <div class="decision-manual">
+            <p class="decision-manual__titulo">Decisión del analista</p>
+            <div class="decision-manual__botones">
+              <button type="button" class="boton boton--nivel" data-accion="confirmar_bloqueo">Confirmar bloqueo</button>
+              <button type="button" class="boton boton--secundario" data-accion="escalar">Escalar</button>
+              <button type="button" class="boton boton--secundario" data-accion="descartar">Descartar</button>
+            </div>
+          </div>
+          <ol class="decisiones" id="decisiones" aria-label="Decisiones registradas"></ol>
+        </section>
+
+        <section class="seccion" aria-labelledby="titulo-linea">
+          <div class="seccion__cabecera">
+            <h3 class="seccion__titulo" id="titulo-linea">Línea de tiempo</h3>
+            <p class="seccion__ayuda" id="linea-ayuda"></p>
+          </div>
+          <ol class="linea" id="linea-tiempo"></ol>
+        </section>
+
+        <section class="seccion" aria-labelledby="titulo-razones">
+          <div class="seccion__cabecera">
+            <h3 class="seccion__titulo" id="titulo-razones">Razones del sistema</h3>
+            <p class="seccion__ayuda">Rareza: qué tan inusual es frente a las transacciones normales. Peso: cuánto empujó el score.</p>
+          </div>
+          <div id="razones"></div>
+        </section>
+
+        <section class="seccion" id="perfil-seccion" aria-labelledby="titulo-perfil">
+          <div class="seccion__cabecera">
+            <h3 class="seccion__titulo" id="titulo-perfil">Perfil habitual de la tarjeta</h3>
+            <p class="seccion__ayuda">Calculado solo con transacciones anteriores al caso.</p>
+          </div>
+          <div id="perfil"></div>
+        </section>
+      </div>
+    </section>
+
+    <!-- Columna 3: traza y conversación ------------------------------------------------->
+    <aside class="columna columna--lateral" aria-label="Agente">
+      <section class="panel panel--traza" aria-labelledby="titulo-traza">
+        <div class="panel__cabecera">
+          <h2 class="titulo-columna" id="titulo-traza">Traza de la tarea</h2>
+          <span class="panel__ayuda">en vivo</span>
+        </div>
+        <div class="traza" id="traza">
+          <p class="traza__vacia">Al abrir un caso verás aquí cada paso del agente: herramientas, llamadas al modelo, reintentos y costo.</p>
+        </div>
+      </section>
+
+      <section class="panel panel--conversacion" aria-labelledby="titulo-conversacion">
+        <div class="panel__cabecera">
+          <h2 class="titulo-columna" id="titulo-conversacion">Preguntar al agente</h2>
+          <span class="panel__ayuda" id="conversacion-caso"></span>
+        </div>
+        <div class="conversacion" id="conversacion" aria-live="polite"></div>
+        <form class="pregunta" id="form-pregunta">
+          <label class="solo-lector" for="campo-pregunta">Pregunta sobre el caso abierto</label>
+          <textarea id="campo-pregunta" rows="2" maxlength="500" placeholder="Abre un caso para preguntar" disabled></textarea>
+          <button type="submit" class="boton boton--primario boton--icono" id="boton-preguntar" aria-label="Enviar pregunta" disabled>
+            <svg class="icono" aria-hidden="true"><use href="#i-enviar"/></svg>
+          </button>
+        </form>
+      </section>
+    </aside>
+  </main>
+
+  <!-- Diálogo de confirmación humana (nunca alert/confirm del navegador) -->
+  <dialog class="dialogo" id="dialogo-decision" aria-labelledby="dialogo-decision-titulo" aria-describedby="dialogo-decision-texto">
+    <form class="dialogo__cuerpo" id="form-decision" novalidate>
+      <h2 class="dialogo__titulo" id="dialogo-decision-titulo"></h2>
+      <p class="dialogo__texto" id="dialogo-decision-texto"></p>
+      <label class="campo-vertical">
+        <span>Nombre del analista</span>
+        <input type="text" id="campo-analista" maxlength="80" autocomplete="name" required>
+        <small>Queda registrado con la decisión. Se recuerda en este navegador.</small>
+      </label>
+      <label class="campo-vertical">
+        <span>Comentario <em>(opcional)</em></span>
+        <textarea id="campo-comentario" rows="3" maxlength="1000"></textarea>
+      </label>
+      <p class="dialogo__error" id="dialogo-decision-error" role="alert" hidden></p>
+      <div class="dialogo__acciones">
+        <button type="button" class="boton boton--secundario" id="dialogo-decision-cancelar">Cancelar</button>
+        <button type="submit" class="boton boton--primario" id="dialogo-decision-aceptar"></button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Panel de demo: fallas forzadas, límites y métricas en vivo -->
+  <dialog class="dialogo dialogo--ancho" id="dialogo-demo" aria-labelledby="dialogo-demo-titulo">
+    <div class="dialogo__cuerpo">
+      <div class="dialogo__encabezado">
+        <h2 class="dialogo__titulo" id="dialogo-demo-titulo">Panel de demo</h2>
+        <button type="button" class="boton boton--fantasma boton--icono" id="dialogo-demo-cerrar" aria-label="Cerrar panel de demo">
+          <svg class="icono" aria-hidden="true"><use href="#i-cerrar"/></svg>
+        </button>
+      </div>
+      <p class="dialogo__texto">Fuerza una falla en las siguientes tareas del agente para mostrar cómo se recupera. Se simula antes de llamar al proveedor, así que no gasta cuota.</p>
+      <fieldset class="opciones-falla" id="opciones-falla">
+        <legend>Falla forzada</legend>
+      </fieldset>
+      <div class="demo__columnas">
+        <section>
+          <h3 class="demo__subtitulo">Límites del agente</h3>
+          <dl class="tabla-datos" id="demo-limites"></dl>
+        </section>
+        <section>
+          <h3 class="demo__subtitulo">Métricas en vivo</h3>
+          <dl class="tabla-datos" id="demo-metricas"></dl>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="avisos" id="avisos" aria-live="polite"></div>
+</body>
+</html>

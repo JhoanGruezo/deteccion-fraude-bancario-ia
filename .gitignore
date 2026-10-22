@@ -1,0 +1,12 @@
+# Dataset de Kaggle y salidas del motor (≈500 MB): la app solo necesita semilla/.
+datos/
+# Llaves y configuración local: nunca al repositorio (la plantilla es .env.example).
+.env
+# Entornos y cachés de Python.
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+# Modelos entrenados y paquetes de entrega (se regeneran).
+*.joblib
+*.zip

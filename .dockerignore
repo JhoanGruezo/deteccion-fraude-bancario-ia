@@ -1,0 +1,20 @@
+# Lo que NO entra a la imagen de la app. La imagen solo necesita app/ y semilla/.
+
+# Datos de Kaggle y salidas del motor (cientos de MB; la app usa semilla/).
+datos/
+*.csv
+*.joblib
+
+# Llaves de API: nunca dentro de una imagen; llegan por variables de entorno.
+.env
+
+# Entornos y cachés de Python.
+.venv/
+venv/
+**/__pycache__/
+*.pyc
+.pytest_cache/
+
+# Control de versiones y herramientas del equipo.
+.git/
+.claude/

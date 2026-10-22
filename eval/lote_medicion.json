@@ -1,0 +1,25 @@
+{
+  "descripcion": "Lote de medición de la línea base (diseno/evaluacion-entrega.md): las 6 explicaciones doradas en frío, las mismas 6 desde caché, 3 preguntas libres y 4 explicaciones con fallas forzadas. Las tareas apuntan a los casos dorados por su id (D1…D6), así que el lote sigue valiendo si se vuelven a elegir los casos; la excepción son las dos ciudades de L14, copiadas de D5 (SIN-000026): si cambia D5, hay que actualizarlas. Las fallas se piden por tarea con ?falla= (no con el panel global de demo).",
+  "tareas": [
+    {"id": "L01", "tipo": "explicacion", "dorado": "D1", "regenerar": true, "falla": null, "proposito": "explicación en frío: ráfaga larga"},
+    {"id": "L02", "tipo": "explicacion", "dorado": "D2", "regenerar": true, "falla": null, "proposito": "explicación en frío: bloqueo por monto"},
+    {"id": "L03", "tipo": "explicacion", "dorado": "D3", "regenerar": true, "falla": null, "proposito": "explicación en frío: gasto en 24 h"},
+    {"id": "L04", "tipo": "explicacion", "dorado": "D4", "regenerar": true, "falla": null, "proposito": "explicación en frío: verificar con el cliente"},
+    {"id": "L05", "tipo": "explicacion", "dorado": "D5", "regenerar": true, "falla": null, "proposito": "explicación en frío: viaje imposible"},
+    {"id": "L06", "tipo": "explicacion", "dorado": "D6", "regenerar": true, "falla": null, "proposito": "explicación en frío: tarjeta sin historial"},
+    {"id": "L07", "tipo": "explicacion", "dorado": "D1", "regenerar": false, "falla": null, "proposito": "segunda apertura (caché) de L01"},
+    {"id": "L08", "tipo": "explicacion", "dorado": "D2", "regenerar": false, "falla": null, "proposito": "segunda apertura (caché) de L02"},
+    {"id": "L09", "tipo": "explicacion", "dorado": "D3", "regenerar": false, "falla": null, "proposito": "segunda apertura (caché) de L03"},
+    {"id": "L10", "tipo": "explicacion", "dorado": "D4", "regenerar": false, "falla": null, "proposito": "segunda apertura (caché) de L04"},
+    {"id": "L11", "tipo": "explicacion", "dorado": "D5", "regenerar": false, "falla": null, "proposito": "segunda apertura (caché) de L05"},
+    {"id": "L12", "tipo": "explicacion", "dorado": "D6", "regenerar": false, "falla": null, "proposito": "segunda apertura (caché) de L06"},
+    {"id": "L13", "tipo": "pregunta", "dorado": "D1", "falla": null, "pregunta": "¿Cuál fue la compra más rara del caso y por qué?", "proposito": "pregunta libre: la tarea 2 de la prueba del compañero"},
+    {"id": "L14", "tipo": "pregunta", "dorado": "D5", "falla": null, "pregunta": "¿En qué ciudades operó la cuenta y cuánto tiempo pasó entre la última compra en una y la primera en la otra?", "proposito": "pregunta libre: el viaje imposible narrado por el agente",
+     "esperado": {"hechos": [{"enunciado": "nombra la ciudad de la compra imposible (Cali)", "debe_contener_alguno": ["Cali"]}, {"enunciado": "nombra la ciudad de la compra anterior (Barranquilla)", "debe_contener_alguno": ["Barranquilla"]}]}},
+    {"id": "L15", "tipo": "pregunta", "dorado": "D4", "falla": null, "pregunta": "¿Por qué este caso es solo de verificación con el cliente y no de bloqueo?", "proposito": "pregunta libre: el agente explica la regla sin cambiarla"},
+    {"id": "L16", "tipo": "explicacion", "dorado": "D2", "regenerar": true, "falla": "429", "proposito": "falla forzada 429 en el principal: backoff y conmutación al respaldo"},
+    {"id": "L17", "tipo": "explicacion", "dorado": "D3", "regenerar": true, "falla": "timeout", "proposito": "falla forzada timeout en el principal: reintentos y conmutación"},
+    {"id": "L18", "tipo": "explicacion", "dorado": "D4", "regenerar": true, "falla": "json", "proposito": "falla forzada JSON roto: reparación o reintento del contrato"},
+    {"id": "L19", "tipo": "explicacion", "dorado": "D6", "regenerar": true, "falla": "todo", "proposito": "caída total de proveedores: degradación a la plantilla"}
+  ]
+}

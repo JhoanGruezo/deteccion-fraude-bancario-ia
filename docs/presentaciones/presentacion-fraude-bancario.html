@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detección de Fraude Bancario — Pitch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&family=Public+Sans:wght@300..800&display=swap">
+<style>
+  * { margin:0; box-sizing:border-box }
+  html, body { height:100% }
+  body { background:#0A1420; overflow:hidden; font-family:'Public Sans', Verdana, sans-serif }
+  .stage { position:fixed; inset:0; overflow:hidden }
+  .deck { width:1920px; height:1080px; position:absolute; left:0; top:0; transform-origin:top left; box-shadow:0 20px 80px rgba(0,0,0,0.5) }
+  .deck section { position:absolute; inset:0; width:1920px; height:1080px }
+  .deck section:not(.activa) { display:none !important }
+  ul { padding-left:44px }
+  table { border-collapse:collapse; width:100% }
+  th, td { padding:14px 24px; text-align:left; vertical-align:top; border-bottom:1px solid #E2E4DC }
+  tr:last-child td { border-bottom:none }
+  .hud { position:fixed; right:18px; bottom:14px; color:#8FA1B8; font:600 14px 'Public Sans', Verdana, sans-serif; z-index:10; user-select:none }
+  .ayuda { position:fixed; left:18px; bottom:14px; color:#51627A; font:400 13px 'Public Sans', Verdana, sans-serif; z-index:10; user-select:none }
+  @media print {
+    body { background:#ffffff; overflow:visible }
+    .stage { position:static; display:block }
+    .deck { width:1920px; height:auto; transform:none !important; box-shadow:none }
+    .deck section { position:relative; inset:auto; display:flex !important; page-break-after:always; break-after:page }
+    .hud, .ayuda { display:none }
+  }
+  @page { size:1920px 1080px; margin:0 }
+</style>
+</head>
+<body>
+<div class="stage">
+<div class="deck" id="deck">
+
+<section id="cover" style="background:linear-gradient(135deg,#0F1E31 0%,#16293F 60%,#1B3350 100%);color:#F3F4EF;font-family:'Public Sans', Verdana, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between">
+<p style="font-size:28px;letter-spacing:4px;text-transform:uppercase;color:#E8A33D;font-weight:600">Ingeniería de Aplicaciones con IA · Pitch del proyecto</p>
+<div style="display:flex;flex-direction:column;gap:40px">
+<h1 style="font-family:'Domine', Georgia, serif;font-size:112px;font-weight:700;line-height:1.08">Detección de fraude bancario</h1>
+<p style="font-size:40px;line-height:1.35;color:#BFCBDC">Un detector que aprende el «normal» de cada cuenta — con IA solo donde de verdad hace falta.</p>
+</div>
+<div style="display:flex;justify-content:space-between">
+<p style="font-size:28px;font-weight:600">Jhoan David Gruezo Gutiérrez · Jeison Nazarit Gomez</p>
+<p style="font-size:28px;color:#8FA1B8">Octubre de 2026</p>
+</div>
+</section>
+
+<section id="problema" style="background:#F8F8F4;color:#16293F;font-family:'Public Sans', Verdana, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;letter-spacing:3px;text-transform:uppercase;color:#B4731F;font-weight:700">El problema</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">Dos errores, una misma causa</h2>
+</div>
+<div style="display:flex;gap:40px;flex:1">
+<div style="flex:1;display:flex;flex-direction:column;gap:24px;background:#FFFFFF;border:1px solid #E2E4DC;border-radius:20px;padding:48px">
+<p style="align-self:flex-start;background:#F4E3C8;color:#7A4E12;font-size:24px;font-weight:700;padding:8px 24px;border-radius:999px">Falso positivo</p>
+<h3 style="font-size:38px;font-weight:600">El cliente honesto, bloqueado</h3>
+<p style="font-size:30px;line-height:1.45;color:#49566B">Fin de mes: paga el arriendo — un monto alto, como todos los meses — y el banco le congela la tarjeta por «actividad sospechosa».</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px;background:#FFFFFF;border:1px solid #E2E4DC;border-radius:20px;padding:48px">
+<p style="align-self:flex-start;background:#DCE4EE;color:#2C4A70;font-size:24px;font-weight:700;padding:8px 24px;border-radius:999px">Falso negativo</p>
+<h3 style="font-size:38px;font-weight:600">El fraude real, invisible</h3>
+<p style="font-size:30px;line-height:1.45;color:#49566B">Tarjeta clonada: el ladrón compra a horas normales y con montos discretos. Ninguna alarma suena.</p>
+</div>
+</div>
+<p style="font-size:38px;font-weight:600;line-height:1.3">La causa es la misma: <span style="color:#B4731F">reglas fijas, iguales para todos los clientes.</span></p>
+</section>
+
+<section id="que-hace" style="background:#F8F8F4;color:#16293F;font-family:'Public Sans', Verdana, sans-serif;padding:128px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;letter-spacing:3px;text-transform:uppercase;color:#B4731F;font-weight:700">La aplicación</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">Qué hace</h2>
+</div>
+<div style="display:flex;gap:36px;flex:1">
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FFFFFF;border:1px solid #E2E4DC;border-radius:20px;padding:44px">
+<p style="align-self:flex-start;background:#16293F;color:#F3F4EF;font-size:24px;font-weight:700;padding:8px 24px;border-radius:999px">ML clásico</p>
+<h3 style="font-size:34px;font-weight:600;line-height:1.2">Puntaje de riesgo por cuenta</h3>
+<p style="font-size:28px;line-height:1.45;color:#49566B">Compara cada transacción contra el perfil histórico de esa cuenta: su monto, sus horarios, sus ubicaciones — no un umbral global.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FFFFFF;border:1px solid #E2E4DC;border-radius:20px;padding:44px">
+<p style="align-self:flex-start;background:#E7EAE1;color:#3C4A3E;font-size:24px;font-weight:700;padding:8px 24px;border-radius:999px">Código determinista</p>
+<h3 style="font-size:34px;font-weight:600;line-height:1.2">Detector de viaje imposible</h3>
+<p style="font-size:28px;line-height:1.45;color:#49566B">Dos compras de la misma cuenta, a una distancia que no se puede recorrer en el tiempo transcurrido entre ambas.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FFFFFF;border:1px solid #E2E4DC;border-radius:20px;padding:44px">
+<p style="align-self:flex-start;background:#F4E3C8;color:#7A4E12;font-size:24px;font-weight:700;padding:8px 24px;border-radius:999px">LLM</p>
+<h3 style="font-size:34px;font-weight:600;line-height:1.2">Consultas en lenguaje natural</h3>
+<p style="font-size:28px;line-height:1.45;color:#49566B">El analista pregunta en español: «sospechosas de esta semana en Medellín mayores a 3 millones».</p>
+</div>
+</div>
+<p style="font-size:36px;font-weight:600;line-height:1.3">El sistema marca y explica. <span style="color:#B4731F">Bloquear la cuenta lo decide siempre un humano.</span></p>
+</section>
+
+<section id="por-que-ia" style="background:#101F33;color:#F3F4EF;font-family:'Public Sans', Verdana, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;letter-spacing:3px;text-transform:uppercase;color:#E8A33D;font-weight:700">La prueba de necesidad</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:68px;font-weight:700;line-height:1.1">Nuestra primera versión no necesitaba IA</h2>
+</div>
+<p style="font-size:30px;line-height:1.4;color:#BFCBDC">Tres reglas de umbral — monto alto, madrugada, ubicación rara — probadas sobre 16.000 transacciones sintéticas con 1,8% de fraude:</p>
+<div style="display:flex;gap:40px;flex:1">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#182B44;border:1px solid #26405F;border-radius:20px;padding:48px">
+<p style="font-size:26px;font-weight:700;color:#BFCBDC;letter-spacing:2px;text-transform:uppercase">Regla de umbral fijo</p>
+<p style="font-family:'Domine', Georgia, serif;font-size:108px;font-weight:700;line-height:1">22,7%</p>
+<p style="font-size:28px;line-height:1.4;color:#BFCBDC">de precisión. Atrapa todo el fraude, pero 8 de cada 10 alertas son clientes honestos.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#182B44;border:1px solid #E8A33D;border-radius:20px;padding:48px">
+<p style="font-size:26px;font-weight:700;color:#E8A33D;letter-spacing:2px;text-transform:uppercase">Random Forest por cuenta</p>
+<p style="font-family:'Domine', Georgia, serif;font-size:108px;font-weight:700;line-height:1;color:#E8A33D">97,7%</p>
+<p style="font-size:28px;line-height:1.4;color:#BFCBDC">de precisión, con recall de 98,8%. AUC-PR de 0,998 contra 0,227 de la regla.</p>
+</div>
+</div>
+<p style="font-size:32px;font-weight:600;line-height:1.35">No existe una «hora sospechosa» universal: el patrón normal es distinto por cuenta y cambia con el tiempo. <span style="color:#E8A33D">Reglas infinitas — eso sí es un problema de modelo.</span></p>
+</section>
+
+<section id="donde-ia" style="background:#F8F8F4;color:#16293F;font-family:'Public Sans', Verdana, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;letter-spacing:3px;text-transform:uppercase;color:#B4731F;font-weight:700">Ser consecuentes</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">IA solo donde hace falta</h2>
+</div>
+<table style="font-size:28px;color:#16293F;background:#FFFFFF;border:1px solid #E2E4DC;border-radius:12px">
+<tr style="background:#16293F"><th style="width:26%;color:#F3F4EF;text-align:left;padding:18px 24px">Componente</th><th style="width:24%;color:#F3F4EF;text-align:left">¿Lleva modelo?</th><th style="width:50%;color:#F3F4EF;text-align:left">Por qué</th></tr>
+<tr><td><b>Puntaje de riesgo</b></td><td>Sí — ML clásico</td><td>Una regla por cuenta, que cambia sola: imposible mantenerla a mano</td></tr>
+<tr style="background:#FBFAF6"><td><b>Consultas del analista</b></td><td>Sí — LLM</td><td>Lenguaje abierto: las preguntas posibles no se pueden enumerar</td></tr>
+<tr><td><b>Viaje imposible</b></td><td>No — fórmula exacta</td><td>Distancia contra tiempo (Haversine): 100% de precisión, sin ambigüedad que aprender</td></tr>
+<tr style="background:#FBFAF6"><td><b>Bloqueo de la cuenta</b></td><td>No — humano</td><td>Error de costo alto e irreversible: lo decide un analista, no el modelo</td></tr>
+</table>
+<p style="font-size:34px;font-weight:600;line-height:1.3">Dos piezas llevan IA, <span style="color:#B4731F">cada una por una razón distinta</span> — no es meterle IA a todo el sistema.</p>
+</section>
+
+<section id="alcance" style="background:#F1F2EB;color:#16293F;font-family:'Public Sans', Verdana, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;letter-spacing:3px;text-transform:uppercase;color:#B4731F;font-weight:700">Las siguientes dos entregas</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">Alcance</h2>
+</div>
+<div style="display:flex;gap:40px;flex:1">
+<div style="flex:3;display:flex;flex-direction:column;gap:24px;background:#FFFFFF;border:1px solid #E2E4DC;border-radius:20px;padding:48px">
+<h3 style="font-size:34px;font-weight:600">Primera entrega</h3>
+<ul style="font-size:28px;line-height:1.55;color:#49566B">
+<li>Validar el motor con un dataset de fraude real (PaySim)</li>
+<li>Persistir los casos marcados en una base de datos</li>
+<li>Agente con herramientas propias y límites de seguridad</li>
+<li>Interfaz de consultas en lenguaje natural, usable por alguien ajeno al equipo</li>
+</ul>
+</div>
+<div style="flex:2;display:flex;flex-direction:column;gap:24px;background:#FFFFFF;border:1px solid #E2E4DC;border-radius:20px;padding:48px">
+<h3 style="font-size:34px;font-weight:600">Segunda entrega</h3>
+<ul style="font-size:28px;line-height:1.55;color:#49566B">
+<li>Evaluación medida: suite de casos y costo por pregunta</li>
+<li>Seguridad y endurecimiento del sistema</li>
+</ul>
+<div style="flex:1"></div>
+<p style="font-size:26px;line-height:1.45;color:#49566B;background:#F4E3C8;border-radius:12px;padding:24px"><b>Fuera de alcance:</b> lavado de activos, identidad sintética y bloqueo automático de cuentas.</p>
+</div>
+</div>
+</section>
+
+<section id="limitaciones" style="background:#F8F8F4;color:#16293F;font-family:'Public Sans', Verdana, sans-serif;padding:128px;display:flex;flex-direction:column;gap:44px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;letter-spacing:3px;text-transform:uppercase;color:#B4731F;font-weight:700">Honestidad primero</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">Limitaciones que ya conocemos</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:32px;flex:1">
+<div style="display:flex;flex-direction:column;gap:14px;background:#FFFFFF;border:1px solid #E2E4DC;border-radius:20px;padding:40px">
+<h3 style="font-size:30px;font-weight:600">Resultados sobre datos sintéticos</h3>
+<p style="font-size:26px;line-height:1.45;color:#49566B">El modelo conoce la lógica con la que generamos el fraude: lo de hoy prueba el pipeline, no el detector. La validación real es lo primero de la entrega.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#FFFFFF;border:1px solid #E2E4DC;border-radius:20px;padding:40px">
+<h3 style="font-size:30px;font-weight:600">Sin datos reales de un banco</h3>
+<p style="font-size:26px;line-height:1.45;color:#49566B">Se sustituyen con un dataset público etiquetado (PaySim o Kaggle), documentando la diferencia con un core bancario real.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#FFFFFF;border:1px solid #E2E4DC;border-radius:20px;padding:40px">
+<h3 style="font-size:30px;font-weight:600">Dos tipos de fraude, no todos</h3>
+<p style="font-size:26px;line-height:1.45;color:#49566B">Lavado de activos e identidad sintética quedan fuera: exigen historiales y grafos de transferencias que no tenemos.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;background:#FFFFFF;border:1px solid #E2E4DC;border-radius:20px;padding:40px">
+<h3 style="font-size:30px;font-weight:600">Decisiones aún abiertas</h3>
+<p style="font-size:26px;line-height:1.45;color:#49566B">El LLM de la interfaz de consultas no está elegido todavía: se decide en la fase de diseño de ese componente, con criterios de costo y latencia.</p>
+</div>
+</div>
+<p style="font-size:32px;font-weight:600;line-height:1.3">El bloqueo automático no es una limitación: <span style="color:#B4731F">es una decisión de diseño.</span></p>
+</section>
+
+<section id="cierre" style="background:linear-gradient(135deg,#0F1E31 0%,#16293F 60%,#1B3350 100%);color:#F3F4EF;font-family:'Public Sans', Verdana, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:48px">
+<h2 style="font-family:'Domine', Georgia, serif;font-size:84px;font-weight:700;line-height:1.15;text-align:center">Aprender el «normal» de cada cuenta<br>no se puede programar a mano.</h2>
+<p style="font-size:44px;font-weight:600;color:#E8A33D;text-align:center">Donde sí se puede, lo programamos.</p>
+<p style="font-size:26px;color:#8FA1B8;text-align:center">Jhoan David Gruezo Gutiérrez · Jeison Nazarit Gomez — Detección de fraude bancario</p>
+</section>
+
+</div>
+</div>
+<div class="hud" id="hud"></div>
+<div class="ayuda">← → navegar · F pantalla completa</div>
+<script>
+  var deck = document.getElementById('deck');
+  var hud = document.getElementById('hud');
+  var slides = Array.prototype.slice.call(deck.querySelectorAll('section'));
+  var i = 0;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, k) { s.classList.toggle('activa', k === i); });
+    hud.textContent = (i + 1) + ' / ' + slides.length;
+  }
+  function fit() {
+    var s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    var x = (window.innerWidth - 1920 * s) / 2;
+    var y = (window.innerHeight - 1080 * s) / 2;
+    deck.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+  window.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { show(i + 1); e.preventDefault(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { show(i - 1); e.preventDefault(); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key === 'f' || e.key === 'F') {
+      if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+    }
+  });
+  window.addEventListener('click', function (e) {
+    if (e.clientX > window.innerWidth / 2) show(i + 1); else show(i - 1);
+  });
+  fit();
+  show(0);
+</script>
+</body>
+</html>
