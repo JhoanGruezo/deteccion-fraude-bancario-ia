@@ -255,6 +255,7 @@ La bitácora completa, sesión por sesión, está en [`decisiones.md`](../decisi
 | Ver los resultados en gráficas | [sección 12](#12-resultados-en-gráficas) |
 | Ver qué falta y el plan del Momento 3 | [`pendientes-y-momento3.md`](pendientes-y-momento3.md) |
 | Verificar la app paso a paso | [`prueba-companero-jeison.txt`](prueba-companero-jeison.txt) |
+| Prepararse para explicar el código | [`guia-de-estudio.md`](guia-de-estudio.md) |
 
 ## 11. Estado y lo que sigue
 

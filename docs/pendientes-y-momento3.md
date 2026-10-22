@@ -20,7 +20,7 @@ Fuentes: rúbrica del Momento 3 y retos de las semanas 12 y 13 del sitio del cur
 | 4 | Corregir lo que salga de 2 y 3, volver a correr la suite y el lote, y actualizar las cifras | Equipo | `eval/resultados/`, `docs/decisiones.md` §9 | [ ] |
 | 5 | Arrancar la app desde el ZIP en la máquina de Jeison (prueba de reproducibilidad) | Jeison | `docs/verificacion-jeison.md` | [ ] |
 | 6 | Confirmar las tarifas de Claude Haiku 5.5 y Gemini 3.1 Flash-Lite en las páginas oficiales (hoy vienen de agregadores) | Jhoan | `app/config.py`, README §3 | [ ] |
-| 7 | Guía de estudio del código repartida por integrante: cada uno debe poder explicar cualquier función que señale el profesor | Ambos | `docs/guia-de-estudio.md` | [ ] |
+| 7 | Estudiar el código con la guía (escrita el 2026-10-21) hasta responder la autoevaluación sin mirar: cada uno debe poder explicar cualquier función que señale el profesor | Ambos | `docs/guia-de-estudio.md` | [ ] |
 | 8 | Guion de la demo de 6 minutos + 3 de preguntas, ensayado con reloj, con plan B (explicaciones en caché y video de respaldo) | Ambos | `docs/presentaciones/` | [ ] |
 | 9 | Regenerar el ZIP final con `python scripts/empaquetar_entrega.py` después de los últimos cambios y subirlo | Jhoan | buzón del curso | [ ] |
 | 10 | Agregar a Jeison como colaborador del repositorio | Jhoan | GitHub | [ ] |
