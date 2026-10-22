@@ -462,3 +462,8 @@ Sesión disparada por un nuevo comentario de Julián (detalle en `decisiones.md`
 - [ ] Verificar las tarifas en las páginas oficiales de Anthropic y Google.
 - [ ] Guía de estudio del código por integrante y ensayo de la demo de 6 min con reloj.
 - [ ] (Opcional) adaptador FastMCP sobre `app/agente/herramientas.py`.
+
+> **Desde el 2026-10-21 la lista viva de pendientes y el alcance del Momento 3 están en
+> [`docs/pendientes-y-momento3.md`](docs/pendientes-y-momento3.md).** Las próximas
+> sesiones de `planear-fraude` deben partir de ese documento y actualizarlo.
+

@@ -253,6 +253,8 @@ La bitácora completa, sesión por sesión, está en [`decisiones.md`](../decisi
 | Ver el pitch del 9 de octubre | [`docs/presentaciones/`](presentaciones) |
 | Conocer las convenciones de código | [`CLAUDE.md`](../CLAUDE.md) |
 | Ver los resultados en gráficas | [sección 12](#12-resultados-en-gráficas) |
+| Ver qué falta y el plan del Momento 3 | [`pendientes-y-momento3.md`](pendientes-y-momento3.md) |
+| Verificar la app paso a paso | [`prueba-companero-jeison.txt`](prueba-companero-jeison.txt) |
 
 ## 11. Estado y lo que sigue
 
@@ -260,9 +262,8 @@ La bitácora completa, sesión por sesión, está en [`decisiones.md`](../decisi
 límites, cascada de proveedores, fallas forzables, suite y lote de medición, ZIP de
 entrega.
 
-**Pendiente del equipo:** verificar a mano los casos dorados
-(`eval/casos_dorados.json`, campo `verificado_por`), la prueba del compañero
-(`docs/decisiones.md` §10) y confirmar las tarifas en las páginas oficiales.
+**Pendiente del equipo:** la lista completa, con responsables, está en
+[`pendientes-y-momento3.md`](pendientes-y-momento3.md).
 
 **Momento 3** (seguridad y gobernanza): modelo de amenazas y ataque propio sobre el
 agente (`docs/seguridad.md`), ficha de gobernanza (`docs/gobernanza.md`), respuesta a la

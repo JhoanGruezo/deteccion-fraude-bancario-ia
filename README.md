@@ -23,6 +23,8 @@ línea base medida están en [`docs/decisiones.md`](docs/decisiones.md).
 | [Evaluación](eval/) | Casos dorados, lote de medición y resultados con fecha |
 | [Bitácora](decisiones.md) y [plan por sesiones](plan-construccion.md) | La historia completa de decisiones, sesión por sesión |
 | [Presentaciones](docs/presentaciones/) | Pitch del 9 de octubre y guiones |
+| [Pendientes y Momento 3](docs/pendientes-y-momento3.md) | Qué falta antes del 31 de octubre, el alcance del Momento 3 y el backlog de mejoras |
+| [Lista de verificación de la app](docs/prueba-companero-jeison.txt) | Pruebas paso a paso para verificar la app e informar qué está bien, mal o mejorable |
 
 **Cifras clave** (2026-10-21):
 
