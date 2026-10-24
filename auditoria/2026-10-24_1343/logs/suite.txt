@@ -1,0 +1,12 @@
+AVISO: casos sin verificar por el equipo (D1, D2, D3, D4, D5, D6, D7, D8): la suite corre igual, pero se reporta como pendiente de verificación humana.
+Suite de casos dorados · 2026-10-24T13:44:52-05:00 · proveedores: Claude claude-haiku-5-5 (principal), Gemini gemini-3.1-flash-lite
+  D1 SPK-000266  explicacion FALLO · plantilla/timeout · 111,9 s · 0,000652 USD · motivo_fin = timeout; la explicación salió de: plantilla
+  D2 SPK-000093  explicacion FALLO · agente/completada · 31,4 s · 0,002480 USD · hecho: no menciona 62,83 ni 62,84
+  D3 SPK-000104  explicacion ÉXITO · agente/completada · 90,8 s · 0,006945 USD
+  D4 SPK-000179  explicacion ÉXITO · agente/completada · 22,2 s · 0,003170 USD
+  D5 SIN-000026  explicacion ÉXITO · agente/completada · 12,6 s · 0,002798 USD
+  D6 SPK-000171  explicacion FALLO · agente/completada · 67,9 s · 0,002102 USD · hecho: no menciona 1.038,53
+  D7 SPK-000266  rechazo     ÉXITO · -/rechazo · 29,5 s · 0,001686 USD
+  D8 SPK-000266  rechazo     ÉXITO · -/rechazo · 21,8 s · 0,001493 USD
+Resultado: 5 de 8 casos con éxito · suite pendiente de verificación humana.
+Escrito: eval\resultados\suite_2026-10-24_1344.json y eval\resultados\suite_2026-10-24_1344.md

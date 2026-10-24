@@ -1,0 +1,23 @@
+Client:
+ Version:    29.9.2
+ Context:    desktop-linux
+ Debug Mode: false
+ Plugins:
+  agent: Docker AI Agent Runner (Docker Inc.)
+    Version:  v1.149.0
+    Path:     C:\Program Files\Docker\cli-plugins\docker-agent.exe
+  ai: Docker AI Agent - Ask Gordon (Docker Inc.)
+    Version:  v1.31.0
+    Path:     C:\Program Files\Docker\cli-plugins\docker-ai.exe
+  buildx: Docker Buildx (Docker Inc.)
+    Version:  v0.38.1
+    Path:     C:\Program Files\Docker\cli-plugins\docker-buildx.exe
+  compose: Docker Compose (Docker Inc.)
+NAME                             IMAGE                          COMMAND                  SERVICE   CREATED              STATUS                        PORTS
+proyecto-fraude-bancario-app-1   proyecto-fraude-bancario-app   "uvicorn app.princip…"   app       About a minute ago   Up About a minute             0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+proyecto-fraude-bancario-db-1    postgres:16-alpine             "docker-entrypoint.s…"   db        About a minute ago   Up About a minute (healthy)   5432/tcp
+{"estado":"ok","base":{"disponible":true,"casos_cargados":339,"mensaje":null},"proveedores":[{"nombre":"claude","principal":true,"etiqueta":"Claude","modelo":"claude-haiku-5-5","con_llave":true},{"nombre":"gemini","principal":false,"etiqueta":"Gemini","modelo":"gemini-3.1-flash-lite","con_llave":true}],"modo_plantilla":false,"falla_forzada":"","panel_demo":true}
+HTTP 200
+ANTHROPIC_API_KEY: si
+GEMINI_API_KEY: si
+GOOGLE_API_KEY: no

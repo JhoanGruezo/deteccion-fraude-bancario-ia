@@ -1,0 +1,19 @@
+<section id="respaldo-preguntas" data-transition="fade" style="background:#EEEFE9;color:#16293F;font-family:'Public Sans', Verdana, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;letter-spacing:3px;text-transform:uppercase;color:#8F5A14;font-weight:700">Respaldo · preguntas probables</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:64px;font-weight:700;line-height:1.1">Respuesta corta y dónde mostrarla</h2>
+</div>
+<table style="font-size:24px;color:#16293F">
+<tr style="background:#16293F"><th style="width:28%;color:#F3F4EF;padding:12px 20px">Pregunta</th><th style="width:44%;color:#F3F4EF">Respuesta</th><th style="width:28%;color:#F3F4EF">Dónde</th></tr>
+<tr><td>¿Qué pasa si una herramienta falla?</td><td style="color:#49566B">Pasados 5 s o con un error, el resultado vuelve al modelo como dato y la traza lo marca; la tarea no se cae</td><td>pytest app/pruebas/test_bucle.py -k herramienta</td></tr>
+<tr><td>¿Cuántas iteraciones y por qué?</td><td style="color:#49566B">Seis: un caso toma 2 o 3 y cabe un reintento completo del contrato</td><td>Panel Demo, límites del agente</td></tr>
+<tr><td>¿Cuánto cuesta una pregunta?</td><td style="color:#49566B">0,0015 USD de mediana: tokens reales de cada tarea por la tarifa de lista</td><td>Traza de la tarea: tokens y costo</td></tr>
+<tr><td>¿Y con un modelo más barato?</td><td style="color:#49566B">Haiku 5.5 ya es el más barato que probamos; el respaldo Flash-Lite también cumple el contrato</td><td>docs/decisiones.md §4</td></tr>
+<tr><td>Muéstrenme un caso que falló</td><td style="color:#49566B">D1, la ráfaga de 12 compras: dos contratos inválidos y plantilla en la primera medición</td><td>eval/resultados/ lote del 21-oct 21:32</td></tr>
+</table>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between">
+<p style="font-size:24px;color:#5A667A">Si señalan una función al azar: docs/guia-de-estudio.md tiene el recorrido por archivo</p>
+<p style="font-size:24px;color:#5A667A">14</p>
+</div>
+<aside>RESPALDO. No se proyecta; es la chuleta para la ronda de 3 minutos. Reparto: preguntas del agente, la app y las fallas → Jhoan; datos, motor, medición y costo → Jeison. Regla de oro: respuesta directa primero, luego mostrarla. Si no saben algo, decir «no lo medimos» antes que inventar. La tarifa de los modelos viene de agregadores: confirmarla en las páginas oficiales antes del 31.</aside>
+</section>

@@ -1,0 +1,16 @@
+# Recalculo de cifras del lote_2026-10-21_2158.json (stdlib)
+tareas 19 exitos 18 tasa 0.9473684210526315
+no cache n= 13 ['L01', 'L02', 'L03', 'L04', 'L05', 'L06', 'L13', 'L14', 'L15', 'L16', 'L17', 'L18', 'L19']
+no cache sin fallas n= 9 ['L01', 'L02', 'L03', 'L04', 'L05', 'L06', 'L13', 'L14', 'L15']
+costo mediana 0.001481 sin fallas 0.001421 total 0.022201
+lat mediana 5764 p90 lineal 17106.4 p90 nearest 17866
+lat sin fallas mediana 4592
+lat todas (incl cache) mediana 4392
+ttft n 12 mediana 795.5
+fallos 4 recuperadas 4 [('L16', True), ('L17', True), ('L18', True), ('L19', True)]
+cache-served ['L07', 'L08', 'L09', 'L10', 'L11', 'L12']
+explicaciones validas 16 origenes [('L19', 'plantilla')]
+
+# Tokens por tarea (mediana, sin cache) segun el lote: ver lote 2158 y 2132
+eval/resultados/lote_2026-10-21_2158.json mediana tokens no cache 11059 todas 9620
+eval/resultados/lote_2026-10-21_2132.json mediana tokens no cache 10710 todas 8227

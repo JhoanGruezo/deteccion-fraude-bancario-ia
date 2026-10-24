@@ -1,0 +1,22 @@
+Lote de medición · 2026-10-24T13:51:28-05:00 · 19 tareas · proveedores: Claude claude-haiku-5-5 (principal), Gemini gemini-3.1-flash-lite
+  L01 D1 explicacion ÉXITO · agente/completada · 32,9 s · 0,002933 USD · gemini · real: 1 reintento(s), conmutación de proveedor → recuperada
+  L02 D2 explicacion ÉXITO · agente/completada · 43,6 s · 0,002561 USD · gemini · real: 1 reintento(s), conmutación de proveedor → recuperada
+  L03 D3 explicacion ÉXITO · agente/completada · 4,9 s · 0,003062 USD · gemini · real: conmutación de proveedor → recuperada
+  L04 D4 explicacion fallo · plantilla/timeout · 123,1 s · 0,000946 USD · gemini · real: 3 reintento(s), conmutación de proveedor, motivo_fin timeout → recuperada · motivo_fin = timeout; la explicación salió de: plantilla
+  L05 D5 explicacion ÉXITO · agente/completada · 27,4 s · 0,002008 USD · gemini · real: conmutación de proveedor → recuperada
+  L06 D6 explicacion fallo · agente/completada · 57,1 s · 0,002822 USD · gemini · real: 2 reintento(s), conmutación de proveedor → recuperada · hecho: no menciona 1.038,53
+  L07 D1 explicacion ÉXITO · cache/completada · 39 ms · 0,000000 USD · -
+  L08 D2 explicacion ÉXITO · cache/completada · 33 ms · 0,000000 USD · -
+  L09 D3 explicacion ÉXITO · cache/completada · 30 ms · 0,000000 USD · -
+  L10 D4 explicacion ÉXITO · cache/completada · 30 ms · 0,000000 USD · -
+  L11 D5 explicacion ÉXITO · cache/completada · 30 ms · 0,000000 USD · -
+  L12 D6 explicacion fallo · cache/completada · 25 ms · 0,000000 USD · - · hecho: no menciona 1.038,53
+  L13 D1 pregunta    ÉXITO · pregunta/completada · 2,9 s · 0,002714 USD · gemini · real: conmutación de proveedor → recuperada
+  L14 D5 pregunta    ÉXITO · pregunta/completada · 4,8 s · 0,003161 USD · gemini · real: conmutación de proveedor → recuperada
+  L15 D4 pregunta    ÉXITO · pregunta/completada · 5,3 s · 0,002074 USD · gemini · real: conmutación de proveedor → recuperada
+  L16 D2 explicacion ÉXITO · agente/completada · 11,0 s · 0,003430 USD · gemini · forzada: 429 → recuperada
+  L17 D3 explicacion ÉXITO · agente/completada · 26,0 s · 0,002713 USD · gemini · forzada: timeout → recuperada
+  L18 D4 explicacion ÉXITO · agente/completada · 34,7 s · 0,006556 USD · gemini · forzada: json → recuperada
+  L19 D6 explicacion fallo · plantilla/respaldo · 14,1 s · 0,000000 USD · - · forzada: todo → recuperada · motivo_fin = respaldo; la explicación salió de: plantilla
+Tasa de éxito: 78,9 % (15/19) · costo mediano: 0,002714 USD · latencia mediana 26,0 s (P90 54,4 s, TTFT 17,0 s) · recuperación: 100,0 % (13/13)
+Escrito: eval\resultados\lote_2026-10-24_1351.json y eval\resultados\lote_2026-10-24_1351.md

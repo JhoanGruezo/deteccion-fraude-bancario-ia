@@ -1,0 +1,8 @@
+salud HTTP 200
+casos 300 dict_keys(['casos', 'total', 'contadores'])
+
+lista HTTP 200
+{"caso":{"id_caso":"SIN-000018","fuente":"sinteticos","inicio_ventana":"2026-03-28T00:44:00","fin_ventana":"2026-03-30T00:44:00","tipos_fraude":["uso_no_autorizado"],"score_maximo":0.999978,"transacciones_sobre_umbral_bloqueo":2,"nivel_recomendacion":"bloquear_tarjeta","motivo_recomendacion":"2 transacciones en 48 h superan el umbral de bloqueo 0,82 (score máximo 1,00): compras anómalas seguidas, patrón de uso no autorizado.","senal_principal":"hora","perfil_previo":{"sin_historial":false,"monto_promedio":701017.26,"horas_habituales":[{"hora":9,"porcentaje":38.9},{"hora":18,"porcentaje":30.{"error":"Caso no encontrado"}
+inexistente HTTP 404
+300 {'total': 339, 'por_nivel': {'bloquear_tarjeta': 268, 'verificar_cliente': 38, 'bloquear_acceso_cuenta': 33}, 'por_estado': {'pendiente': 339}, 'por_fuente': {'sinteticos': 52, 'sparkov': 287}}
+detalle HTTP 200

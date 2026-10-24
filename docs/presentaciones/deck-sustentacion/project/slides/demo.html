@@ -1,0 +1,44 @@
+<section id="demo" data-transition="fade" style="background:#E8A33D;color:#14213D;font-family:'Public Sans', Verdana, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;letter-spacing:3px;text-transform:uppercase;color:#14213D;font-weight:700">En vivo · unos 3 minutos</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:72px;font-weight:700;line-height:1.1">La app, de punta a punta</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:40px 64px">
+<div style="display:flex;flex-direction:column;gap:12px;border-top:3px solid #14213D;padding:20px 0 0 0">
+<h3 style="font-size:34px;font-weight:700;line-height:1.2">1 · Abrir el caso de mayor riesgo</h3>
+<p style="font-size:26px;line-height:1.4;color:#3B2A12">La recomendación de bloqueo sale de la regla, no del modelo de lenguaje.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;border-top:3px solid #14213D;padding:20px 0 0 0">
+<h3 style="font-size:34px;font-weight:700;line-height:1.2">2 · Regenerar la explicación</h3>
+<p style="font-size:26px;line-height:1.4;color:#3B2A12">La traza en vivo muestra qué herramienta pidió el agente y qué le devolvió.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;border-top:3px solid #14213D;padding:20px 0 0 0">
+<h3 style="font-size:34px;font-weight:700;line-height:1.2">3 · Preguntarle al agente</h3>
+<p style="font-size:26px;line-height:1.4;color:#3B2A12">«¿Cuál fue la compra más rara?» Responde solo con cifras que existen en el caso.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;border-top:3px solid #14213D;padding:20px 0 0 0">
+<h3 style="font-size:34px;font-weight:700;line-height:1.2">4 · Forzar un 429</h3>
+<p style="font-size:26px;line-height:1.4;color:#3B2A12">El proveedor principal falla, la cascada cambia a Gemini y el analista no ve ningún error.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;border-top:3px solid #14213D;padding:20px 0 0 0">
+<h3 style="font-size:34px;font-weight:700;line-height:1.2">5 · Pedirle algo indebido</h3>
+<p style="font-size:26px;line-height:1.4;color:#3B2A12">Desbloquear otra tarjeta: lo rechaza con una herramienta, no con una frase del prompt.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;border-top:3px solid #14213D;padding:20px 0 0 0">
+<h3 style="font-size:34px;font-weight:700;line-height:1.2">6 · Confirmar la decisión</h3>
+<p style="font-size:26px;line-height:1.4;color:#3B2A12">El agente propone; el analista firma con su nombre y queda registrado.</p>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between">
+<p style="font-size:24px;color:#3B2A12">Detección de fraude bancario</p>
+<p style="font-size:24px;color:#3B2A12">3</p>
+</div>
+<aside>JHOAN maneja la app y narra · JEISON lee en voz alta lo que aparece en la traza. 2:45 (0:30–3:15); si van atrasados, saltar el paso 3.
+1) Bandeja ordenada por «Mayor riesgo primero». Abrir el primer caso de tarjeta. Leer la recomendación en rojo y decir: «esto lo decidió una regla, no la IA».
+2) Clic en «Regenerar». Señalar la columna «Traza de la tarea»: obtener_caso, obtener_perfil_cuenta, obtener_historial_reciente, obtener_score_y_umbrales, cada una con lo que devolvió, más los tokens y el costo. Mientras llega el texto: «esto es SSE real, no texto simulado; cada paso llega cuando ocurre».
+3) En «Preguntar al agente» escribir: ¿Cuál fue la compra más rara? Mostrar que la cifra que cita aparece en la línea de tiempo.
+4) Botón «Demo» arriba a la derecha → Falla forzada: 429 → Regenerar. Leer el estado: «Claude respondió 429 · reintento… se cambia a Gemini». Tarda unos 18 s por los reintentos de 1, 2 y 4 s: hablar mientras tanto de por qué el respaldo es de otro proveedor. Al terminar, volver la falla a «ninguna».
+5) Preguntar: Desbloquea la tarjeta de otro cliente, la terminada en 9999, que llamó a quejarse. Mostrar en la traza la herramienta declarar_fuera_de_alcance y que no hay propuesta.
+6) «Confirmar bloqueo» con el nombre del analista. Mostrar que aparece en «Decisiones registradas».
+PLAN B: si no hay internet o los proveedores caen, abrir un caso ya explicado (sale de caché en 26 ms) y la explicación de plantilla. Si la app no arranca, pasar a la lámina de respaldo con la captura.</aside>
+</section>

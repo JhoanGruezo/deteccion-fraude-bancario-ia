@@ -21,9 +21,13 @@ Fuentes: rúbrica del Momento 3 y retos de las semanas 12 y 13 del sitio del cur
 | 5 | Arrancar la app desde el ZIP en la máquina de Jeison (prueba de reproducibilidad) | Jeison | `docs/verificacion-jeison.md` | [ ] |
 | 6 | Confirmar las tarifas de Claude Haiku 5.5 y Gemini 3.1 Flash-Lite en las páginas oficiales (hoy vienen de agregadores) | Jhoan | `app/config.py`, README §3 | [ ] |
 | 7 | Estudiar el código con la guía (escrita el 2026-10-21) hasta responder la autoevaluación sin mirar: cada uno debe poder explicar cualquier función que señale el profesor | Ambos | `docs/guia-de-estudio.md` | [ ] |
-| 8 | Guion de la demo de 6 minutos + 3 de preguntas, ensayado con reloj, con plan B (explicaciones en caché y video de respaldo) | Ambos | `docs/presentaciones/` | [ ] |
+| 8 | Guion de la demo de 6 minutos + 3 de preguntas, ensayado con reloj, con plan B (explicaciones en caché y video de respaldo). **2026-10-24:** deck y guiones por persona listos (`docs/sesion-2026-10-24.md` §2); falta ensayar con reloj y activar el link del deck | Ambos | `docs/presentaciones/` | [~] |
 | 9 | Regenerar el ZIP final con `python scripts/empaquetar_entrega.py` después de los últimos cambios y subirlo | Jhoan | buzón del curso | [ ] |
-| 10 | Agregar a Jeison como colaborador del repositorio | Jhoan | GitHub | [ ] |
+| 10 | Agregar a Jeison como colaborador del repositorio | Jhoan | GitHub | [x] 2026-10-22 (invitación pendiente de que Jeison la acepte) |
+| 11 | Conseguir una llave de Anthropic válida (`sk-ant-…`) y repetir la suite y el lote: la del 24-oct dio 401 y todo cayó a Gemini (`auditoria/2026-10-24_1343/`) | Jhoan | `eval/resultados/`, `docs/decisiones.md` §9 | [ ] |
+| 12 | Rotar las dos llaves de `docs/prueba-companero-jeison.txt` y no commitear ese archivo con ellas | Jhoan | — | [ ] |
+| 13 | Agregar los formatos `apikey_` y `AQ.` al escáner de `scripts/empaquetar_entrega.py` | Jhoan | `scripts/` | [ ] |
+| 14 | Corregir en `docs/decisiones.md` "cinco" por "seis" herramientas y la mediana de tokens (11 059); actualizar `validacion/motor-riesgo.md` | Ambos | `docs/`, `validacion/` | [ ] |
 
 Riesgos para el día de la demo y su plan:
 

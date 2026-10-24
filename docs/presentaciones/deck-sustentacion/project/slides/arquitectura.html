@@ -1,0 +1,56 @@
+<section id="arquitectura" data-transition="fade" style="background:#F8F8F4;color:#16293F;font-family:'Public Sans', Verdana, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;letter-spacing:3px;text-transform:uppercase;color:#8F5A14;font-weight:700">Arquitectura</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:64px;font-weight:700;line-height:1.1">Cada pieza en su capa</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 48px 1fr 48px 1fr 48px 1fr;grid-template-rows:auto 64px auto;gap:0 16px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:8px;background:#FDFDFB;border:1px solid #D5D9CF;border-radius:16px;padding:24px 28px;align-self:stretch">
+<h3 style="font-size:30px;font-weight:700">Navegador</h3>
+<p style="font-size:24px;line-height:1.35;color:#49566B">Frontend propio: bandeja, caso, traza en vivo y chat.</p>
+</div>
+<x-shape kind="arrow-right" style="width:48px;height:24px;background:#9AA5B5"></x-shape>
+<div style="display:flex;flex-direction:column;gap:8px;background:#FDFDFB;border:1px solid #D5D9CF;border-radius:16px;padding:24px 28px;align-self:stretch">
+<h3 style="font-size:30px;font-weight:700">API</h3>
+<p style="font-size:24px;line-height:1.35;color:#49566B">FastAPI. Entrega la explicación por SSE real, evento por evento.</p>
+</div>
+<x-shape kind="arrow-right" style="width:48px;height:24px;background:#9AA5B5"></x-shape>
+<div style="display:flex;flex-direction:column;gap:8px;background:#E3ECF6;border:2px solid #2F6FB0;border-radius:16px;padding:24px 28px;align-self:stretch">
+<h3 style="font-size:30px;font-weight:700;color:#1F4E80">Agente</h3>
+<p style="font-size:24px;line-height:1.35;color:#2B3A50">Bucle propio sin framework, cuatro límites y contrato verificado en código.</p>
+</div>
+<x-shape kind="arrow-right" style="width:48px;height:24px;background:#9AA5B5"></x-shape>
+<div style="display:flex;flex-direction:column;gap:8px;background:#E3ECF6;border:1px solid #9DB9D8;border-radius:16px;padding:24px 28px;align-self:stretch">
+<h3 style="font-size:30px;font-weight:700;color:#1F4E80">Proveedores</h3>
+<p style="font-size:24px;line-height:1.35;color:#2B3A50">Claude Haiku 5.5 → Gemini 3.1 Flash-Lite → plantilla sin red.</p>
+</div>
+<div></div>
+<div></div>
+<div></div>
+<div></div>
+<x-shape kind="arrow-down" style="width:24px;height:48px;background:#9AA5B5;justify-self:center"></x-shape>
+<div></div>
+<div></div>
+<div style="display:flex;flex-direction:column;gap:8px;background:#F4E3C8;border:1px solid #DDBB84;border-radius:16px;padding:24px 28px;align-self:stretch">
+<h3 style="font-size:30px;font-weight:700;color:#7A4E12">Motor de riesgo</h3>
+<p style="font-size:24px;line-height:1.35;color:#5A3E12">ML clásico y viaje imposible. Corre aparte y deja los casos listos.</p>
+</div>
+<x-shape kind="arrow-right" style="width:48px;height:24px;background:#9AA5B5"></x-shape>
+<div style="display:flex;flex-direction:column;gap:8px;background:#FDFDFB;border:1px solid #D5D9CF;border-radius:16px;padding:24px 28px;align-self:stretch">
+<h3 style="font-size:30px;font-weight:700">Postgres</h3>
+<p style="font-size:24px;line-height:1.35;color:#49566B">Casos, historial, explicaciones, trazas, propuestas y decisiones.</p>
+</div>
+<x-shape kind="arrow-left" style="width:48px;height:24px;background:#9AA5B5"></x-shape>
+<div style="display:flex;flex-direction:column;gap:8px;background:#FDFDFB;border:1px solid #D5D9CF;border-radius:16px;padding:24px 28px;align-self:stretch">
+<h3 style="font-size:30px;font-weight:700">Herramientas</h3>
+<p style="font-size:24px;line-height:1.35;color:#49566B">Seis, y todas pasan por repositorio.py, la única puerta a la base.</p>
+</div>
+<div></div>
+<div></div>
+</div>
+<p style="font-size:24px;color:#5A667A">Azul: lo que toca el modelo de lenguaje · Ámbar: aprendizaje automático clásico · Blanco: código</p>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between">
+<p style="font-size:24px;color:#5A667A">Detección de fraude bancario</p>
+<p style="font-size:24px;color:#5A667A">4</p>
+</div>
+<aside>JHOAN · 20 s (3:15–3:35). «Lo que acaban de ver tiene esta forma. El navegador habla con una API en FastAPI que transmite la explicación por SSE real: cada herramienta, cada reintento y cada fragmento de texto llega cuando ocurre. El agente es un bucle nuestro, sin framework, y sus herramientas solo llegan a la base a través de un archivo, repositorio.py. La capa de proveedores está aislada: Claude Haiku primero, Gemini de respaldo y, si todo cae, una plantilla que no necesita red. El motor de riesgo corre aparte y deja los casos listos en la base.» Si preguntan por qué no colas ni petición simple: una explicación tarda de 5 a 18 s; sin SSE el analista no ve nada mientras tanto, y una cola sería infraestructura para un problema que no tenemos (un analista, un caso abierto).</aside>
+</section>

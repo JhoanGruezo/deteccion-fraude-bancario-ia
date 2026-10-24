@@ -1,0 +1,6 @@
+# Spot-check de monto_24h previo en 3 transacciones de sinteticos (datos/transacciones.csv vs datos/salidas_sinteticos/casos_marcados.json)
+# Recalculo en stdlib: suma de montos de la misma tarjeta en [t-24h, t), sin la transaccion actual.
+tx 8078  tarjeta 193 previas24h 1 suma recalculada 605861.92 | guardado monto_24h valor_observado 605861.92 (referencia 240189.64)
+tx 13756 tarjeta 329 previas24h 1 suma recalculada 355495.49 | guardado monto_24h valor_observado 355495.49 (referencia 235675.45)
+tx 13176 tarjeta 315 previas24h 1 suma recalculada 217505.06 | guardado monto_24h valor_observado 217505.06 (referencia 134561.37)
+# Resultado: coinciden exactamente; no se detecto uso de la transaccion actual ni de posteriores.

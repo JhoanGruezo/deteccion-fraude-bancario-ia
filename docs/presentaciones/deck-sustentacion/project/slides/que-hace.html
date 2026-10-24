@@ -1,0 +1,37 @@
+<section id="que-hace" data-transition="fade" style="background:#F8F8F4;color:#16293F;font-family:'Public Sans', Verdana, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;letter-spacing:3px;text-transform:uppercase;color:#8F5A14;font-weight:700">Qué hace</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:64px;font-weight:700;line-height:1.1">Al analista le llega el caso razonado</h2>
+</div>
+<div style="display:flex;gap:24px;align-items:stretch">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FDFDFB;border:1px solid #E2E4DC;border-radius:20px;padding:36px">
+<p style="align-self:flex-start;background:#DCE7F3;color:#1F4E80;font-size:24px;font-weight:700;padding:6px 20px;border-radius:999px">ML clásico</p>
+<h3 style="font-size:34px;font-weight:700;line-height:1.2">Motor de riesgo</h3>
+<p style="font-size:26px;line-height:1.4;color:#49566B">Compara cada compra con el perfil previo de su propia tarjeta: monto, hora, categoría y gasto de 24 horas.</p>
+</div>
+<x-shape kind="arrow-right" style="width:48px;height:24px;background:#9AA5B5;align-self:center"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FDFDFB;border:1px solid #E2E4DC;border-radius:20px;padding:36px">
+<p style="align-self:flex-start;background:#E6E8E1;color:#3D4757;font-size:24px;font-weight:700;padding:6px 20px;border-radius:999px">Código</p>
+<h3 style="font-size:34px;font-weight:700;line-height:1.2">Regla del caso</h3>
+<p style="font-size:26px;line-height:1.4;color:#49566B">Dos o más compras sobre el umbral en 48 horas abren un caso y fijan qué bloquear: tarjeta, acceso a la cuenta o verificar.</p>
+</div>
+<x-shape kind="arrow-right" style="width:48px;height:24px;background:#9AA5B5;align-self:center"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FDFDFB;border:2px solid #E8A33D;border-radius:20px;padding:36px">
+<p style="align-self:flex-start;background:#F4E3C8;color:#7A4E12;font-size:24px;font-weight:700;padding:6px 20px;border-radius:999px">LLM</p>
+<h3 style="font-size:34px;font-weight:700;line-height:1.2">Agente</h3>
+<p style="font-size:26px;line-height:1.4;color:#49566B">Consulta la evidencia con sus herramientas y explica qué pasó, por qué es riesgo y qué bloquear.</p>
+</div>
+<x-shape kind="arrow-right" style="width:48px;height:24px;background:#9AA5B5;align-self:center"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FDFDFB;border:1px solid #E2E4DC;border-radius:20px;padding:36px">
+<p style="align-self:flex-start;background:#16293F;color:#F3F4EF;font-size:24px;font-weight:700;padding:6px 20px;border-radius:999px">Humano</p>
+<h3 style="font-size:34px;font-weight:700;line-height:1.2">Analista</h3>
+<p style="font-size:26px;line-height:1.4;color:#49566B">Confirma, escala o descarta. Sin su confirmación no existe ninguna decisión.</p>
+</div>
+</div>
+<p style="font-size:28px;line-height:1.4;color:#49566B">339 casos cargados: <b style="color:#16293F">287 de Sparkov</b>, un dataset de Kaggle que no generamos nosotros, y 52 sintéticos para mostrar el viaje imposible.</p>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between">
+<p style="font-size:24px;color:#5A667A">Detección de fraude bancario</p>
+<p style="font-size:24px;color:#5A667A">2</p>
+</div>
+<aside>JHOAN · 20 s (0:10–0:30). «El profesor nos pidió que al analista no le llegue un número para interpretar, sino el caso ya razonado. Así funciona: un modelo de ML clásico compara cada compra con el historial de su propia tarjeta. Cuando dos o más compras pasan el umbral en 48 horas, una regla escrita en código abre el caso y decide qué bloquear. Eso no lo decide la IA, porque el costo del error es alto. Luego el agente consulta la evidencia y la explica en palabras. Y el bloqueo solo existe cuando el analista lo confirma.» Si preguntan por qué la regla y no el LLM decide qué bloquear: entrada estructurada, regla exacta, error caro; los seis ejes la mandan a código.</aside>
+</section>
