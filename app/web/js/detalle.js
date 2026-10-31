@@ -274,7 +274,7 @@ export function crearDetalle({ trazas, conversacion, dialogo, alCambio }) {
   async function decidir(accion) {
     const etiqueta = f.ACCIONES[accion];
     const descripciones = {
-      confirmar_bloqueo: `Se registrará el bloqueo de ${objetivoDe(accion)} para ${caso.id_caso}, con tu nombre.`,
+      confirmar_bloqueo: `Se registrará el bloqueo de ${objetivoDe(accion)} para ${caso.id_caso}, con tu nombre.`.replace("de el ", "del "),
       escalar: `El caso ${caso.id_caso} pasará a «Escalado» para revisión de otro nivel.`,
       descartar: `El caso ${caso.id_caso} se marcará como descartado (falsa alarma). Deja un comentario si es posible.`,
     };

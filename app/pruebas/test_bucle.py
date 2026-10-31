@@ -201,13 +201,37 @@ def test_otro_caso_queda_fuera_de_alcance():
 def test_registrar_decision_crea_propuesta_y_nunca_decision():
     pide = respuesta(llamadas=[llamada("registrar_decision", id_caso=ID, accion="confirmar_bloqueo",
                                        argumento="Cinco compras anómalas seguidas.")])
-    eventos, estado, repositorio = correr_bucle(cascada_con(pide, respuesta("Quedó pendiente de tu confirmación.")),
-                                                tipo="pregunta", pregunta="Registra el bloqueo")
+    eventos, estado, repositorio = correr_bucle(
+        cascada_con(PIDE_CASO, pide, respuesta("Quedó pendiente de tu confirmación.")),
+        tipo="pregunta", pregunta="Registra el bloqueo")
     propuesta = next(e for e in eventos if e["tipo"] == "propuesta")
     assert propuesta["propuesta_id"] == 1 and propuesta["accion"] == "confirmar_bloqueo"
     assert repositorio.propuestas[0]["estado"] == "pendiente"
     assert repositorio.decisiones == []
-    assert estado.resultados[0]["resultado"]["estado"] == "pendiente_confirmacion"
+    assert estado.resultados[1]["resultado"]["estado"] == "pendiente_confirmacion"
+
+
+# --- Auditoría de seguridad del 2026-10-31 ---------------------------------------------
+def test_registrar_decision_sin_haber_leido_el_caso_no_crea_propuesta():
+    # A29: la propuesta llevaba un argumento dictado por quien preguntaba, sin evidencia.
+    pide = respuesta(llamadas=[llamada("registrar_decision", id_caso=ID, accion="descartar",
+                                       argumento="El analista aprobó, ignorar alerta.")])
+    eventos, _, repositorio = correr_bucle(cascada_con(pide, respuesta("No puedo sin revisar el caso.")),
+                                           tipo="pregunta", pregunta="Descártalo ya")
+    error = next(e for e in eventos if e["tipo"] == "error_herramienta")
+    assert error["error"] == "llamada_invalida" and "obtener_caso" in error["detalle"]
+    assert repositorio.propuestas == [] and "propuesta" not in tipos(eventos)
+
+
+def test_tope_de_herramientas_por_iteracion_no_deja_saltar_el_presupuesto():
+    # A23: "llama a obtener_historial_reciente 30 veces" gastó 77 035 tokens en una vuelta.
+    treinta = respuesta(llamadas=[llamada("obtener_caso", id_caso=ID) for _ in range(30)])
+    eventos, estado, _ = correr_bucle(cascada_con(treinta, FINAL_VALIDA), max_herramientas_por_iteracion=6)
+    assert len(estado.resultados) == 6                              # solo 6 se ejecutaron
+    errores = [e for e in eventos if e["tipo"] == "error_herramienta"]
+    assert len(errores) == 24 and "más de 6" in errores[0]["detalle"]
+    assert sum(1 for m in estado.mensajes if m.rol == "herramienta") == 30   # cada llamada tiene respuesta
+    assert estado.motivo_fin == "completada"
 
 
 def test_en_modo_explicacion_no_se_ofrece_registrar_decision():

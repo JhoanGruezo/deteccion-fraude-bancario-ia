@@ -52,11 +52,13 @@ class Limites:
     timeout_modelo_s: float = 25.0    # por llamada al modelo
     timeout_herramienta_s: float = 5.0
     max_tokens_respuesta: int = 2_500
+    max_herramientas_por_iteracion: int = 6   # sin él, 30 llamadas en una vuelta saltaban el presupuesto
 
     @classmethod
     def desde_config(cls) -> "Limites":
         return cls(config.MAX_ITERACIONES, config.PRESUPUESTO_TOKENS, config.TIMEOUT_MODELO_S,
-                   config.TIMEOUT_HERRAMIENTA_S, config.MAX_TOKENS_RESPUESTA)
+                   config.TIMEOUT_HERRAMIENTA_S, config.MAX_TOKENS_RESPUESTA,
+                   config.MAX_HERRAMIENTAS_POR_ITERACION)
 
 
 @dataclass
@@ -109,21 +111,31 @@ def _resumen_resultado(resultado: dict) -> dict:
 
 
 def _ejecutar_llamada(llamada, contexto: ContextoHerramientas, limites: Limites,
-                      estado: EstadoTarea, permitidas: list[str] | None = None) -> Iterator[dict]:
+                      estado: EstadoTarea, permitidas: list[str] | None = None,
+                      sobrante: bool = False) -> Iterator[dict]:
     """Corre una herramienta pedida por el modelo y deja su resultado en la conversación.
 
     `permitidas`: las herramientas del modo de la tarea. Una que existe pero no se
     ofreció en este modo (por ejemplo registrar_decision al explicar) se trata igual
     que una inexistente: el modelo no puede saltarse el modo pidiéndola por su nombre.
+    `sobrante`: la llamada pasó el tope de herramientas por iteración; no se ejecuta,
+    pero recibe su resultado de error (las APIs exigen uno por cada llamada pedida).
     """
     yield {"tipo": "herramienta", "nombre": llamada.nombre, "argumentos": llamada.argumentos,
            "id_llamada": llamada.id}
 
     permitidas = list(HERRAMIENTAS) if permitidas is None else permitidas
     herramienta = HERRAMIENTAS.get(llamada.nombre) if llamada.nombre in permitidas else None
-    if herramienta is None:
+    if sobrante:
+        problema = (f"se pidieron más de {limites.max_herramientas_por_iteracion} herramientas en una "
+                    "sola vuelta; esta no se ejecutó. Pide solo las que necesites")
+    elif herramienta is None:
         problema = (f"la herramienta «{llamada.nombre}» no existe en este modo; las disponibles son: "
                     f"{', '.join(permitidas)}")
+    elif herramienta.escribe and not any(r["nombre"] == "obtener_caso" for r in estado.resultados):
+        # Una propuesta tiene que poder rastrearse a la evidencia: sin haber leído el caso,
+        # el argumento sería dictado por quien pregunta (auditoría del 2026-10-31, A29).
+        problema = "antes de proponer una decisión consulta el caso con obtener_caso y argumenta con lo que devuelva"
     else:
         problema = validar_argumentos(herramienta, llamada.argumentos)
 
@@ -250,5 +262,6 @@ def ejecutar(tipo: str, id_caso: str, pregunta: str | None, contexto: ContextoHe
             return
 
         # Límite 4 (confirmación humana) vive dentro de registrar_decision: solo propone.
-        for llamada in respuesta.llamadas:
-            yield from _ejecutar_llamada(llamada, contexto, limites, estado, permitidas)
+        for indice, llamada in enumerate(respuesta.llamadas):
+            yield from _ejecutar_llamada(llamada, contexto, limites, estado, permitidas,
+                                         sobrante=indice >= limites.max_herramientas_por_iteracion)

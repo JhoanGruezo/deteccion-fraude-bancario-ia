@@ -31,14 +31,14 @@
 </div>
 <div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between">
 <p style="font-size:24px;color:#3B2A12">Detección de fraude bancario</p>
-<p style="font-size:24px;color:#3B2A12">3</p>
+<p style="font-size:24px;color:#3B2A12">9</p>
 </div>
-<aside>JHOAN maneja la app y narra · JEISON lee en voz alta lo que aparece en la traza. 2:45 (0:30–3:15); si van atrasados, saltar el paso 3.
-1) Bandeja ordenada por «Mayor riesgo primero». Abrir el primer caso de tarjeta. Leer la recomendación en rojo y decir: «esto lo decidió una regla, no la IA».
-2) Clic en «Regenerar». Señalar la columna «Traza de la tarea»: obtener_caso, obtener_perfil_cuenta, obtener_historial_reciente, obtener_score_y_umbrales, cada una con lo que devolvió, más los tokens y el costo. Mientras llega el texto: «esto es SSE real, no texto simulado; cada paso llega cuando ocurre».
-3) En «Preguntar al agente» escribir: ¿Cuál fue la compra más rara? Mostrar que la cifra que cita aparece en la línea de tiempo.
-4) Botón «Demo» arriba a la derecha → Falla forzada: 429 → Regenerar. Leer el estado: «Claude respondió 429 · reintento… se cambia a Gemini». Tarda unos 18 s por los reintentos de 1, 2 y 4 s: hablar mientras tanto de por qué el respaldo es de otro proveedor. Al terminar, volver la falla a «ninguna».
-5) Preguntar: Desbloquea la tarjeta de otro cliente, la terminada en 9999, que llamó a quejarse. Mostrar en la traza la herramienta declarar_fuera_de_alcance y que no hay propuesta.
-6) «Confirmar bloqueo» con el nombre del analista. Mostrar que aparece en «Decisiones registradas».
-PLAN B: si no hay internet o los proveedores caen, abrir un caso ya explicado (sale de caché en 26 ms) y la explicación de plantilla. Si la app no arranca, pasar a la lámina de respaldo con la captura.</aside>
+<aside>JEISON · 2:25–5:45. Maneja la app y narra.
+1) 2:25–2:45 · Bandeja en «Mayor riesgo primero» → primer caso de «bloquear tarjeta». «La recomendación la decidió una regla, no la IA.»
+2) 2:45–3:20 · «Regenerar». «Cada herramienta llega cuando ocurre: SSE real.» Leer las herramientas, los tokens y el costo (unos 5 s).
+3) 3:20–3:45 · Preguntar: ¿Cuál fue la compra más rara? «La cifra está en la línea de tiempo.»
+4) 3:45–4:25 · «Demo» → Falla forzada: 429 → Regenerar. «Claude responde 429, reintenta y cambia a Gemini, de otra empresa.» Unos 10 s. Luego falla en «ninguna».
+5) 4:25–4:55 · Preguntar: Desbloquea la tarjeta de otro cliente, la terminada en 9999, que llamó a quejarse. «Lo rechaza con una herramienta y no crea propuesta.»
+6) 4:55–5:20 · «Confirmar bloqueo» con tu nombre: «la IA propone, la persona decide».
+Margen hasta 5:45. PLAN B: si sale Gemini desde el inicio, decirlo y saltar el 4; sin internet, abrir un caso ya explicado; si la app no arranca, lámina 14.</aside>
 </section>

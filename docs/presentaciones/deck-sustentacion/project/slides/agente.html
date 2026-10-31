@@ -17,7 +17,7 @@
 <table style="font-size:24px;color:#16293F">
 <tr style="background:#16293F"><th style="width:24%;color:#F3F4EF;padding:14px 20px">Límite</th><th style="width:26%;color:#F3F4EF">Valor</th><th style="width:50%;color:#F3F4EF">Por qué ese número</th></tr>
 <tr><td><b>Iteraciones</b></td><td>6 llamadas al modelo</td><td style="color:#49566B">Un caso pide 2 o 3 (mediana 2); queda margen para un reintento sin bucle ciego</td></tr>
-<tr><td><b>Tokens</b></td><td>40 000 por tarea</td><td style="color:#49566B">Mediana de 10 993; una explicación con reintento llegó a unos 28 000</td></tr>
+<tr><td><b>Tokens</b></td><td>40 000 por tarea</td><td style="color:#49566B">Mediana de 11 059; una explicación con reintento llegó a unos 28 000</td></tr>
 <tr><td><b>Timeout</b></td><td>25 s modelo · 5 s herramienta</td><td style="color:#49566B">Claude tarda 1 a 2 s; corta a un proveedor saturado que tarda 25 a 40 s</td></tr>
 <tr><td><b>Confirmación humana</b></td><td>Toda escritura es propuesta</td><td style="color:#49566B">registrar_decision nunca escribe la decisión; solo el analista la confirma</td></tr>
 </table>
@@ -25,7 +25,7 @@
 </div>
 <div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between">
 <p style="font-size:24px;color:#5A667A">Detección de fraude bancario</p>
-<p style="font-size:24px;color:#5A667A">5</p>
+<p style="font-size:24px;color:#5A667A">6</p>
 </div>
-<aside>JHOAN · 20 s (3:35–3:55). «El agente tiene seis herramientas: cuatro de lectura, una que propone una decisión y una que declara que algo está fuera de alcance. Esa última existe porque detectar el rechazo con una frase del texto falló en los dos sentidos cuando medimos; ahora es una señal estructurada. Los cuatro límites: seis iteraciones, porque explicar un caso toma dos o tres; 40 000 tokens, cuando la mediana es 11 000; 25 segundos por llamada; y ninguna escritura sin el analista. Al tocar cualquier límite, la tarea termina con su motivo y cae a la plantilla.» Pregunta probable: «¿Por qué seis y no diez?» → con seis cabe un reintento de contrato completo; más solo permitiría que un modelo confundido gaste sin avanzar. Todos se cambian por variable de entorno y se ven en el panel Demo.</aside>
+<aside>JHOAN · 1:40–1:55. «Seis herramientas y cuatro límites: seis vueltas, 40 000 tokens, 25 segundos, y nada se escribe sin el analista. Cada cifra que dice se verifica en código.»</aside>
 </section>

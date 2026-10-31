@@ -33,8 +33,10 @@ CARPETA_SEMILLA = _texto("CARPETA_SEMILLA", os.path.join(os.path.dirname(os.path
 # --- Proveedores de IA ---------------------------------------------------------------
 GEMINI_API_KEY = _texto("GEMINI_API_KEY")
 # Respaldo: Flash-Lite. El 2026-10-21 gemini-3.8-flash respondía 503 o tardaba 25-40 s
-# por saturación, mientras 3.1 Flash-Lite atendía tool calling en 4-17 s.
-GEMINI_MODELO = _texto("GEMINI_MODELO", "gemini-3.1-flash-lite")
+# por saturación, mientras 3.1 Flash-Lite atendía tool calling en 4-17 s. El 2026-10-31
+# le tocó a 3.1 Flash-Lite: 503 "high demand" y un 429 forzado terminaba en plantilla a
+# los 36 s; 3.5 Flash-Lite recuperó 4 de 4 en unos 10 s.
+GEMINI_MODELO = _texto("GEMINI_MODELO", "gemini-3.5-flash-lite")
 ANTHROPIC_API_KEY = _texto("ANTHROPIC_API_KEY")
 CLAUDE_MODELO = _texto("CLAUDE_MODELO", "claude-haiku-5-5")
 # Razonamiento extendido de Claude: apagado (ver proveedores/claude.py, por qué).
@@ -51,6 +53,8 @@ TARIFAS_USD_POR_MILLON = {
     "gemini-3.8-flash": (_decimal("TARIFA_GEMINI_ENTRADA", 0.75), _decimal("TARIFA_GEMINI_SALIDA", 3.75)),
     # Gemini 3.1 Flash-Lite: 0,25 / 1,50 (anotherwrapper.com y morphllm.com, citando ai.google.dev).
     "gemini-3.1-flash-lite": (_decimal("TARIFA_GEMINI_LITE_ENTRADA", 0.25), _decimal("TARIFA_GEMINI_LITE_SALIDA", 1.50)),
+    # Gemini 3.5 Flash-Lite: 0,30 / 2,50 (anotherwrapper.com y pricepertoken.com, 2026-10-31).
+    "gemini-3.5-flash-lite": (_decimal("TARIFA_GEMINI_35_LITE_ENTRADA", 0.30), _decimal("TARIFA_GEMINI_35_LITE_SALIDA", 2.50)),
     "claude-haiku-5-5": (_decimal("TARIFA_CLAUDE_ENTRADA", 0.10), _decimal("TARIFA_CLAUDE_SALIDA", 0.50)),
 }
 
@@ -66,6 +70,11 @@ PRESUPUESTO_TOKENS = _entero("PRESUPUESTO_TOKENS", 40_000)
 TIMEOUT_MODELO_S = _decimal("TIMEOUT_MODELO_S", 25.0)
 TIMEOUT_HERRAMIENTA_S = _decimal("TIMEOUT_HERRAMIENTA_S", 5.0)
 MAX_TOKENS_RESPUESTA = _entero("MAX_TOKENS_RESPUESTA", 2_500)
+# Herramientas por llamada al modelo. Sin este tope, el presupuesto de tokens se
+# saltaba: en la auditoría del 2026-10-31 un pedido de "llama 30 veces" metió 30
+# resultados en una sola vuelta y la tarea gastó 77 035 tokens. Un caso legítimo pide
+# 3 o 4 en paralelo.
+MAX_HERRAMIENTAS_POR_ITERACION = _entero("MAX_HERRAMIENTAS_POR_ITERACION", 6)
 # El cuarto límite (confirmación humana) no es un número: toda herramienta que
 # escribe solo crea una propuesta pendiente (ver agente/herramientas.py).
 

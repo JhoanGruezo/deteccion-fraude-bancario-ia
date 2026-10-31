@@ -55,6 +55,7 @@ PATRONES_LLAVE = {
     "Google OAuth/Vertex (AQ.Ab…)": re.compile(rb"AQ\.Ab[0-9A-Za-z_\-]{20,}"),
     "Anthropic (sk-ant-…)": re.compile(rb"sk-ant-[0-9A-Za-z_\-]{20,}"),
     "Groq (gsk_…)": re.compile(rb"gsk_[0-9A-Za-z]{20,}"),
+    "Genérica (apikey_…)": re.compile(rb"apikey_[0-9A-Za-z_\-]{20,}"),
 }
 # Variables cuyo nombre termina en API_KEY, _SECRET o _TOKEN (no MAX_TOKENS_RESPUESTA).
 VARIABLES_DE_LLAVE = re.compile(r"^\s*([A-Z0-9_]*(API_KEY|_SECRET|_TOKEN))\s*=\s*(.*)$")

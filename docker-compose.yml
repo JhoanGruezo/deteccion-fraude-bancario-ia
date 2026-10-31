@@ -37,7 +37,9 @@ services:
       # Vacío o ausente en .env = se arma con POSTGRES_PASSWORD apuntando al servicio db.
       DATABASE_URL: ${DATABASE_URL:-postgresql://fraude:${POSTGRES_PASSWORD:-fraude_dev}@db:5432/fraude}
     ports:
-      - "8000:8000"
+      # Solo en esta máquina: sin login (M2), nadie en la red del aula debe poder
+      # forzar fallas, firmar decisiones ni gastar crédito del LLM.
+      - "127.0.0.1:8000:8000"
     depends_on:
       db:
         condition: service_healthy

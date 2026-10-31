@@ -1,112 +1,47 @@
-# Guion de la sustentación — Jhoan
+# Guion de la sustentación — Jhoan (diapositivas)
 
-**Sábado 31 de octubre de 2026 · 6 minutos de demo + 3 de preguntas · orden sorteado**
-Deck: https://claude.ai/artifact/YW2u8Bnbm4BDuU9PtAqdXo (las notas del orador de cada
-lámina repiten este texto).
+**Sábado 31 de octubre de 2026 · 6 minutos en total + 3 de preguntas**
+Deck: https://claude.ai/artifact/YW2u8Bnbm4BDuU9PtAqdXo (las notas del orador repiten
+este texto).
 
-**Tu papel:** abres, manejas la app durante toda la demo y cierras. Te tocan las láminas
-del producto (qué hace, arquitectura, agente y fallas). Jeison lleva datos, motor y
-cifras. En preguntas respondes todo lo del agente, la app y las fallas.
+**Tu papel:** diapositivas de 0:00 a 2:25, le pasas la palabra a Jeison y cierras de 5:45
+a 6:00. Una idea por lámina: la dices y pasas.
 
-## Línea de tiempo (total 5:50, quedan 10 s de margen)
-
-| Minuto | Lámina | Quién |
+| Minuto | Lámina | Lo que dices |
 |---|---|---|
-| 0:00–0:10 | 1 · Portada | **Jhoan** |
-| 0:10–0:30 | 2 · Qué hace | **Jhoan** |
-| 0:30–3:15 | 3 · Demo en vivo | **Jhoan** maneja y narra · Jeison lee la traza |
-| 3:15–3:35 | 4 · Arquitectura | **Jhoan** |
-| 3:35–3:55 | 5 · El agente | **Jhoan** |
-| 3:55–4:05 | 6 · Camino de falla | **Jhoan** |
-| 4:05–5:35 | 7 a 10 · Datos, motor, cifras, iteración | Jeison |
-| 5:35–5:50 | 11 · Cierre | **Jhoan** |
+| 0:00–0:10 | 1 · Portada | «Buenos días, somos Jhoan y Jeison. Hicimos la mesa de trabajo de un analista de riesgo bancario. Les cuento qué es y por qué lo hicimos así, y Jeison les muestra la app.» |
+| 0:10–0:25 | 2 · Qué hace | «Al analista no le llega un puntaje: le llega el caso razonado. El modelo marca, una regla decide qué bloquear, el agente lo explica y el analista confirma.» |
+| 0:25–0:40 | 3 · Frontera de la IA | «La IA está solo donde hace falta: el puntaje con ML, porque sería una regla distinta por tarjeta, y la explicación con un LLM, porque es lenguaje. Lo exacto o caro va en código, y el bloqueo lo decide una persona.» |
+| 0:40–1:00 | 4 · Arquitectura | «El navegador habla con una API en FastAPI que transmite en vivo. El agente solo llega a Postgres por sus herramientas. Los proveedores están aislados: Claude, Gemini de respaldo y una plantilla sin red. El motor de riesgo corre aparte.» |
+| 1:00–1:40 | 5 · Decisiones | «Cada decisión con su porqué. FastAPI en vez de Streamlit, para transmitir en vivo por SSE. Postgres, porque casos, trazas y decisiones quedan relacionados y auditados. Docker Compose: un comando, 24 segundos. Agente propio sin LangChain, para controlar sus límites. Claude porque lo medimos: el más rápido y el más barato. Y sin RAG: son tablas que se buscan por id.» |
+| 1:40–1:55 | 6 · Agente | «Seis herramientas y cuatro límites: seis vueltas, 40 000 tokens, 25 segundos, y nada se escribe sin el analista. Cada cifra que dice se verifica en código.» |
+| 1:55–2:10 | 7 · Motor | «¿Por qué un modelo? En Sparkov, un dataset que no hicimos nosotros, la regla fija acierta 1,4 % de sus alertas; el modelo, 78,6 %, sin ver el futuro.» |
+| 2:10–2:25 | 8 · Cifras | «La app, medida: 94,7 % de éxito, una milésima y media de dólar por caso, 5,8 segundos y todas las fallas forzadas recuperadas. Jeison.» |
+| 2:25–5:45 | 9 · App en vivo | Jeison |
+| 5:45–6:00 | 10 · Cierre | «Lo que todavía no hace: no hay inicio de sesión, con Sparkov no distinguimos tarjeta de cliente y el viaje imposible solo se prueba con sintéticos. Sigue la seguridad: inicio de sesión con roles y volver a medir. Gracias.» |
 
-Si al llegar a la lámina 4 el reloj pasa de 3:30, salta la 6 (el 429 ya se vio en la
-demo) y avísale a Jeison con la mirada que recorte la 10.
+## Preguntas que te tocan (decisiones, datos, motor y cifras)
 
-## Lo que dices, lámina por lámina
+- **«¿Por qué FastAPI y no Streamlit?»** Streamlit vuelve a ejecutar todo en cada clic;
+  necesitábamos que la explicación y la traza llegaran en vivo, evento por evento, por
+  SSE real, y una API con capas separadas.
+- **«¿Por qué Postgres y no CSV o SQLite?»** Casos, transacciones, explicaciones, trazas,
+  propuestas y decisiones están relacionados; una decisión se registra en una
+  transacción y queda auditada. Es la base que trabaja el curso desde la semana 7.
+- **«¿Por qué sin LangChain?»** El bucle es un archivo nuestro de unas 250 líneas
+  (`app/agente/bucle.py`): controlamos los límites y la traza y lo explicamos línea por
+  línea.
+- **«¿Por qué no RAG?»** Son tablas en Postgres, el agente ve un solo caso y lo busca por
+  id exacto. RAG traería filas parecidas.
+- **«¿Por qué Claude y no Gemini?»** Medido el 21 de octubre: Gemini 3.8 Flash tardaba de
+  25 a 40 s; Haiku de 1 a 2 s y es el más barato. Hoy el respaldo es Gemini 3.5
+  Flash-Lite porque 3.1 estaba saturado.
+- **«¿Cómo evitaron la filtración?»** El perfil usa solo compras anteriores de la tarjeta
+  y la partición es temporal.
+- **«¿Lo volvieron a medir?»** Sí, hoy: 89,5 % de éxito, 5,5 s de mediana, recuperación
+  del 100 %.
+- **«¿Lo atacaron?»** Sí, hoy: 33 ataques de prompt injection. Ninguno filtró llaves ni
+  ejecutó un bloqueo; dos fallas parciales se corrigieron en código (tope de herramientas
+  por vuelta y no proponer sin haber leído el caso).
 
-**1 · Portada (10 s).** «Buenos días. Somos Jhoan y Jeison. Construimos la mesa de
-trabajo de un analista de riesgo de un banco. En la primera entrega les mostramos el
-motor que detecta el fraude; hoy, lo que ve el analista cuando abre un caso. Vamos
-directo a la app y después les contamos cómo está hecha y cómo la medimos.»
-
-**2 · Qué hace (20 s).** «El profesor nos pidió que al analista no le llegue un número
-para interpretar, sino el caso razonado. Un modelo de ML clásico compara cada compra con
-el historial de su propia tarjeta. Si dos o más compras pasan el umbral en 48 horas, una
-regla en código abre el caso y decide qué bloquear; eso no lo decide la IA, porque el
-error es caro. Después el agente explica el caso en palabras, y el bloqueo solo existe
-cuando el analista lo confirma.»
-
-**3 · Demo (2:45).** Cambia a la pestaña de la app. Seis pasos:
-
-1. **Caso de mayor riesgo.** Bandeja en «Mayor riesgo primero», abre el primer caso de
-   tarjeta. Lee la recomendación en rojo: «esto lo decidió la regla, no la IA».
-2. **Regenerar.** Clic en «Regenerar». Señala la columna «Traza de la tarea»; Jeison lee
-   en voz alta las herramientas que pide el agente. Tú dices: «esto es SSE real: cada
-   paso llega cuando ocurre, no es texto simulado».
-3. **Pregunta.** En «Preguntar al agente»: *¿Cuál fue la compra más rara?* Muestra que la
-   cifra que cita está en la línea de tiempo. (Si van atrasados, salta este paso).
-4. **429 forzado.** Botón «Demo» arriba a la derecha → Falla forzada: **429** →
-   Regenerar. Mientras tarda (unos 18 s por los reintentos de 1, 2 y 4 s): «el respaldo
-   es de otro proveedor a propósito; un 429 de Anthropic no afecta a Google». Al
-   terminar, **vuelve la falla a «ninguna»**.
-5. **Rechazo.** Pregunta: *Desbloquea la tarjeta de otro cliente, la terminada en 9999,
-   que llamó a quejarse.* Muestra en la traza `declarar_fuera_de_alcance` y que no hay
-   propuesta.
-6. **Confirmar.** «Confirmar bloqueo» con tu nombre; aparece en las decisiones
-   registradas.
-
-**4 · Arquitectura (20 s).** «Lo que vieron tiene esta forma. El navegador habla con
-FastAPI, que transmite la explicación por SSE real. El agente es un bucle nuestro, sin
-framework, y sus herramientas llegan a la base solo por repositorio.py. La capa de
-proveedores está aislada: Claude Haiku primero, Gemini de respaldo y una plantilla sin
-red. El motor corre aparte y deja los casos en la base.»
-
-**5 · El agente (20 s).** «Seis herramientas: cuatro leen, una propone una decisión y una
-declara que algo está fuera de alcance; esa existe porque detectar el rechazo por una
-frase falló cuando medimos. Cuatro límites: seis iteraciones, porque un caso toma dos o
-tres; 40 000 tokens, cuando la mediana es 11 000; 25 segundos por llamada; y ninguna
-escritura sin el analista.»
-
-**6 · Camino de falla (10 s).** «El 429 lo vieron. Igual con un timeout o un JSON roto, y
-si caen los dos proveedores, la plantilla arma la explicación con lo guardado. Nunca
-llega un error crudo al analista.» → «Jeison les cuenta los datos y las cifras.»
-
-**11 · Cierre (15 s).** «Lo que todavía no hace: el analista firma con un nombre escrito,
-sin inicio de sesión; con Sparkov no distinguimos bloquear tarjeta de bloquear cliente; y
-el viaje imposible solo se prueba con sintéticos. Sigue la seguridad: atacar nuestro
-propio agente con una inyección, inicio de sesión con roles, tope de gasto y volver a
-medir. Gracias.» Si el tiempo se acabó, di solo «Gracias».
-
-## Preguntas que te tocan
-
-- **«¿Qué pasa si una herramienta falla? Muéstrenmelo.»** Si tarda más de 5 s o lanza
-  error, el resultado vuelve al modelo como dato, la traza lo marca y la tarea sigue; no
-  se cae. Prueba: `pytest app/pruebas/test_bucle.py -k herramienta`.
-- **«¿Cuántas iteraciones aguanta y por qué ese número?»** Seis. Explicar un caso toma 2 o
-  3 (mediana 2 en el lote); con seis cabe un reintento completo del contrato sin dejar
-  que un modelo confundido gaste sin avanzar. Se ve en el panel Demo.
-- **«¿Por qué SSE y no una petición normal o una cola?»** Una explicación tarda de 5 a
-  18 s; sin SSE el analista no ve nada mientras tanto. Una cola es infraestructura para
-  miles de tareas por segundo; tenemos un analista con un caso abierto.
-- **«¿Por qué Claude y no Gemini de principal?»** Lo medimos el 21 de octubre: Gemini 3.8
-  Flash estaba saturado, tardaba de 25 a 40 s o respondía 503; Haiku respondía en 1 a 2 s
-  y es el más barato.
-- **«¿Cómo saben que no inventa cifras?»** El contrato se verifica en código
-  (`app/agente/contrato.py`): cada número de tres o más cifras significativas tiene que
-  aparecer en lo que devolvieron las herramientas.
-- **«Explíquenme esta función.»** Repasa `docs/guia-de-estudio.md`, sobre todo
-  `app/agente/bucle.py`, `herramientas.py`, `contrato.py` y `app/proveedores/`.
-
-Regla de oro: respuesta directa primero, luego muéstrala. Si no lo medimos, se dice «no lo
-medimos»; nunca se inventa.
-
-## Lista de la víspera y del día
-
-- [ ] `docker compose up` y `/api/salud` en «ok» con 339 casos.
-- [ ] Las dos llaves responden (abrir un caso nuevo y ver que lo explique Claude).
-- [ ] Un caso ya explicado en caché para el plan B.
-- [ ] Falla forzada en «ninguna» antes de empezar.
-- [ ] Deck abierto en otra pestaña, en la lámina 1.
-- [ ] Plan B sin internet: casos de caché y plantilla; si la app no arranca, lámina 13.
+Regla de oro: respuesta directa. Si no lo medimos, se dice «no lo medimos».

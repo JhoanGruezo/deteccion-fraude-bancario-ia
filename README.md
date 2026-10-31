@@ -100,7 +100,7 @@ Si el puerto 8000 está ocupado, cambie el lado izquierdo de `ports` en
 | Papel | Proveedor y modelo | Tarifa de lista (USD por millón de tokens, entrada / salida) |
 |---|---|---|
 | Principal | Anthropic **Claude Haiku 5.5** (`claude-haiku-5-5`) | 0,10 / 0,50 |
-| Respaldo | Google **Gemini 3.1 Flash-Lite** (`gemini-3.1-flash-lite`) | 0,25 / 1,50 |
+| Respaldo | Google **Gemini 3.5 Flash-Lite** (`gemini-3.5-flash-lite`) | 0,30 / 2,50 |
 | Último escalón (sin red) | Plantilla determinista armada con las desviaciones guardadas del caso | 0 |
 
 Por qué, con lo medido el 2026-10-21:
@@ -108,7 +108,10 @@ Por qué, con lo medido el 2026-10-21:
 - **Latencia.** Claude Haiku 5.5 respondía cada llamada con herramientas en 1 a 2 s.
   El modelo que habíamos elegido primero, Gemini 3.8 Flash, estaba saturado ese día:
   respondía 503 o tardaba de 25 a 40 s, por encima del timeout de 25 s por llamada.
-  Por eso el respaldo es Gemini 3.1 Flash-Lite, que atendía tool calling en 4 a 17 s.
+  Por eso el respaldo pasó a Gemini 3.1 Flash-Lite, que atendía tool calling en 4 a 17 s.
+  El 2026-10-31 le tocó a 3.1 Flash-Lite: respondía 503 por alta demanda y un 429
+  forzado terminaba en la plantilla a los 36 s. Con Gemini 3.5 Flash-Lite la misma
+  falla se recuperó 4 de 4 veces en unos 10 s, así que es el respaldo vigente.
 - **Costo.** Una explicación completa cuesta del orden de una décima de centavo de
   dólar con Haiku (la mediana medida está en `docs/decisiones.md`, sección 9).
 - **Tool calling.** El agente necesita llamar herramientas en paralelo y devolver un
@@ -134,7 +137,7 @@ en `.env`, que nunca se entrega ni entra a la imagen (`.dockerignore`).
 | `GEMINI_API_KEY` | vacía | llave de Gemini (proveedor de respaldo) |
 | `ORDEN_PROVEEDORES` | `claude,gemini` | orden de la cascada; el primero es el principal |
 | `CLAUDE_MODELO` | `claude-haiku-5-5` | modelo de Claude |
-| `GEMINI_MODELO` | `gemini-3.1-flash-lite` | modelo de Gemini |
+| `GEMINI_MODELO` | `gemini-3.5-flash-lite` | modelo de Gemini |
 | `CLAUDE_RAZONAMIENTO` | `false` | razonamiento extendido de Claude (más lento y más tokens) |
 | `POSTGRES_PASSWORD` | `fraude_dev` | contraseña del Postgres del compose (solo desarrollo; se fija al crear el volumen) |
 | `DATABASE_URL` | vacía | vacía = la arma Compose apuntando al servicio `db`; solo se llena para usar otra base |

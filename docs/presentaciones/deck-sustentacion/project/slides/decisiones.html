@@ -1,0 +1,21 @@
+<section id="decisiones" data-transition="fade" style="background:#F8F8F4;color:#16293F;font-family:'Public Sans', Verdana, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:26px;letter-spacing:3px;text-transform:uppercase;color:#8F5A14;font-weight:700">Decisiones de tecnología</p>
+<h2 style="font-family:'Domine', Georgia, serif;font-size:64px;font-weight:700;line-height:1.1">Qué elegimos y por qué</h2>
+</div>
+<table style="font-size:24px;color:#16293F">
+<tr style="background:#16293F"><th style="width:17%;color:#F3F4EF;padding:14px 20px">Decisión</th><th style="width:28%;color:#F3F4EF">Elegimos</th><th style="width:55%;color:#F3F4EF">Por qué</th></tr>
+<tr><td><b>Interfaz</b></td><td>FastAPI + frontend propio</td><td style="color:#49566B">Empezamos en Streamlit; lo cambiamos para tener SSE real</td></tr>
+<tr><td><b>Transmisión</b></td><td>SSE en vivo</td><td style="color:#49566B">Una explicación tarda segundos: el analista ve cada paso</td></tr>
+<tr><td><b>Base de datos</b></td><td>PostgreSQL</td><td style="color:#49566B">Casos, historial, trazas y decisiones relacionados y auditables</td></tr>
+<tr><td><b>Despliegue</b></td><td>Docker Compose</td><td style="color:#49566B">Un comando levanta base y app: 24 s desde el ZIP limpio</td></tr>
+<tr><td><b>Agente</b></td><td>Bucle propio, sin LangChain</td><td style="color:#49566B">Controlamos los cuatro límites y lo explicamos línea por línea</td></tr>
+<tr><td><b>Proveedores</b></td><td>Claude Haiku → Gemini → plantilla</td><td style="color:#49566B">Medido: Haiku responde en 1-2 s y es el más barato</td></tr>
+<tr><td><b>Datos al agente</b></td><td>Consulta directa, sin RAG</td><td style="color:#49566B">Son tablas buscadas por id exacto; RAG traería filas parecidas</td></tr>
+</table>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between">
+<p style="font-size:24px;color:#5A667A">Detección de fraude bancario</p>
+<p style="font-size:24px;color:#5A667A">5</p>
+</div>
+<aside>JHOAN · 1:00–1:40. «Cada decisión con su porqué. FastAPI en vez de Streamlit, para transmitir en vivo por SSE. Postgres, porque casos, trazas y decisiones quedan relacionados y auditados. Docker Compose: un comando, 24 segundos. Agente propio sin LangChain, para controlar sus límites. Claude porque lo medimos: el más rápido y el más barato. Y sin RAG: son tablas que se buscan por id.»</aside>
+</section>

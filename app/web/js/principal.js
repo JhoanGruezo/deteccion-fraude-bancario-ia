@@ -22,8 +22,8 @@ const RUTA_CASO = /^#\/caso\/([A-Za-z0-9_-]+)$/;
 
 const DESCRIPCION_FALLAS = {
   "": ["Ninguna", "El agente usa los proveedores normalmente."],
-  429: ["429 · cuota agotada", "Gemini responde 429: se ven los reintentos con espera y la conmutación a Claude."],
-  timeout: ["Timeout", "Gemini excede el tiempo límite: reintento y, si persiste, conmutación."],
+  429: ["429 · cuota agotada", "El proveedor principal responde 429: se ven los reintentos con espera y la conmutación al de respaldo."],
+  timeout: ["Timeout", "El proveedor principal excede el tiempo límite: reintentos y, si persiste, conmutación al de respaldo."],
   json: ["JSON roto", "La primera respuesta llega truncada: reparación, reintento y, si no, plantilla."],
   todo: ["Caída total", "Ambos proveedores fallan: la explicación sale de la plantilla por reglas."],
 };

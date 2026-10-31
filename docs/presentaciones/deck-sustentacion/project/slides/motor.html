@@ -24,7 +24,7 @@
 </table>
 <div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;justify-content:space-between">
 <p style="font-size:24px;color:#5A667A">Sparkov · partición temporal · prueba: 555 719 transacciones, 0,386 % de fraude</p>
-<p style="font-size:24px;color:#5A667A">8</p>
+<p style="font-size:24px;color:#5A667A">7</p>
 </div>
-<aside>JEISON · 20 s. «Esta es la razón por la que el proyecto necesita un modelo. Nuestra primera idea era una regla de umbral fijo: monto alto o madrugada. Medida sobre Sparkov, acierta en 1,4 % de sus alertas, casi setenta falsas alarmas por cada fraude real. El modelo compara cada compra con el historial previo de esa tarjeta y sube la precisión a 78,6 % detectando más fraude. Lo medimos con partición temporal: el modelo nunca ve el futuro y el perfil usa solo transacciones anteriores.» Si preguntan por la filtración: la versión anterior calculaba el perfil con todos los datos antes de partir; se corrigió el 21 de octubre. Sin las tarjetas nuevas (todas son fraude en Sparkov, un artefacto del simulador), AUC-PR 0,875. Umbrales elegidos en validación y aplicados sin retocar.</aside>
+<aside>JHOAN · 1:55–2:10. «¿Por qué un modelo? En Sparkov, un dataset que no hicimos nosotros, la regla fija acierta 1,4 % de sus alertas; el modelo, 78,6 %, sin ver el futuro.»</aside>
 </section>

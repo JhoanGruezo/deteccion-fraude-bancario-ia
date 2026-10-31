@@ -68,10 +68,12 @@ de cada tarjeta con caso, y la app los carga en Postgres al arrancar.
 | ¿Buscamos identificadores exactos? | Sí: el id del caso, que se resuelve con una consulta por llave primaria |
 | ¿Son prosa abierta que cambia? | No: son números, fechas, categorías y comercios |
 
-**Estrategia elegida: consulta directa por tool calling.** El agente tiene cinco
-herramientas que consultan la base a través de `app/db/repositorio.py` (la única
+**Estrategia elegida: consulta directa por tool calling.** El agente tiene seis
+herramientas. Cinco consultan la base a través de `app/db/repositorio.py` (la única
 puerta a la base): `obtener_caso`, `obtener_perfil_cuenta`,
-`obtener_historial_reciente`, `obtener_score_y_umbrales` y `registrar_decision`. Las
+`obtener_historial_reciente`, `obtener_score_y_umbrales` y `registrar_decision`. La
+sexta, `declarar_fuera_de_alcance`, no lee ni escribe nada: es la señal estructurada
+de que el agente rechaza una pregunta (sección 11, versión `2026-10-21.4`). Las
 alternativas descartadas: RAG, porque un pipeline vectorial sobre un volcado de tablas
 recuperaría fragmentos parecidos en vez de las filas exactas y el modelo "calcularía"
 sobre lo que le llegó (la clase lo llama alucinar en cálculos); contexto largo con toda
@@ -90,7 +92,7 @@ dato de esos está en la base.
 | Papel | Modelo | Tarifa de lista (USD por millón, entrada / salida) |
 |---|---|---|
 | Principal | Claude Haiku 5.5 (`claude-haiku-5-5`) | 0,10 / 0,50 |
-| Respaldo | Gemini 3.1 Flash-Lite (`gemini-3.1-flash-lite`) | 0,25 / 1,50 |
+| Respaldo | Gemini 3.5 Flash-Lite (`gemini-3.5-flash-lite`) | 0,30 / 2,50 |
 | Último escalón | Plantilla determinista, sin red | 0 |
 
 La decisión inicial (2026-10-21) era Gemini 3.8 Flash como principal y Claude de
@@ -100,6 +102,14 @@ mientras Claude Haiku 5.5 respondía cada llamada con herramientas en 1 a 2 s y 
 más barato de los tres. El respaldo pasó a Gemini 3.1 Flash-Lite, que atendía tool
 calling en 4 a 17 s. Que el respaldo sea de otro proveedor importa: un 429 o una caída
 de un proveedor no afecta al otro.
+
+**Cambio del 2026-10-31.** En la prueba previa a la sustentación, Gemini 3.1 Flash-Lite
+respondía 503 ("high demand") y un 429 forzado terminaba en la plantilla a los 36 s.
+Gemini 3.5 Flash-Lite respondió 4 de 4 recuperaciones del 429 en unos 10 s, así que
+pasó a ser el respaldo (tarifa 0,30 / 2,50 según anotherwrapper.com y
+pricepertoken.com). Es la misma decisión que el 21 de octubre: el respaldo se elige con
+lo que responde, no con lo que dice el catálogo. Las cifras de la sección 9 se midieron
+con 3.1 Flash-Lite.
 
 Los dos modelos cumplen lo que el agente necesita: llamadas a herramientas en
 paralelo y un JSON con contrato estricto que además se verifica en código. Las tarifas
@@ -138,16 +148,17 @@ termina y se guarda igual.
 al modelo; si el modelo pide herramientas se ejecutan y se devuelven, y si no pide
 ninguna su texto es la respuesta final.
 
-**Herramientas**: las cinco de la sección 3. Todas validan que el `id_caso` sea el del
+**Herramientas**: las seis de la sección 3. Todas validan que el `id_caso` sea el del
 caso abierto. En modo explicación el agente solo tiene las cuatro de lectura; en modo
-pregunta tiene además `registrar_decision`, que solo crea una propuesta pendiente.
+pregunta tiene además `registrar_decision`, que solo crea una propuesta pendiente, y
+`declarar_fuera_de_alcance`, que fija el rechazo de forma determinista.
 
 **Los cuatro límites**, con sus valores y por qué:
 
 | Límite | Valor | Por qué ese número |
 |---|---|---|
 | Iteraciones | 6 llamadas al modelo por tarea | Explicar un caso pide 3 o 4 herramientas: 2 o 3 iteraciones con llamadas en paralelo y 1 final. En el lote la mediana fue 2. Seis dan margen para un reintento del contrato sin permitir un bucle ciego |
-| Presupuesto de tokens | 40 000 de entrada + salida por tarea | Cada iteración reenvía la conversación; una explicación con reintento de contrato consumió unos 28 000 tokens de entrada el 2026-10-21. La mediana del lote fue 10 993 tokens por tarea |
+| Presupuesto de tokens | 40 000 de entrada + salida por tarea | Cada iteración reenvía la conversación; una explicación con reintento de contrato consumió unos 28 000 tokens de entrada el 2026-10-21. La mediana del lote fue 11 059 tokens por tarea (las 13 no servidas desde caché) |
 | Timeout | 25 s por llamada al modelo y 5 s por herramienta | 25 s está muy por encima de lo que tarda Claude (1-2 s) y corta a un proveedor saturado (Gemini 3.8 Flash tardaba 25-40 s); las herramientas son consultas por llave que tardan milisegundos |
 | Confirmación humana | Toda escritura es una propuesta | `registrar_decision` escribe en `propuestas_decision`, nunca en `decisiones`; la decisión la crea la API solo cuando el analista confirma con su nombre |
 
