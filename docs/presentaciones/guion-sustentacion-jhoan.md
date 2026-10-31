@@ -4,8 +4,8 @@
 Deck: https://claude.ai/artifact/YW2u8Bnbm4BDuU9PtAqdXo · App: http://localhost:8000
 Comandos: `docs/presentaciones/comandos-demo.md`.
 
-**Tu papel:** Jeison presenta las 4 primeras láminas (0:00–1:45) y termina con «Jhoan les
-muestra la app». Ahí cambias a la pestaña de la app y la manejas hasta el final.
+**Tu papel:** Jeison presenta las 5 láminas (0:00–1:45) y termina con «Jhoan les muestra
+la app». Ahí cambias a la pestaña de la app y la manejas hasta el final.
 
 ## Antes de empezar
 
@@ -35,7 +35,8 @@ muestra la app». Ahí cambias a la pestaña de la app y la manejas hasta el fin
 - **La explicación sale «armada por reglas»:** «si la IA no da una explicación
   verificable, el sistema la arma con reglas; nunca muestra un error».
 - **Sin internet:** abre un caso que ya tenga explicación (sale de caché).
-- **La app no arranca:** lámina 13 del deck (captura).
+- **La app no arranca:** abre la captura `docs/img/vista-analista.jpg` y explica el
+  recorrido sobre ella.
 
 ## Preguntas que te tocan (la app, el agente, las fallas y la seguridad)
 

@@ -3,12 +3,10 @@
   "createdOnFiles": {"v": 1, "at": "2026-10-24T15:00:00Z"},
   "lists": "css",
   "title": "Detección de fraude bancario · Sustentación",
-  "order": ["cover", "que-hace", "arquitectura", "decisiones", "demo", "respaldo-frontera", "agente", "motor", "cifras", "datos", "fallos", "iteracion", "respaldo-captura", "respaldo-preguntas", "cierre"],
+  "order": ["cover", "que-busca", "que-hace", "arquitectura", "decisiones"],
   "sections": {
-    "s1": {"description": "Qué es el proyecto y qué hace", "start": "cover"},
-    "s2": {"description": "Arquitectura y tecnología, con el porqué de cada elección", "start": "arquitectura"},
-    "s3": {"description": "La app en vivo, de punta a punta", "start": "demo"},
-    "s4": {"description": "Respaldo para la ronda de preguntas", "start": "respaldo-frontera"}
+    "s1": {"description": "Qué es el proyecto y qué busca", "start": "cover"},
+    "s2": {"description": "Qué hace, cómo está armado y por qué esta tecnología", "start": "que-hace"}
   },
   "faces": {
     "domine": {"family": "Domine", "href": "https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap"},
