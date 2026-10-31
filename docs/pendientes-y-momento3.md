@@ -24,10 +24,10 @@ Fuentes: rúbrica del Momento 3 y retos de las semanas 12 y 13 del sitio del cur
 | 8 | Guion de la demo de 6 minutos + 3 de preguntas, ensayado con reloj, con plan B (explicaciones en caché y video de respaldo). **2026-10-24:** deck y guiones por persona listos (`docs/sesion-2026-10-24.md` §2); falta ensayar con reloj y activar el link del deck | Ambos | `docs/presentaciones/` | [~] |
 | 9 | Regenerar el ZIP final con `python scripts/empaquetar_entrega.py` después de los últimos cambios y subirlo | Jhoan | buzón del curso | [ ] |
 | 10 | Agregar a Jeison como colaborador del repositorio | Jhoan | GitHub | [x] 2026-10-22 (invitación pendiente de que Jeison la acepte) |
-| 11 | Conseguir una llave de Anthropic válida (`sk-ant-…`) y repetir la suite y el lote: la del 24-oct dio 401 y todo cayó a Gemini (`auditoria/2026-10-24_1343/`) | Jhoan | `eval/resultados/`, `docs/decisiones.md` §9 | [ ] |
+| 11 | Conseguir una llave de Anthropic válida (`sk-ant-…`) y repetir la suite y el lote: la del 24-oct dio 401 y todo cayó a Gemini (`auditoria/2026-10-24_1343/`) | Jhoan | `eval/resultados/`, `docs/decisiones.md` §9 | [x] 2026-10-31 (llave nueva `sustentacion-31oct` en `.env`; suite 8/8 con Claude) |
 | 12 | Rotar las dos llaves de `docs/prueba-companero-jeison.txt` y no commitear ese archivo con ellas | Jhoan | — | [ ] |
-| 13 | Agregar los formatos `apikey_` y `AQ.` al escáner de `scripts/empaquetar_entrega.py` | Jhoan | `scripts/` | [ ] |
-| 14 | Corregir en `docs/decisiones.md` "cinco" por "seis" herramientas y la mediana de tokens (11 059); actualizar `validacion/motor-riesgo.md` | Ambos | `docs/`, `validacion/` | [ ] |
+| 13 | Agregar los formatos `apikey_` y `AQ.` al escáner de `scripts/empaquetar_entrega.py` | Jhoan | `scripts/` | [x] 2026-10-31 (`apikey_`; `AQ.Ab` ya estaba) |
+| 14 | Corregir en `docs/decisiones.md` "cinco" por "seis" herramientas y la mediana de tokens (11 059); actualizar `validacion/motor-riesgo.md` | Ambos | `docs/`, `validacion/` | [~] 2026-10-31 (seis herramientas y 11 059 corregidos; falta `validacion/motor-riesgo.md`) |
 
 Riesgos para el día de la demo y su plan:
 
@@ -46,7 +46,8 @@ tarea con responsable:
 
 | Comentario del profesor | Qué implica | Tarea | Estado |
 |---|---|---|---|
-| (pendiente de la sustentación) | | | |
+| **2026-10-31, tras la sustentación.** Exigir siempre validación humana antes de bloquear es un riesgo: mientras el analista revisa, el ladrón sigue comprando. Según el flujo de la alerta, a veces es mejor bloquear de inmediato y pasar el caso a un agente/analista. El objetivo es minimizar el riesgo de robo: mejor bloquear y avisar que correr el riesgo | Se invierte la supervisión humana: el sistema **bloquea solo** (acción protectora y reversible) y la persona decide el **desbloqueo**. Para parar una transacción hace falta un camino rápido: detectar → bloquear → avisar, sin el LLM en medio | **Objetivo central del Momento 3**: ver §9 | [ ] |
+| (si llegan más comentarios del profesor, anotarlos aquí) | | | |
 
 ## 3. Alcance del Momento 3 (semana 14, 40 %)
 
@@ -205,3 +206,56 @@ de ahí.»
 
 Orden recomendado: 1 a 3 primero (son los que más pesan); el dataset IEEE-CIS como
 refuerzo de datos en paralelo.
+
+## 9. Objetivo del Momento 3: detectar, bloquear de inmediato y desbloquear con decisión humana
+
+Origen: feedback del profesor tras la sustentación del Momento 2 (2026-10-31, §2).
+Cambia el flujo central de la app, así que tiene prioridad sobre el resto del backlog
+y debe quedar reflejado en `docs/SPEC.md` como renegociación.
+
+### 9.1 Qué cambia
+
+| | Momento 2 (hoy) | Momento 3 (objetivo) |
+|---|---|---|
+| Cuándo se actúa | Se abre un caso cuando hay **2 o más** compras marcadas en 48 h; una compra aislada no abre caso | Cada transacción se evalúa **al llegar**; si el riesgo es alto se bloquea en ese momento, sin esperar la segunda compra |
+| Quién bloquea | El analista confirma el bloqueo; el agente solo propone | **El sistema bloquea solo** (tarjeta o acceso a la cuenta) y avisa |
+| Qué decide la persona | Bloquear, descartar o escalar | **Desbloquear** (falsa alarma) o mantener el bloqueo y escalar |
+| Papel del agente LLM | Explica el caso al abrirlo | Igual, pero **fuera del camino crítico**: explica después del bloqueo, para que el analista decida el desbloqueo rápido |
+
+### 9.2 Diseño propuesto (a validar con la cadena requisitos → diseño → construcción → validación)
+
+1. **Evaluación por transacción** (`POST /api/transacciones/evaluar` o un simulador de
+   flujo): perfil de la tarjeta + modelo de riesgo. El modelo de ML responde en
+   milisegundos; el LLM no participa en esta decisión.
+2. **Dos umbrales**, elegidos en validación por costo esperado (fraude que se escapa
+   contra cliente honesto bloqueado):
+   - riesgo alto → **bloqueo automático** + caso abierto + aviso al cliente y al analista;
+   - riesgo medio → alerta para verificar con el cliente, sin bloquear;
+   - viaje imposible → bloqueo automático del acceso a la cuenta.
+3. **Aviso inmediato**: registro del bloqueo con hora y motivo, y una notificación
+   simulada al cliente ("¿reconoce esta compra?") y al analista.
+4. **Desbloqueo solo con decisión humana**, con rol autenticado (se une al inicio de
+   sesión con roles de §8.2). Desbloquear exige motivo escrito y queda en la traza.
+5. **Simulador de flujo en tiempo real**: reproducir el tramo de prueba de Sparkov
+   transacción por transacción para mostrar en vivo cómo el sistema detiene el fraude.
+
+### 9.3 Cómo se mide (cifras nuevas, contra el Momento 2)
+
+- **Latencia de decisión por transacción** (mediana y p99): de la llegada al bloqueo.
+- **Fraude detenido antes de la segunda compra**: hoy el caso exige dos; mostrar
+  cuánto dinero se deja de perder al bloquear en la primera.
+- **Bloqueos falsos por cada 1 000 transacciones** y **tiempo mediano hasta el
+  desbloqueo**. Con una precisión de 78,6 %, cerca de 1 de cada 5 bloqueos automáticos
+  sería de un cliente honesto: el desbloqueo rápido es parte del diseño, no un detalle.
+- Precisión, recall, F1 y AUC-PR del umbral de bloqueo automático (nunca solo accuracy).
+
+### 9.4 Lo que esto cambia en seguridad y gobernanza
+
+- Gobernanza, pregunta 1 (qué decide el sistema solo): ahora **sí** decide una acción
+  sobre la cuenta, el bloqueo, y hay que sustentarlo: es protectora y reversible, y su
+  costo se mide.
+- Gobernanza, pregunta 2 (qué necesita a un humano): **el desbloqueo**, con un analista
+  autenticado y su motivo.
+- Seguridad: un bloqueo automático puede usarse para hacer daño (bloquear clientes en
+  masa). Hace falta un tope de bloqueos automáticos por minuto, alerta al supervisor si
+  se supera y que el agente siga sin poder desbloquear.
