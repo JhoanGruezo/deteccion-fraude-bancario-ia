@@ -163,3 +163,45 @@ resultado, haya funcionado o no, y lo que se cambió después.
   aparte (AUC-PR 0,875 sin esas filas).
 - Las tarifas vienen de agregadores, no de las páginas oficiales.
 - La suite dorada está pendiente de verificación humana.
+
+## 8. Plan del Momento 3 sin datos reales de bancos (2026-10-31)
+
+Ningún banco va a entregar datos de clientes, y la rúbrica del Momento 3 no los pide:
+evalúa seguridad, gobernanza, la respuesta a la auditoría cruzada, las cifras finales
+contra la línea base y que alguien ajeno al equipo use la app. El tema de los datos se
+resuelve con honestidad y reforzando la evidencia con lo que sí es público.
+
+### 8.1 Datos
+
+| Prioridad | Qué | Por qué |
+|---|---|---|
+| Alta | Validar el motor en un segundo dataset con transacciones reales anonimizadas: **IEEE-CIS Fraud Detection** (Kaggle, donado por Vesta). Trae identificadores de tarjeta y dirección para armar un perfil por tarjeta; no trae coordenadas, así que el viaje imposible sigue en sintéticos. Hay que aceptar las reglas de la competencia en Kaggle para bajarlo | Si el modelo vuelve a ganarle a la regla fija en datos que no son simulados ni nuestros, la prueba de necesidad queda mucho más sólida |
+| Media | Pruebas de estrés: inyectar en Sparkov fraudes que imitan el perfil de la tarjeta (montos pequeños, hora y categoría habituales) y medir cuántos detecta | Saber dónde falla el modelo y decirlo antes de que lo pregunten |
+| Media | Medir precisión y recall mes a mes en el tramo de prueba | Si cae con el tiempo, sustenta un plan de reentrenamiento |
+| Media | Diseño para un banco real: contrato de datos (columnas que el banco llena), anonimización antes de que algo salga (tarjeta enmascarada, sin nombres), despliegue dentro del banco con Docker y modelo contratado en su propia nube (por ejemplo, Claude en AWS Bedrock o Gemini en Vertex) | Responde "¿y con datos reales?" y la pregunta de gobernanza "¿qué datos salen a un tercero?" |
+
+Respuesta para la sustentación: «Los bancos no comparten datos de clientes, y está bien
+que no lo hagan. Por eso validamos con dos datasets públicos que no generamos nosotros,
+uno con transacciones reales anonimizadas, y diseñamos la app para que un banco la
+corra dentro de su propia infraestructura, con sus datos anonimizados y sin que salgan
+de ahí.»
+
+### 8.2 Entregables de la rúbrica, en orden
+
+1. **`docs/seguridad.md`**: tríada (§4), ataque propio con traza (los 33 ataques de
+   `auditoria/2026-10-31_demo/seguridad-agente.md`) y hardening con el antes y el
+   después: tope de 6 herramientas por iteración, `registrar_decision` solo después de
+   `obtener_caso`, puerto en 127.0.0.1, contrato que sube los campos anidados.
+2. **`docs/gobernanza.md`**: ficha de una página con las 5 preguntas (§5).
+3. **Inicio de sesión con roles** (analista y supervisor): cada decisión con un
+   responsable autenticado. Es lo más importante en código.
+4. **Tope de gasto diario, límite de peticiones por minuto y CSRF** (hallazgos medios de
+   `auditoria/2026-10-31_demo/seguridad-app.md`).
+5. **`docs/SPEC.md`** con la tabla de renegociaciones (§3): sin él, el criterio
+   "Alcance" queda en riesgo.
+6. **Prueba con un tercero** que use la app en vivo sin explicación.
+7. **Cifras finales contra la línea base**, con el mismo método del lote.
+8. **`docs/respuesta_auditoria.md`** cuando llegue el reporte del otro equipo.
+
+Orden recomendado: 1 a 3 primero (son los que más pesan); el dataset IEEE-CIS como
+refuerzo de datos en paralelo.
