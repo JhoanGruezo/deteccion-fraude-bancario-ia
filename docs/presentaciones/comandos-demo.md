@@ -110,4 +110,4 @@ docker compose down -v     # OJO: borra la base; al arrancar se recarga la semil
 ## 8. Plan B
 
 - Sin internet: abre un caso ya explicado (sale de caché) o la explicación de plantilla.
-- La app no levanta: lámina 14 del deck (captura de la vista del analista).
+- La app no levanta: lámina 13 del deck (captura de la vista del analista).
