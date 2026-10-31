@@ -231,7 +231,22 @@ def reparar_json(texto: str) -> tuple[dict | None, str | None]:
             return None, f"el JSON está roto y no se pudo reparar ({error.msg})"
     if not isinstance(datos, dict):
         return None, "la respuesta no es un objeto JSON"
-    return datos, None
+    return _desanidar(datos), None
+
+
+# Campos de primer nivel que el modelo a veces escribe DENTRO de "recomendacion" (medido el
+# 2026-10-31 con Claude Haiku: el contenido era correcto y se iba a la plantilla solo por
+# la forma). Se suben a su lugar; todas las comprobaciones siguen aplicando igual.
+_CAMPOS_QUE_SE_ANIDAN = ("senales_citadas", "lo_que_no_se_sabe", "nivel_riesgo_en_palabras")
+
+
+def _desanidar(datos: dict) -> dict:
+    recomendacion = datos.get("recomendacion")
+    if isinstance(recomendacion, dict):
+        for clave in _CAMPOS_QUE_SE_ANIDAN:
+            if clave not in datos and clave in recomendacion:
+                datos[clave] = recomendacion.pop(clave)
+    return datos
 
 
 # --- Validación ------------------------------------------------------------------------

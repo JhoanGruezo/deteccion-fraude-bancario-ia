@@ -117,6 +117,25 @@ def test_explicacion_valida_pasa():
     assert contenido["es_respaldo"] is False
 
 
+def test_campos_anidados_dentro_de_recomendacion_se_suben_y_se_validan():
+    # Claude Haiku, 2026-10-31: senales_citadas y lo_que_no_se_sabe llegaban dentro de recomendacion.
+    datos = explicacion_valida()
+    datos["recomendacion"]["senales_citadas"] = datos.pop("senales_citadas")
+    datos["recomendacion"]["lo_que_no_se_sabe"] = datos.pop("lo_que_no_se_sabe")
+    contenido, errores = validar_explicacion(json.dumps(datos, ensure_ascii=False), evidencia_de(caso_de_ejemplo()))
+    assert errores == []
+    assert contenido["senales_citadas"] == ["monto", "hora"]
+    assert "reconoce" in contenido["lo_que_no_se_sabe"]
+
+
+def test_campos_anidados_siguen_pasando_por_las_comprobaciones():
+    datos = explicacion_valida()
+    datos.pop("senales_citadas")
+    datos["recomendacion"]["senales_citadas"] = ["ubicacion_imposible"]   # no relevante en este caso
+    _, errores = validar_explicacion(json.dumps(datos, ensure_ascii=False), evidencia_de(caso_de_ejemplo()))
+    assert any("no son relevantes" in e for e in errores)
+
+
 def test_json_con_cercos_y_texto_alrededor_se_repara():
     texto = "Aquí está la explicación:\n```json\n" + texto_valido() + "\n```\nEspero que sirva."
     contenido, errores = validar_explicacion(texto, evidencia_de(caso_de_ejemplo()))
