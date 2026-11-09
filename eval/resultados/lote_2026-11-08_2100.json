@@ -1,0 +1,4525 @@
+{
+  "fecha": "2026-11-08T21:00:25-05:00",
+  "url_base": "http://localhost:8000",
+  "proveedores": "Claude claude-haiku-5-5 (principal), Gemini gemini-3.5-flash-lite",
+  "aviso": null,
+  "parcial": false,
+  "cifras": {
+    "n_tareas": 19,
+    "tasa_exito": {
+      "exitos": 16,
+      "tareas": 19,
+      "valor": 0.8421052631578947
+    },
+    "costo_por_tarea": {
+      "mediana_usd": 0.001749,
+      "tareas_consideradas": 13,
+      "mediana_sin_fallas_forzadas_usd": 0.001703,
+      "total_lote_usd": 0.023262
+    },
+    "latencia": {
+      "mediana_ms": 6816,
+      "p90_ms": 12238.6,
+      "tareas_consideradas": 13,
+      "mediana_sin_fallas_forzadas_ms": 6522,
+      "mediana_todas_ms": 6306,
+      "ttft_mediano_ms": 2694.5,
+      "tareas_con_ttft": 12
+    },
+    "recuperacion": {
+      "recuperadas": 4,
+      "tareas_con_fallo": 4,
+      "valor": 1.0
+    },
+    "ahorro_cache": {
+      "pares": [
+        {
+          "dorado": "D1",
+          "desde_cache": true,
+          "latencia_fria_ms": 6522,
+          "latencia_cache_ms": 2044,
+          "costo_frio_usd": 0.001703,
+          "costo_cache_usd": 0.0
+        },
+        {
+          "dorado": "D2",
+          "desde_cache": true,
+          "latencia_fria_ms": 7991,
+          "latencia_cache_ms": 2053,
+          "costo_frio_usd": 0.001999,
+          "costo_cache_usd": 0.0
+        },
+        {
+          "dorado": "D3",
+          "desde_cache": true,
+          "latencia_fria_ms": 7597,
+          "latencia_cache_ms": 2050,
+          "costo_frio_usd": 0.002033,
+          "costo_cache_usd": 0.0
+        },
+        {
+          "dorado": "D4",
+          "desde_cache": true,
+          "latencia_fria_ms": 6306,
+          "latencia_cache_ms": 2036,
+          "costo_frio_usd": 0.001465,
+          "costo_cache_usd": 0.0
+        },
+        {
+          "dorado": "D5",
+          "desde_cache": true,
+          "latencia_fria_ms": 6816,
+          "latencia_cache_ms": 2032,
+          "costo_frio_usd": 0.001749,
+          "costo_cache_usd": 0.0
+        },
+        {
+          "dorado": "D6",
+          "desde_cache": true,
+          "latencia_fria_ms": 6773,
+          "latencia_cache_ms": 2041,
+          "costo_frio_usd": 0.001855,
+          "costo_cache_usd": 0.0
+        }
+      ],
+      "pares_servidos_desde_cache": 6,
+      "latencia_mediana_fria_ms": 6794.5,
+      "latencia_mediana_cache_ms": 2042.5,
+      "costo_mediano_frio_usd": 0.001802,
+      "costo_cache_usd": 0.0,
+      "reduccion_latencia": 0.6993892118625359
+    },
+    "tareas_contaminadas": []
+  },
+  "resultados": [
+    {
+      "id": "L01",
+      "tipo": "explicacion",
+      "dorado": "D1",
+      "id_caso": "SPK-000266",
+      "proposito": "explicación en frío: ráfaga larga",
+      "regenerar": true,
+      "falla_pedida": null,
+      "contaminada": false,
+      "exito": true,
+      "origen": "agente",
+      "explicacion_valida": true,
+      "motivos_de_fallo": [],
+      "hechos": [
+        {
+          "hecho": "cita la señal «monto_24h»",
+          "cumple": true
+        },
+        {
+          "hecho": "dice cuántas compras tuvo el caso (12) o cuántas superaron el umbral (12)",
+          "cumple": true
+        },
+        {
+          "hecho": "identifica la tarjeta por sus últimos cuatro dígitos (3109)",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 321,16",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 956,22",
+          "cumple": true
+        }
+      ],
+      "contenido": {
+        "que_paso": "Entre el 27 y el 28 de septiembre de 2020 se registraron 12 transacciones en Dallas por 6.824,70 en total. La primera fue el 27-09-2020 a la 1:54, por 321,16 en Mosciski, Gislason and Mertz (grocery_pos). La última fue el 28-09-2020 a las 23:03, por 956,22 en Stamm-Witting (shopping_net). Varias compras grandes se concentraron en pocas horas la noche del 28, y entre ellas hubo compras pequeñas en gas_transport. Antes del caso, la tarjeta tenía compras de montos bajos entre el 24 y el 26 de septiembre.",
+        "por_que_es_riesgo": "El monto de las compras es muy superior a su patrón previo: por ejemplo, 987,00 frente a un promedio previo de 57,22. El gasto de las últimas 24 horas llegó a 3.587,62 frente a un gasto diario habitual de 61,45. La hora de la compra de las 22:00 y las 23:00 también se aparta de sus horas habituales.",
+        "lo_que_no_se_sabe": "Si el cliente reconoce estas compras. El perfil tiene 625 transacciones previas, así que sí hay un historial con el cual comparar.",
+        "nivel_riesgo_en_palabras": "Riesgo alto: sus 12 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 94,1 % (de los más altos de la cola).",
+        "recomendacion": {
+          "accion": "bloquear_tarjeta",
+          "objetivo": "la tarjeta terminada en 3109",
+          "argumento": "La regla detectó 12 transacciones que superan el umbral de bloqueo en 48 horas, con un patrón de compras anómalas seguidas compatible con uso no autorizado. La señal principal es el gasto de las últimas 24 horas."
+        },
+        "senales_citadas": [
+          "monto",
+          "monto_24h",
+          "hora"
+        ],
+        "es_respaldo": false
+      },
+      "con_fallo": false,
+      "descripcion_fallo": null,
+      "recuperada": false,
+      "metricas": {
+        "tarea_id": "12ca3c48-1c10-4f60-a01a-ce58e47698a3",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 6522,
+        "ttft_cliente_ms": 2825,
+        "primer_evento_ms": 2012,
+        "latencia_servidor_ms": 4502,
+        "ttft_servidor_ms": 2126,
+        "costo_usd": 0.001703,
+        "tokens_entrada": 12922,
+        "tokens_salida": 821,
+        "iteraciones": 2,
+        "proveedor_final": "claude",
+        "modelo_final": "claude-haiku-5-5",
+        "reintentos": 0,
+        "conmutaciones": 0,
+        "desde_cache": false,
+        "es_respaldo": false,
+        "falla_aplicada": null,
+        "herramientas_pedidas": [
+          "obtener_caso",
+          "obtener_historial_reciente",
+          "obtener_perfil_cuenta"
+        ],
+        "fragmentos_streaming": 112
+      },
+      "traza": [
+        {
+          "t_ms": 2012,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Regenerando: consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2024,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "12ca3c48-1c10-4f60-a01a-ce58e47698a3",
+            "tipo_tarea": "explicacion",
+            "id_caso": "SPK-000266",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": null
+          }
+        },
+        {
+          "t_ms": 2063,
+          "tipo": "estado",
+          "datos": {
+            "texto": "El asistente está consultando la evidencia del caso…"
+          }
+        },
+        {
+          "t_ms": 2066,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 1,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 3441,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "argumentos": {
+              "id_caso": "SPK-000266"
+            },
+            "id_llamada": "toolu_01XP3y5iWpsUwwBggzqRxuju"
+          }
+        },
+        {
+          "t_ms": 3462,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "resumen": {
+              "campos": [
+                "fin_ventana",
+                "fuente",
+                "id_caso",
+                "inicio_ventana",
+                "monto_total",
+                "motivo_recomendacion",
+                "n_transacciones",
+                "nivel_recomendacion",
+                "score_maximo",
+                "senal_principal",
+                "senales_que_puedes_citar",
+                "tarjeta",
+                "tipos_fraude_sospechados",
+                "transacciones",
+                "transacciones_sobre_umbral_bloqueo"
+              ],
+              "tamano_caracteres": 7873,
+              "n_transacciones": 12
+            },
+            "duracion_ms": 18
+          }
+        },
+        {
+          "t_ms": 3464,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "argumentos": {
+              "id_caso": "SPK-000266",
+              "dias": 3
+            },
+            "id_llamada": "toolu_01Vmy8Y2bX9E4GADeMR2LEGA"
+          }
+        },
+        {
+          "t_ms": 3476,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "resumen": {
+              "campos": [
+                "dias",
+                "n_transacciones",
+                "transacciones"
+              ],
+              "tamano_caracteres": 2615,
+              "n_transacciones": 16
+            },
+            "duracion_ms": 9
+          }
+        },
+        {
+          "t_ms": 3478,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "argumentos": {
+              "id_caso": "SPK-000266"
+            },
+            "id_llamada": "toolu_01K58o4Hbodhqq3iSJejhxQN"
+          }
+        },
+        {
+          "t_ms": 3483,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "resumen": {
+              "campos": [
+                "categorias_habituales",
+                "horas_habituales",
+                "monto_desviacion",
+                "monto_promedio",
+                "n_transacciones_previas",
+                "sin_historial",
+                "tarjeta",
+                "transacciones_por_dia"
+              ],
+              "tamano_caracteres": 466
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 3486,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 2,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 6516,
+          "tipo": "explicacion",
+          "datos": {
+            "contenido": {
+              "que_paso": "Entre el 27 y el 28 de septiembre de 2020 se registraron 12 transacciones en Dallas por 6.824,70 en total. La primera fue el 27-09-2020 a la 1:54, por 321,16 en Mosciski, Gislason and Mertz (grocery_pos). La última fue el 28-09-2020 a las 23:03, por 956,22 en Stamm-Witting (shopping_net). Varias compras grandes se concentraron en pocas horas la noche del 28, y entre ellas hubo compras pequeñas en gas_transport. Antes del caso, la tarjeta tenía compras de montos bajos entre el 24 y el 26 de septiembre.",
+              "por_que_es_riesgo": "El monto de las compras es muy superior a su patrón previo: por ejemplo, 987,00 frente a un promedio previo de 57,22. El gasto de las últimas 24 horas llegó a 3.587,62 frente a un gasto diario habitual de 61,45. La hora de la compra de las 22:00 y las 23:00 también se aparta de sus horas habituales.",
+              "lo_que_no_se_sabe": "Si el cliente reconoce estas compras. El perfil tiene 625 transacciones previas, así que sí hay un historial con el cual comparar.",
+              "nivel_riesgo_en_palabras": "Riesgo alto: sus 12 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 94,1 % (de los más altos de la cola).",
+              "recomendacion": {
+                "accion": "bloquear_tarjeta",
+                "objetivo": "la tarjeta terminada en 3109",
+                "argumento": "La regla detectó 12 transacciones que superan el umbral de bloqueo en 48 horas, con un patrón de compras anómalas seguidas compatible con uso no autorizado. La señal principal es el gasto de las últimas 24 horas."
+              },
+              "senales_citadas": [
+                "monto",
+                "monto_24h",
+                "hora"
+              ],
+              "es_respaldo": false
+            },
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 6521,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "12ca3c48-1c10-4f60-a01a-ce58e47698a3",
+            "motivo_fin": "completada",
+            "iteraciones": 2,
+            "tokens_entrada": 12922,
+            "tokens_salida": 821,
+            "costo_usd": 0.001703,
+            "latencia_ms": 4502,
+            "ttft_ms": 2126,
+            "proveedor_final": "claude",
+            "modelo_final": "claude-haiku-5-5",
+            "reintentos": 0,
+            "conmutaciones": 0,
+            "desde_cache": false,
+            "tokens": 13743,
+            "fragmentos_streaming": 112,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L02",
+      "tipo": "explicacion",
+      "dorado": "D2",
+      "id_caso": "SPK-000093",
+      "proposito": "explicación en frío: bloqueo por monto",
+      "regenerar": true,
+      "falla_pedida": null,
+      "contaminada": false,
+      "exito": true,
+      "origen": "agente",
+      "explicacion_valida": true,
+      "motivos_de_fallo": [],
+      "hechos": [
+        {
+          "hecho": "cita la señal «monto»",
+          "cumple": true
+        },
+        {
+          "hecho": "identifica la tarjeta por sus últimos cuatro dígitos (9375)",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 842,65",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 62,83 o 62,84",
+          "cumple": true
+        }
+      ],
+      "contenido": {
+        "que_paso": "El 21/06/2020 a las 22:06 se registró una compra de 24,84 en Hamill-D'Amore (health_fitness, Notrees). A las 23:02 siguió una compra de 842,65 en Hermann and Sons (shopping_pos, Notrees). Son las dos transacciones del caso, por un total de 867,49. Antes, desde el 18/06, la tarjeta tenía compras de menor monto; las dos más grandes previas fueron 1.063,03 (20/06, Fisher-Schowalter) y 834,60 (20/06, Dach-Nader). Tras el caso, a las 05:21 del 23/06 hubo otra compra de 975,81 en Kunde-Sanford.",
+        "por_que_es_riesgo": "La compra de 842,65 es 13,4 veces el promedio previo del cliente (62,83). El gasto de las últimas 24 horas llegó a 1.125,43, frente a un gasto diario habitual de 239,53. La primera compra, de 24,84, ocurrió a una hora en la que solo el 3,0 % de sus transacciones previas se hacían.",
+        "lo_que_no_se_sabe": "No se sabe si el cliente reconoce las dos compras ni si las autorizó. El perfil no muestra si sus compras grandes previas en comercios similares son habituales en la cuenta.",
+        "nivel_riesgo_en_palabras": "Riesgo alto: sus 2 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 33,4 % (en la mitad de la cola).",
+        "recomendacion": {
+          "accion": "bloquear_tarjeta",
+          "objetivo": "la tarjeta terminada en 9375",
+          "argumento": "La regla bloquea porque dos transacciones en 48 horas superan el umbral de bloqueo (0,97) y el patrón es de compras anómalas seguidas, compatible con uso no autorizado. El monto de la segunda compra y el gasto acumulado de 24 horas son las señales principales."
+        },
+        "senales_citadas": [
+          "monto",
+          "monto_24h",
+          "hora"
+        ],
+        "es_respaldo": false
+      },
+      "con_fallo": false,
+      "descripcion_fallo": null,
+      "recuperada": false,
+      "metricas": {
+        "tarea_id": "be7703fc-bc2d-4fc0-bd8d-1641a9268eef",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 7991,
+        "ttft_cliente_ms": 3507,
+        "primer_evento_ms": 2011,
+        "latencia_servidor_ms": 5974,
+        "ttft_servidor_ms": 3461,
+        "costo_usd": 0.001999,
+        "tokens_entrada": 15565,
+        "tokens_salida": 885,
+        "iteraciones": 3,
+        "proveedor_final": "claude",
+        "modelo_final": "claude-haiku-5-5",
+        "reintentos": 0,
+        "conmutaciones": 0,
+        "desde_cache": false,
+        "es_respaldo": false,
+        "falla_aplicada": null,
+        "herramientas_pedidas": [
+          "obtener_caso",
+          "obtener_historial_reciente",
+          "obtener_perfil_cuenta"
+        ],
+        "fragmentos_streaming": 125
+      },
+      "traza": [
+        {
+          "t_ms": 2011,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Regenerando: consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2018,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "be7703fc-bc2d-4fc0-bd8d-1641a9268eef",
+            "tipo_tarea": "explicacion",
+            "id_caso": "SPK-000093",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": null
+          }
+        },
+        {
+          "t_ms": 2030,
+          "tipo": "estado",
+          "datos": {
+            "texto": "El asistente está consultando la evidencia del caso…"
+          }
+        },
+        {
+          "t_ms": 2031,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 1,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 3834,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "argumentos": {
+              "id_caso": "SPK-000093"
+            },
+            "id_llamada": "toolu_01HvewJfK8XVsYwtXbUVbmzT"
+          }
+        },
+        {
+          "t_ms": 3838,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "resumen": {
+              "campos": [
+                "fin_ventana",
+                "fuente",
+                "id_caso",
+                "inicio_ventana",
+                "monto_total",
+                "motivo_recomendacion",
+                "n_transacciones",
+                "nivel_recomendacion",
+                "score_maximo",
+                "senal_principal",
+                "senales_que_puedes_citar",
+                "tarjeta",
+                "tipos_fraude_sospechados",
+                "transacciones",
+                "transacciones_sobre_umbral_bloqueo"
+              ],
+              "tamano_caracteres": 2052,
+              "n_transacciones": 2
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 3841,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 2,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 4814,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "argumentos": {
+              "id_caso": "SPK-000093",
+              "dias": 3
+            },
+            "id_llamada": "toolu_01CtZkwc4sWdZ1vGJZvdBSX3"
+          }
+        },
+        {
+          "t_ms": 4821,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "resumen": {
+              "campos": [
+                "dias",
+                "n_transacciones",
+                "transacciones"
+              ],
+              "tamano_caracteres": 4113,
+              "n_transacciones": 26
+            },
+            "duracion_ms": 4
+          }
+        },
+        {
+          "t_ms": 4823,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "argumentos": {
+              "id_caso": "SPK-000093"
+            },
+            "id_llamada": "toolu_01MCFsf1KAp4DifuKRgP3NjD"
+          }
+        },
+        {
+          "t_ms": 4826,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "resumen": {
+              "campos": [
+                "categorias_habituales",
+                "horas_habituales",
+                "monto_desviacion",
+                "monto_promedio",
+                "n_transacciones_previas",
+                "sin_historial",
+                "tarjeta",
+                "transacciones_por_dia"
+              ],
+              "tamano_caracteres": 471
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 4829,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 3,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 7986,
+          "tipo": "explicacion",
+          "datos": {
+            "contenido": {
+              "que_paso": "El 21/06/2020 a las 22:06 se registró una compra de 24,84 en Hamill-D'Amore (health_fitness, Notrees). A las 23:02 siguió una compra de 842,65 en Hermann and Sons (shopping_pos, Notrees). Son las dos transacciones del caso, por un total de 867,49. Antes, desde el 18/06, la tarjeta tenía compras de menor monto; las dos más grandes previas fueron 1.063,03 (20/06, Fisher-Schowalter) y 834,60 (20/06, Dach-Nader). Tras el caso, a las 05:21 del 23/06 hubo otra compra de 975,81 en Kunde-Sanford.",
+              "por_que_es_riesgo": "La compra de 842,65 es 13,4 veces el promedio previo del cliente (62,83). El gasto de las últimas 24 horas llegó a 1.125,43, frente a un gasto diario habitual de 239,53. La primera compra, de 24,84, ocurrió a una hora en la que solo el 3,0 % de sus transacciones previas se hacían.",
+              "lo_que_no_se_sabe": "No se sabe si el cliente reconoce las dos compras ni si las autorizó. El perfil no muestra si sus compras grandes previas en comercios similares son habituales en la cuenta.",
+              "nivel_riesgo_en_palabras": "Riesgo alto: sus 2 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 33,4 % (en la mitad de la cola).",
+              "recomendacion": {
+                "accion": "bloquear_tarjeta",
+                "objetivo": "la tarjeta terminada en 9375",
+                "argumento": "La regla bloquea porque dos transacciones en 48 horas superan el umbral de bloqueo (0,97) y el patrón es de compras anómalas seguidas, compatible con uso no autorizado. El monto de la segunda compra y el gasto acumulado de 24 horas son las señales principales."
+              },
+              "senales_citadas": [
+                "monto",
+                "monto_24h",
+                "hora"
+              ],
+              "es_respaldo": false
+            },
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 7990,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "be7703fc-bc2d-4fc0-bd8d-1641a9268eef",
+            "motivo_fin": "completada",
+            "iteraciones": 3,
+            "tokens_entrada": 15565,
+            "tokens_salida": 885,
+            "costo_usd": 0.001999,
+            "latencia_ms": 5974,
+            "ttft_ms": 3461,
+            "proveedor_final": "claude",
+            "modelo_final": "claude-haiku-5-5",
+            "reintentos": 0,
+            "conmutaciones": 0,
+            "desde_cache": false,
+            "tokens": 16450,
+            "fragmentos_streaming": 125,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L03",
+      "tipo": "explicacion",
+      "dorado": "D3",
+      "id_caso": "SPK-000104",
+      "proposito": "explicación en frío: gasto en 24 h",
+      "regenerar": true,
+      "falla_pedida": null,
+      "contaminada": false,
+      "exito": true,
+      "origen": "agente",
+      "explicacion_valida": true,
+      "motivos_de_fallo": [],
+      "hechos": [
+        {
+          "hecho": "cita la señal «monto_24h»",
+          "cumple": true
+        },
+        {
+          "hecho": "dice cuántas compras tuvo el caso (5) o cuántas superaron el umbral (5)",
+          "cumple": true
+        },
+        {
+          "hecho": "identifica la tarjeta por sus últimos cuatro dígitos (2826)",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 967,23",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 1.010,50 o 1.920,54 o 1.930,67 o 2.863,31",
+          "cumple": true
+        }
+      ],
+      "contenido": {
+        "que_paso": "Entre el 14-07-2020 a las 23:04 y el 15-07-2020 a las 22:14 se registraron 5 transacciones en Boyd por 3.794,35 en total: Jast Ltd por 967,23 (14/07, 23:04), Schmeler, Bashirian and Price por 930,27 (14/07, 23:08), Schmitt Inc por 10,13 (15/07, 02:42), Lemke-Gutmann por 932,64 (15/07, 18:58) y Heathcote LLC por 954,08 (15/07, 22:14). Antes, en las mismas horas del 13 y 14 de julio, la tarjeta tenía compras pequeñas (entre 10,04 y 94,54).",
+        "por_que_es_riesgo": "Las compras grandes son de categoría shopping_net, de 967,23 y 930,27 en la primera hora, cuando el monto promedio previo del cliente es 88,44. El monto de cada una aparece como 10,3 a 10,9 veces ese promedio, y el gasto de las últimas 24 horas llegó a 2.863,31 frente a un gasto diario habitual de 91,60.",
+        "lo_que_no_se_sabe": "No se sabe si el cliente reconoce las compras ni si el comercio es legítimo. Tampoco hay información sobre cómo se obtuvieron los datos de la tarjeta. El historial reciente es de 3 días y el perfil se basa en 548 transacciones previas.",
+        "nivel_riesgo_en_palabras": "Riesgo alto: sus 5 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 94,1 % (de los más altos de la cola).",
+        "recomendacion": {
+          "accion": "bloquear_tarjeta",
+          "objetivo": "la tarjeta terminada en 2826",
+          "argumento": "La regla bloquea porque 5 transacciones en 48 h superaron el umbral de bloqueo, con patrón de uso no autorizado: compras grandes seguidas en shopping_net, muy por encima de su gasto habitual, y un gasto de 24 horas que se disparó."
+        },
+        "senales_citadas": [
+          "monto",
+          "monto_24h"
+        ],
+        "es_respaldo": false
+      },
+      "con_fallo": false,
+      "descripcion_fallo": null,
+      "recuperada": false,
+      "metricas": {
+        "tarea_id": "074e91ae-fd38-413b-935a-b6a7d94454a7",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 7597,
+        "ttft_cliente_ms": 2642,
+        "primer_evento_ms": 2013,
+        "latencia_servidor_ms": 5579,
+        "ttft_servidor_ms": 2997,
+        "costo_usd": 0.002033,
+        "tokens_entrada": 15600,
+        "tokens_salida": 945,
+        "iteraciones": 3,
+        "proveedor_final": "claude",
+        "modelo_final": "claude-haiku-5-5",
+        "reintentos": 0,
+        "conmutaciones": 0,
+        "desde_cache": false,
+        "es_respaldo": false,
+        "falla_aplicada": null,
+        "herramientas_pedidas": [
+          "obtener_caso",
+          "obtener_historial_reciente",
+          "obtener_perfil_cuenta"
+        ],
+        "fragmentos_streaming": 133
+      },
+      "traza": [
+        {
+          "t_ms": 2013,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Regenerando: consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2020,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "074e91ae-fd38-413b-935a-b6a7d94454a7",
+            "tipo_tarea": "explicacion",
+            "id_caso": "SPK-000104",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": null
+          }
+        },
+        {
+          "t_ms": 2033,
+          "tipo": "estado",
+          "datos": {
+            "texto": "El asistente está consultando la evidencia del caso…"
+          }
+        },
+        {
+          "t_ms": 2036,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 1,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 2976,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "argumentos": {
+              "id_caso": "SPK-000104"
+            },
+            "id_llamada": "toolu_01DQCWhQVqhcXEZLbccZwEtw"
+          }
+        },
+        {
+          "t_ms": 2984,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "resumen": {
+              "campos": [
+                "fin_ventana",
+                "fuente",
+                "id_caso",
+                "inicio_ventana",
+                "monto_total",
+                "motivo_recomendacion",
+                "n_transacciones",
+                "nivel_recomendacion",
+                "score_maximo",
+                "senal_principal",
+                "senales_que_puedes_citar",
+                "tarjeta",
+                "tipos_fraude_sospechados",
+                "transacciones",
+                "transacciones_sobre_umbral_bloqueo"
+              ],
+              "tamano_caracteres": 3393,
+              "n_transacciones": 5
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 2986,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 2,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 4002,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "argumentos": {
+              "id_caso": "SPK-000104",
+              "dias": 3
+            },
+            "id_llamada": "toolu_01695Nqqg76qMiFMjnFeJ9M9"
+          }
+        },
+        {
+          "t_ms": 4007,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "resumen": {
+              "campos": [
+                "dias",
+                "n_transacciones",
+                "transacciones"
+              ],
+              "tamano_caracteres": 1623,
+              "n_transacciones": 10
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 4008,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "argumentos": {
+              "id_caso": "SPK-000104"
+            },
+            "id_llamada": "toolu_01E2go4NHQArWLUe5d5QJ2wF"
+          }
+        },
+        {
+          "t_ms": 4220,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "resumen": {
+              "campos": [
+                "categorias_habituales",
+                "horas_habituales",
+                "monto_desviacion",
+                "monto_promedio",
+                "n_transacciones_previas",
+                "sin_historial",
+                "tarjeta",
+                "transacciones_por_dia"
+              ],
+              "tamano_caracteres": 462
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 4223,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 3,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 7593,
+          "tipo": "explicacion",
+          "datos": {
+            "contenido": {
+              "que_paso": "Entre el 14-07-2020 a las 23:04 y el 15-07-2020 a las 22:14 se registraron 5 transacciones en Boyd por 3.794,35 en total: Jast Ltd por 967,23 (14/07, 23:04), Schmeler, Bashirian and Price por 930,27 (14/07, 23:08), Schmitt Inc por 10,13 (15/07, 02:42), Lemke-Gutmann por 932,64 (15/07, 18:58) y Heathcote LLC por 954,08 (15/07, 22:14). Antes, en las mismas horas del 13 y 14 de julio, la tarjeta tenía compras pequeñas (entre 10,04 y 94,54).",
+              "por_que_es_riesgo": "Las compras grandes son de categoría shopping_net, de 967,23 y 930,27 en la primera hora, cuando el monto promedio previo del cliente es 88,44. El monto de cada una aparece como 10,3 a 10,9 veces ese promedio, y el gasto de las últimas 24 horas llegó a 2.863,31 frente a un gasto diario habitual de 91,60.",
+              "lo_que_no_se_sabe": "No se sabe si el cliente reconoce las compras ni si el comercio es legítimo. Tampoco hay información sobre cómo se obtuvieron los datos de la tarjeta. El historial reciente es de 3 días y el perfil se basa en 548 transacciones previas.",
+              "nivel_riesgo_en_palabras": "Riesgo alto: sus 5 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 94,1 % (de los más altos de la cola).",
+              "recomendacion": {
+                "accion": "bloquear_tarjeta",
+                "objetivo": "la tarjeta terminada en 2826",
+                "argumento": "La regla bloquea porque 5 transacciones en 48 h superaron el umbral de bloqueo, con patrón de uso no autorizado: compras grandes seguidas en shopping_net, muy por encima de su gasto habitual, y un gasto de 24 horas que se disparó."
+              },
+              "senales_citadas": [
+                "monto",
+                "monto_24h"
+              ],
+              "es_respaldo": false
+            },
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 7597,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "074e91ae-fd38-413b-935a-b6a7d94454a7",
+            "motivo_fin": "completada",
+            "iteraciones": 3,
+            "tokens_entrada": 15600,
+            "tokens_salida": 945,
+            "costo_usd": 0.002033,
+            "latencia_ms": 5579,
+            "ttft_ms": 2997,
+            "proveedor_final": "claude",
+            "modelo_final": "claude-haiku-5-5",
+            "reintentos": 0,
+            "conmutaciones": 0,
+            "desde_cache": false,
+            "tokens": 16545,
+            "fragmentos_streaming": 133,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L04",
+      "tipo": "explicacion",
+      "dorado": "D4",
+      "id_caso": "SPK-000179",
+      "proposito": "explicación en frío: verificar con el cliente",
+      "regenerar": true,
+      "falla_pedida": null,
+      "contaminada": false,
+      "exito": true,
+      "origen": "agente",
+      "explicacion_valida": true,
+      "motivos_de_fallo": [],
+      "hechos": [
+        {
+          "hecho": "cita la señal «monto_24h»",
+          "cumple": true
+        },
+        {
+          "hecho": "habla de verificar o contactar al cliente, no de bloquear",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 18,44 o 8,32",
+          "cumple": true
+        }
+      ],
+      "contenido": {
+        "que_paso": "El caso tiene dos transacciones en la tarjeta terminada en 0710, por un total de 26,76. La primera fue el 30/11/2020 a las 22:26:50, por 18,44, en Hauck, Dietrich and Funk (kids_pets, Colton). La segunda fue el 01/12/2020 a las 07:20:44, por 8,32, en Maggio-Fahey (misc_pos, Colton). Antes del caso, en las 24 horas previas, el historial muestra un movimiento de gasto muy superior al habitual, incluida una compra de 2.253,20 el 30/11 a las 10:49.",
+        "por_que_es_riesgo": "La señal principal es el gasto de las últimas 24 horas: en esa ventana movió 2.436,25, frente a un gasto diario habitual de 118,79, más inusual que el 99,7 % de las transacciones normales. La segunda compra también muestra un monto de 8,32, equivalente a 0,1 veces su promedio previo de 61,00, y un ritmo de 5 transacciones en 24 horas frente a 1,95 por día habitual.",
+        "lo_que_no_se_sabe": "No se sabe si el cliente reconoce las dos compras ni quién usó la tarjeta. La tarjeta tiene un historial amplio (1.361 transacciones previas), por lo que la comparación con su perfil es válida.",
+        "nivel_riesgo_en_palabras": "Riesgo alto: 1 de sus 2 transacciones supera el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 48,1 % (en la mitad de la cola).",
+        "recomendacion": {
+          "accion": "verificar_cliente",
+          "objetivo": "contacto con el cliente (tarjeta terminada en 0710)",
+          "argumento": "El motivo de la regla es que una sola transacción supera el umbral de bloqueo, y una compra aislada se confirma con el cliente antes de bloquear. Las señales de gasto de 24 horas sustentan la revisión."
+        },
+        "senales_citadas": [
+          "monto",
+          "monto_24h",
+          "ritmo_24h"
+        ],
+        "es_respaldo": false
+      },
+      "con_fallo": false,
+      "descripcion_fallo": null,
+      "recuperada": false,
+      "metricas": {
+        "tarea_id": "55e1933a-b065-46c2-bd17-3524adf7fe22",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 6306,
+        "ttft_cliente_ms": 2667,
+        "primer_evento_ms": 2067,
+        "latencia_servidor_ms": 4234,
+        "ttft_servidor_ms": 1760,
+        "costo_usd": 0.001465,
+        "tokens_entrada": 10340,
+        "tokens_salida": 861,
+        "iteraciones": 2,
+        "proveedor_final": "claude",
+        "modelo_final": "claude-haiku-5-5",
+        "reintentos": 0,
+        "conmutaciones": 0,
+        "desde_cache": false,
+        "es_respaldo": false,
+        "falla_aplicada": null,
+        "herramientas_pedidas": [
+          "obtener_caso",
+          "obtener_historial_reciente",
+          "obtener_perfil_cuenta"
+        ],
+        "fragmentos_streaming": 124
+      },
+      "traza": [
+        {
+          "t_ms": 2067,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Regenerando: consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2076,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "55e1933a-b065-46c2-bd17-3524adf7fe22",
+            "tipo_tarea": "explicacion",
+            "id_caso": "SPK-000179",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": null
+          }
+        },
+        {
+          "t_ms": 2087,
+          "tipo": "estado",
+          "datos": {
+            "texto": "El asistente está consultando la evidencia del caso…"
+          }
+        },
+        {
+          "t_ms": 2089,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 1,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 3313,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "argumentos": {
+              "id_caso": "SPK-000179"
+            },
+            "id_llamada": "toolu_016LuJzL2nTyzpyhbxAP7qVF"
+          }
+        },
+        {
+          "t_ms": 3317,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "resumen": {
+              "campos": [
+                "fin_ventana",
+                "fuente",
+                "id_caso",
+                "inicio_ventana",
+                "monto_total",
+                "motivo_recomendacion",
+                "n_transacciones",
+                "nivel_recomendacion",
+                "score_maximo",
+                "senal_principal",
+                "senales_que_puedes_citar",
+                "tarjeta",
+                "tipos_fraude_sospechados",
+                "transacciones",
+                "transacciones_sobre_umbral_bloqueo"
+              ],
+              "tamano_caracteres": 1858,
+              "n_transacciones": 2
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 3319,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "argumentos": {
+              "id_caso": "SPK-000179",
+              "dias": 3
+            },
+            "id_llamada": "toolu_012ibd1eSmZq2VzwkD4MJRDa"
+          }
+        },
+        {
+          "t_ms": 3324,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "resumen": {
+              "campos": [
+                "dias",
+                "n_transacciones",
+                "transacciones"
+              ],
+              "tamano_caracteres": 3175,
+              "n_transacciones": 20
+            },
+            "duracion_ms": 3
+          }
+        },
+        {
+          "t_ms": 3326,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "argumentos": {
+              "id_caso": "SPK-000179"
+            },
+            "id_llamada": "toolu_011gPgn4VLy8YvE3K3wuVbP9"
+          }
+        },
+        {
+          "t_ms": 3329,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "resumen": {
+              "campos": [
+                "categorias_habituales",
+                "horas_habituales",
+                "monto_desviacion",
+                "monto_promedio",
+                "n_transacciones_previas",
+                "sin_historial",
+                "tarjeta",
+                "transacciones_por_dia"
+              ],
+              "tamano_caracteres": 477
+            },
+            "duracion_ms": 1
+          }
+        },
+        {
+          "t_ms": 3332,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 2,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 6302,
+          "tipo": "explicacion",
+          "datos": {
+            "contenido": {
+              "que_paso": "El caso tiene dos transacciones en la tarjeta terminada en 0710, por un total de 26,76. La primera fue el 30/11/2020 a las 22:26:50, por 18,44, en Hauck, Dietrich and Funk (kids_pets, Colton). La segunda fue el 01/12/2020 a las 07:20:44, por 8,32, en Maggio-Fahey (misc_pos, Colton). Antes del caso, en las 24 horas previas, el historial muestra un movimiento de gasto muy superior al habitual, incluida una compra de 2.253,20 el 30/11 a las 10:49.",
+              "por_que_es_riesgo": "La señal principal es el gasto de las últimas 24 horas: en esa ventana movió 2.436,25, frente a un gasto diario habitual de 118,79, más inusual que el 99,7 % de las transacciones normales. La segunda compra también muestra un monto de 8,32, equivalente a 0,1 veces su promedio previo de 61,00, y un ritmo de 5 transacciones en 24 horas frente a 1,95 por día habitual.",
+              "lo_que_no_se_sabe": "No se sabe si el cliente reconoce las dos compras ni quién usó la tarjeta. La tarjeta tiene un historial amplio (1.361 transacciones previas), por lo que la comparación con su perfil es válida.",
+              "nivel_riesgo_en_palabras": "Riesgo alto: 1 de sus 2 transacciones supera el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 48,1 % (en la mitad de la cola).",
+              "recomendacion": {
+                "accion": "verificar_cliente",
+                "objetivo": "contacto con el cliente (tarjeta terminada en 0710)",
+                "argumento": "El motivo de la regla es que una sola transacción supera el umbral de bloqueo, y una compra aislada se confirma con el cliente antes de bloquear. Las señales de gasto de 24 horas sustentan la revisión."
+              },
+              "senales_citadas": [
+                "monto",
+                "monto_24h",
+                "ritmo_24h"
+              ],
+              "es_respaldo": false
+            },
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 6306,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "55e1933a-b065-46c2-bd17-3524adf7fe22",
+            "motivo_fin": "completada",
+            "iteraciones": 2,
+            "tokens_entrada": 10340,
+            "tokens_salida": 861,
+            "costo_usd": 0.001465,
+            "latencia_ms": 4234,
+            "ttft_ms": 1760,
+            "proveedor_final": "claude",
+            "modelo_final": "claude-haiku-5-5",
+            "reintentos": 0,
+            "conmutaciones": 0,
+            "desde_cache": false,
+            "tokens": 11201,
+            "fragmentos_streaming": 124,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L05",
+      "tipo": "explicacion",
+      "dorado": "D5",
+      "id_caso": "SIN-000026",
+      "proposito": "explicación en frío: viaje imposible",
+      "regenerar": true,
+      "falla_pedida": null,
+      "contaminada": false,
+      "exito": true,
+      "origen": "agente",
+      "explicacion_valida": true,
+      "motivos_de_fallo": [],
+      "hechos": [
+        {
+          "hecho": "cita la señal «ubicacion»",
+          "cumple": true
+        },
+        {
+          "hecho": "nombra la ciudad de la compra imposible (Cali)",
+          "cumple": true
+        },
+        {
+          "hecho": "nombra la ciudad de la compra anterior (Barranquilla)",
+          "cumple": true
+        },
+        {
+          "hecho": "habla de bloquear el acceso a la cuenta (no solo la tarjeta)",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 361.143,19",
+          "cumple": true
+        }
+      ],
+      "contenido": {
+        "que_paso": "El 26/03/2026 a las 07:04 se registró una compra de 361.143,19 en Cali, la única transacción del caso. Minutos antes, a las 06:59, la misma tarjeta había operado por 416.776,68 en Barranquilla, donde hacía casi todas sus compras previas. Las transacciones de los días anteriores (24 y 25/03) también fueron en Barranquilla, con montos entre 119.971,68 y 644.552,21. La tarjeta tiene 41 transacciones previas.",
+        "por_que_es_riesgo": "El sistema detectó un viaje imposible: la misma tarjeta operó en Barranquilla a las 06:59 y en Cali a las 07:04, distancia que no se puede recorrer en cinco minutos. Además, Cali no aparece en sus ubicaciones habituales, la compra es a una hora poco frecuente para este cliente y el ritmo de transacciones de las últimas 24 horas es inusual.",
+        "lo_que_no_se_sabe": "No se sabe si el titular reconoce la compra en Cali ni si pudo estar físicamente en ambos lugares. La evidencia no incluye comercio ni categoría de las transacciones.",
+        "nivel_riesgo_en_palabras": "Las compras en sí no superan los umbrales de riesgo del sistema: la alerta viene del viaje imposible entre dos transacciones. Entre los 52 casos marcados de su fuente, su riesgo es mayor que el del 59,6 % (en la mitad de la cola).",
+        "recomendacion": {
+          "accion": "bloquear_acceso_cuenta",
+          "objetivo": "el acceso a la cuenta (tarjeta terminada en 0257)",
+          "argumento": "La regla marcó viaje imposible: la misma cuenta operó en dos lugares que no se pueden recorrer en ese tiempo, lo que sugiere una posible toma de control. Las señales de ubicación, hora y ritmo refuerzan esa lectura."
+        },
+        "senales_citadas": [
+          "ubicacion",
+          "viaje_imposible",
+          "hora",
+          "ritmo_24h"
+        ],
+        "es_respaldo": false
+      },
+      "con_fallo": false,
+      "descripcion_fallo": null,
+      "recuperada": false,
+      "metricas": {
+        "tarea_id": "397c1bf5-4502-43af-b92c-eab7af10194c",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 6816,
+        "ttft_cliente_ms": 2616,
+        "primer_evento_ms": 2009,
+        "latencia_servidor_ms": 4802,
+        "ttft_servidor_ms": 2414,
+        "costo_usd": 0.001749,
+        "tokens_entrada": 13212,
+        "tokens_salida": 856,
+        "iteraciones": 3,
+        "proveedor_final": "claude",
+        "modelo_final": "claude-haiku-5-5",
+        "reintentos": 0,
+        "conmutaciones": 0,
+        "desde_cache": false,
+        "es_respaldo": false,
+        "falla_aplicada": null,
+        "herramientas_pedidas": [
+          "obtener_caso",
+          "obtener_historial_reciente",
+          "obtener_perfil_cuenta"
+        ],
+        "fragmentos_streaming": 120
+      },
+      "traza": [
+        {
+          "t_ms": 2009,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Regenerando: consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2015,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "397c1bf5-4502-43af-b92c-eab7af10194c",
+            "tipo_tarea": "explicacion",
+            "id_caso": "SIN-000026",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": null
+          }
+        },
+        {
+          "t_ms": 2027,
+          "tipo": "estado",
+          "datos": {
+            "texto": "El asistente está consultando la evidencia del caso…"
+          }
+        },
+        {
+          "t_ms": 2029,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 1,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 2970,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "argumentos": {
+              "id_caso": "SIN-000026"
+            },
+            "id_llamada": "toolu_01Lu9id59q3RnaPx6bWZdAWk"
+          }
+        },
+        {
+          "t_ms": 2974,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "resumen": {
+              "campos": [
+                "fin_ventana",
+                "fuente",
+                "id_caso",
+                "inicio_ventana",
+                "monto_total",
+                "motivo_recomendacion",
+                "n_transacciones",
+                "nivel_recomendacion",
+                "score_maximo",
+                "senal_principal",
+                "senales_que_puedes_citar",
+                "tarjeta",
+                "tipos_fraude_sospechados",
+                "transacciones",
+                "transacciones_sobre_umbral_bloqueo"
+              ],
+              "tamano_caracteres": 1487,
+              "n_transacciones": 1
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 2976,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 2,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 3869,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "argumentos": {
+              "id_caso": "SIN-000026",
+              "dias": 3
+            },
+            "id_llamada": "toolu_01VoBBzdfg6LMHWEAj5u2Dau"
+          }
+        },
+        {
+          "t_ms": 3873,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "resumen": {
+              "campos": [
+                "dias",
+                "n_transacciones",
+                "transacciones"
+              ],
+              "tamano_caracteres": 758,
+              "n_transacciones": 5
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 3875,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "argumentos": {
+              "id_caso": "SIN-000026"
+            },
+            "id_llamada": "toolu_0128aDvhCBDs6b3CdTktcKc1"
+          }
+        },
+        {
+          "t_ms": 3879,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "resumen": {
+              "campos": [
+                "horas_habituales",
+                "monto_desviacion",
+                "monto_promedio",
+                "n_transacciones_previas",
+                "sin_historial",
+                "tarjeta",
+                "transacciones_por_dia",
+                "ubicaciones_habituales"
+              ],
+              "tamano_caracteres": 428
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 3881,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 3,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 6812,
+          "tipo": "explicacion",
+          "datos": {
+            "contenido": {
+              "que_paso": "El 26/03/2026 a las 07:04 se registró una compra de 361.143,19 en Cali, la única transacción del caso. Minutos antes, a las 06:59, la misma tarjeta había operado por 416.776,68 en Barranquilla, donde hacía casi todas sus compras previas. Las transacciones de los días anteriores (24 y 25/03) también fueron en Barranquilla, con montos entre 119.971,68 y 644.552,21. La tarjeta tiene 41 transacciones previas.",
+              "por_que_es_riesgo": "El sistema detectó un viaje imposible: la misma tarjeta operó en Barranquilla a las 06:59 y en Cali a las 07:04, distancia que no se puede recorrer en cinco minutos. Además, Cali no aparece en sus ubicaciones habituales, la compra es a una hora poco frecuente para este cliente y el ritmo de transacciones de las últimas 24 horas es inusual.",
+              "lo_que_no_se_sabe": "No se sabe si el titular reconoce la compra en Cali ni si pudo estar físicamente en ambos lugares. La evidencia no incluye comercio ni categoría de las transacciones.",
+              "nivel_riesgo_en_palabras": "Las compras en sí no superan los umbrales de riesgo del sistema: la alerta viene del viaje imposible entre dos transacciones. Entre los 52 casos marcados de su fuente, su riesgo es mayor que el del 59,6 % (en la mitad de la cola).",
+              "recomendacion": {
+                "accion": "bloquear_acceso_cuenta",
+                "objetivo": "el acceso a la cuenta (tarjeta terminada en 0257)",
+                "argumento": "La regla marcó viaje imposible: la misma cuenta operó en dos lugares que no se pueden recorrer en ese tiempo, lo que sugiere una posible toma de control. Las señales de ubicación, hora y ritmo refuerzan esa lectura."
+              },
+              "senales_citadas": [
+                "ubicacion",
+                "viaje_imposible",
+                "hora",
+                "ritmo_24h"
+              ],
+              "es_respaldo": false
+            },
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 6816,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "397c1bf5-4502-43af-b92c-eab7af10194c",
+            "motivo_fin": "completada",
+            "iteraciones": 3,
+            "tokens_entrada": 13212,
+            "tokens_salida": 856,
+            "costo_usd": 0.001749,
+            "latencia_ms": 4802,
+            "ttft_ms": 2414,
+            "proveedor_final": "claude",
+            "modelo_final": "claude-haiku-5-5",
+            "reintentos": 0,
+            "conmutaciones": 0,
+            "desde_cache": false,
+            "tokens": 14068,
+            "fragmentos_streaming": 120,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L06",
+      "tipo": "explicacion",
+      "dorado": "D6",
+      "id_caso": "SPK-000171",
+      "proposito": "explicación en frío: tarjeta sin historial",
+      "regenerar": true,
+      "falla_pedida": null,
+      "contaminada": false,
+      "exito": true,
+      "origen": "agente",
+      "explicacion_valida": true,
+      "motivos_de_fallo": [],
+      "hechos": [
+        {
+          "hecho": "cita la señal «historial»",
+          "cumple": true
+        },
+        {
+          "hecho": "dice que la tarjeta no tiene historial suficiente",
+          "cumple": true
+        },
+        {
+          "hecho": "identifica la tarjeta por sus últimos cuatro dígitos (7373)",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 1.038,53",
+          "cumple": true
+        }
+      ],
+      "contenido": {
+        "que_paso": "Entre el 25-10-2020 a las 22:34 y las 23:32 se registraron 4 compras seguidas en Wever, por un total de 3.645,79: Baumbach, Hodkiewicz and Walsh (22:34, 1.038,53, shopping_pos), Little, Gutmann and Lynch (22:51, 773,18, shopping_net), Bednar Group (23:02, 772,55, misc_net) y Langworth, Boehm and Gulgowski (23:32, 1.061,53, shopping_net). Antes, a las 20:43, hubo una compra de 614,29 en Bednar Group y a las 06:57 una de 12,40 en gas_transport. La tarjeta casi no tiene compras previas.",
+        "por_que_es_riesgo": "El sistema señala que la tarjeta tiene muy poco historial: sin un perfil con el cual comparar, cada compra del caso queda en el percentil de rareza 99,2. Las cuatro transacciones superan el umbral de bloqueo, con un patrón de compras de montos altos y seguidas en menos de una hora.",
+        "lo_que_no_se_sabe": "No hay un perfil habitual con el cual comparar: la tarjeta tiene solo 2 compras previas. No se sabe si el cliente reconoce las compras del caso ni el origen de la tarjeta usada.",
+        "nivel_riesgo_en_palabras": "Riesgo alto: sus 4 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 78,0 % (de los más altos de la cola).",
+        "recomendacion": {
+          "accion": "bloquear_tarjeta",
+          "objetivo": "la tarjeta terminada en 7373",
+          "argumento": "La regla bloquea porque 4 transacciones en 48 h superan el umbral de bloqueo 0,97, con compras anómalas seguidas y patrón de uso no autorizado. La señal principal es el historial de la tarjeta."
+        },
+        "senales_citadas": [
+          "historial"
+        ],
+        "es_respaldo": false
+      },
+      "con_fallo": false,
+      "descripcion_fallo": null,
+      "recuperada": false,
+      "metricas": {
+        "tarea_id": "09840ac3-4eab-4131-85f1-c74b5e5ec0e8",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 6773,
+        "ttft_cliente_ms": 2633,
+        "primer_evento_ms": 2009,
+        "latencia_servidor_ms": 4758,
+        "ttft_servidor_ms": 2375,
+        "costo_usd": 0.001855,
+        "tokens_entrada": 14194,
+        "tokens_salida": 872,
+        "iteraciones": 3,
+        "proveedor_final": "claude",
+        "modelo_final": "claude-haiku-5-5",
+        "reintentos": 0,
+        "conmutaciones": 0,
+        "desde_cache": false,
+        "es_respaldo": false,
+        "falla_aplicada": null,
+        "herramientas_pedidas": [
+          "obtener_caso",
+          "obtener_historial_reciente",
+          "obtener_perfil_cuenta"
+        ],
+        "fragmentos_streaming": 118
+      },
+      "traza": [
+        {
+          "t_ms": 2009,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Regenerando: consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2019,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "09840ac3-4eab-4131-85f1-c74b5e5ec0e8",
+            "tipo_tarea": "explicacion",
+            "id_caso": "SPK-000171",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": null
+          }
+        },
+        {
+          "t_ms": 2032,
+          "tipo": "estado",
+          "datos": {
+            "texto": "El asistente está consultando la evidencia del caso…"
+          }
+        },
+        {
+          "t_ms": 2034,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 1,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 2952,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "argumentos": {
+              "id_caso": "SPK-000171"
+            },
+            "id_llamada": "toolu_015v5YidNty8rUV52yhNqiDL"
+          }
+        },
+        {
+          "t_ms": 2956,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "resumen": {
+              "campos": [
+                "aviso_historial",
+                "fin_ventana",
+                "fuente",
+                "id_caso",
+                "inicio_ventana",
+                "monto_total",
+                "motivo_recomendacion",
+                "n_transacciones",
+                "nivel_recomendacion",
+                "score_maximo",
+                "senal_principal",
+                "senales_que_puedes_citar",
+                "tarjeta",
+                "tipos_fraude_sospechados",
+                "transacciones",
+                "transacciones_sobre_umbral_bloqueo"
+              ],
+              "tamano_caracteres": 2435,
+              "n_transacciones": 4
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 2958,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 2,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 3834,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "argumentos": {
+              "id_caso": "SPK-000171",
+              "dias": 3
+            },
+            "id_llamada": "toolu_01QTKp9YVio1aDhDQTnCyCta"
+          }
+        },
+        {
+          "t_ms": 3880,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "resumen": {
+              "campos": [
+                "dias",
+                "n_transacciones",
+                "transacciones"
+              ],
+              "tamano_caracteres": 1014,
+              "n_transacciones": 6
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 3882,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "argumentos": {
+              "id_caso": "SPK-000171"
+            },
+            "id_llamada": "toolu_0159ZWsBCzZ8Q6J3TpBjpEAY"
+          }
+        },
+        {
+          "t_ms": 3887,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "resumen": {
+              "campos": [
+                "categorias_habituales",
+                "horas_habituales",
+                "monto_desviacion",
+                "monto_promedio",
+                "n_transacciones_previas",
+                "nota",
+                "sin_historial",
+                "tarjeta",
+                "transacciones_por_dia"
+              ],
+              "tamano_caracteres": 475
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 3889,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 3,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 6768,
+          "tipo": "explicacion",
+          "datos": {
+            "contenido": {
+              "que_paso": "Entre el 25-10-2020 a las 22:34 y las 23:32 se registraron 4 compras seguidas en Wever, por un total de 3.645,79: Baumbach, Hodkiewicz and Walsh (22:34, 1.038,53, shopping_pos), Little, Gutmann and Lynch (22:51, 773,18, shopping_net), Bednar Group (23:02, 772,55, misc_net) y Langworth, Boehm and Gulgowski (23:32, 1.061,53, shopping_net). Antes, a las 20:43, hubo una compra de 614,29 en Bednar Group y a las 06:57 una de 12,40 en gas_transport. La tarjeta casi no tiene compras previas.",
+              "por_que_es_riesgo": "El sistema señala que la tarjeta tiene muy poco historial: sin un perfil con el cual comparar, cada compra del caso queda en el percentil de rareza 99,2. Las cuatro transacciones superan el umbral de bloqueo, con un patrón de compras de montos altos y seguidas en menos de una hora.",
+              "lo_que_no_se_sabe": "No hay un perfil habitual con el cual comparar: la tarjeta tiene solo 2 compras previas. No se sabe si el cliente reconoce las compras del caso ni el origen de la tarjeta usada.",
+              "nivel_riesgo_en_palabras": "Riesgo alto: sus 4 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 78,0 % (de los más altos de la cola).",
+              "recomendacion": {
+                "accion": "bloquear_tarjeta",
+                "objetivo": "la tarjeta terminada en 7373",
+                "argumento": "La regla bloquea porque 4 transacciones en 48 h superan el umbral de bloqueo 0,97, con compras anómalas seguidas y patrón de uso no autorizado. La señal principal es el historial de la tarjeta."
+              },
+              "senales_citadas": [
+                "historial"
+              ],
+              "es_respaldo": false
+            },
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 6773,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "09840ac3-4eab-4131-85f1-c74b5e5ec0e8",
+            "motivo_fin": "completada",
+            "iteraciones": 3,
+            "tokens_entrada": 14194,
+            "tokens_salida": 872,
+            "costo_usd": 0.001855,
+            "latencia_ms": 4758,
+            "ttft_ms": 2375,
+            "proveedor_final": "claude",
+            "modelo_final": "claude-haiku-5-5",
+            "reintentos": 0,
+            "conmutaciones": 0,
+            "desde_cache": false,
+            "tokens": 15066,
+            "fragmentos_streaming": 118,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L07",
+      "tipo": "explicacion",
+      "dorado": "D1",
+      "id_caso": "SPK-000266",
+      "proposito": "segunda apertura (caché) de L01",
+      "regenerar": false,
+      "falla_pedida": null,
+      "contaminada": false,
+      "exito": true,
+      "origen": "cache",
+      "explicacion_valida": true,
+      "motivos_de_fallo": [],
+      "hechos": [
+        {
+          "hecho": "cita la señal «monto_24h»",
+          "cumple": true
+        },
+        {
+          "hecho": "dice cuántas compras tuvo el caso (12) o cuántas superaron el umbral (12)",
+          "cumple": true
+        },
+        {
+          "hecho": "identifica la tarjeta por sus últimos cuatro dígitos (3109)",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 321,16",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 956,22",
+          "cumple": true
+        }
+      ],
+      "contenido": {
+        "que_paso": "Entre el 27 y el 28 de septiembre de 2020 se registraron 12 transacciones en Dallas por 6.824,70 en total. La primera fue el 27-09-2020 a la 1:54, por 321,16 en Mosciski, Gislason and Mertz (grocery_pos). La última fue el 28-09-2020 a las 23:03, por 956,22 en Stamm-Witting (shopping_net). Varias compras grandes se concentraron en pocas horas la noche del 28, y entre ellas hubo compras pequeñas en gas_transport. Antes del caso, la tarjeta tenía compras de montos bajos entre el 24 y el 26 de septiembre.",
+        "es_respaldo": false,
+        "recomendacion": {
+          "accion": "bloquear_tarjeta",
+          "objetivo": "la tarjeta terminada en 3109",
+          "argumento": "La regla detectó 12 transacciones que superan el umbral de bloqueo en 48 horas, con un patrón de compras anómalas seguidas compatible con uso no autorizado. La señal principal es el gasto de las últimas 24 horas."
+        },
+        "senales_citadas": [
+          "monto",
+          "monto_24h",
+          "hora"
+        ],
+        "lo_que_no_se_sabe": "Si el cliente reconoce estas compras. El perfil tiene 625 transacciones previas, así que sí hay un historial con el cual comparar.",
+        "por_que_es_riesgo": "El monto de las compras es muy superior a su patrón previo: por ejemplo, 987,00 frente a un promedio previo de 57,22. El gasto de las últimas 24 horas llegó a 3.587,62 frente a un gasto diario habitual de 61,45. La hora de la compra de las 22:00 y las 23:00 también se aparta de sus horas habituales.",
+        "nivel_riesgo_en_palabras": "Riesgo alto: sus 12 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 94,1 % (de los más altos de la cola)."
+      },
+      "con_fallo": false,
+      "descripcion_fallo": null,
+      "recuperada": false,
+      "metricas": {
+        "tarea_id": "b9de481b-a545-4a8d-9fa0-fe0a4f0fe548",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 2044,
+        "ttft_cliente_ms": null,
+        "primer_evento_ms": 2011,
+        "latencia_servidor_ms": 26,
+        "ttft_servidor_ms": null,
+        "costo_usd": 0.0,
+        "tokens_entrada": 0,
+        "tokens_salida": 0,
+        "iteraciones": 0,
+        "proveedor_final": null,
+        "modelo_final": null,
+        "reintentos": 0,
+        "conmutaciones": 0,
+        "desde_cache": true,
+        "es_respaldo": false,
+        "falla_aplicada": null,
+        "herramientas_pedidas": [],
+        "fragmentos_streaming": 0
+      },
+      "traza": [
+        {
+          "t_ms": 2011,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2021,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "b9de481b-a545-4a8d-9fa0-fe0a4f0fe548",
+            "tipo_tarea": "explicacion",
+            "id_caso": "SPK-000266",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": null
+          }
+        },
+        {
+          "t_ms": 2039,
+          "tipo": "cache",
+          "datos": {
+            "explicacion": {
+              "id": 131,
+              "id_caso": "SPK-000266",
+              "tarea_id": "12ca3c48-1c10-4f60-a01a-ce58e47698a3",
+              "contenido": {
+                "que_paso": "Entre el 27 y el 28 de septiembre de 2020 se registraron 12 transacciones en Dallas por 6.824,70 en total. La primera fue el 27-09-2020 a la 1:54, por 321,16 en Mosciski, Gislason and Mertz (grocery_pos). La última fue el 28-09-2020 a las 23:03, por 956,22 en Stamm-Witting (shopping_net). Varias compras grandes se concentraron en pocas horas la noche del 28, y entre ellas hubo compras pequeñas en gas_transport. Antes del caso, la tarjeta tenía compras de montos bajos entre el 24 y el 26 de septiembre.",
+                "es_respaldo": false,
+                "recomendacion": {
+                  "accion": "bloquear_tarjeta",
+                  "objetivo": "la tarjeta terminada en 3109",
+                  "argumento": "La regla detectó 12 transacciones que superan el umbral de bloqueo en 48 horas, con un patrón de compras anómalas seguidas compatible con uso no autorizado. La señal principal es el gasto de las últimas 24 horas."
+                },
+                "senales_citadas": [
+                  "monto",
+                  "monto_24h",
+                  "hora"
+                ],
+                "lo_que_no_se_sabe": "Si el cliente reconoce estas compras. El perfil tiene 625 transacciones previas, así que sí hay un historial con el cual comparar.",
+                "por_que_es_riesgo": "El monto de las compras es muy superior a su patrón previo: por ejemplo, 987,00 frente a un promedio previo de 57,22. El gasto de las últimas 24 horas llegó a 3.587,62 frente a un gasto diario habitual de 61,45. La hora de la compra de las 22:00 y las 23:00 también se aparta de sus horas habituales.",
+                "nivel_riesgo_en_palabras": "Riesgo alto: sus 12 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 94,1 % (de los más altos de la cola)."
+              },
+              "es_respaldo": false,
+              "proveedor": "claude",
+              "modelo": "claude-haiku-5-5",
+              "creada_en": "2026-11-09T02:00:35.664681+00:00"
+            }
+          }
+        },
+        {
+          "t_ms": 2044,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "b9de481b-a545-4a8d-9fa0-fe0a4f0fe548",
+            "motivo_fin": "completada",
+            "iteraciones": 0,
+            "tokens_entrada": 0,
+            "tokens_salida": 0,
+            "costo_usd": 0.0,
+            "latencia_ms": 26,
+            "ttft_ms": null,
+            "proveedor_final": null,
+            "modelo_final": null,
+            "reintentos": 0,
+            "conmutaciones": 0,
+            "desde_cache": true,
+            "tokens": 0,
+            "fragmentos_streaming": 0,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L08",
+      "tipo": "explicacion",
+      "dorado": "D2",
+      "id_caso": "SPK-000093",
+      "proposito": "segunda apertura (caché) de L02",
+      "regenerar": false,
+      "falla_pedida": null,
+      "contaminada": false,
+      "exito": true,
+      "origen": "cache",
+      "explicacion_valida": true,
+      "motivos_de_fallo": [],
+      "hechos": [
+        {
+          "hecho": "cita la señal «monto»",
+          "cumple": true
+        },
+        {
+          "hecho": "identifica la tarjeta por sus últimos cuatro dígitos (9375)",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 842,65",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 62,83 o 62,84",
+          "cumple": true
+        }
+      ],
+      "contenido": {
+        "que_paso": "El 21/06/2020 a las 22:06 se registró una compra de 24,84 en Hamill-D'Amore (health_fitness, Notrees). A las 23:02 siguió una compra de 842,65 en Hermann and Sons (shopping_pos, Notrees). Son las dos transacciones del caso, por un total de 867,49. Antes, desde el 18/06, la tarjeta tenía compras de menor monto; las dos más grandes previas fueron 1.063,03 (20/06, Fisher-Schowalter) y 834,60 (20/06, Dach-Nader). Tras el caso, a las 05:21 del 23/06 hubo otra compra de 975,81 en Kunde-Sanford.",
+        "es_respaldo": false,
+        "recomendacion": {
+          "accion": "bloquear_tarjeta",
+          "objetivo": "la tarjeta terminada en 9375",
+          "argumento": "La regla bloquea porque dos transacciones en 48 horas superan el umbral de bloqueo (0,97) y el patrón es de compras anómalas seguidas, compatible con uso no autorizado. El monto de la segunda compra y el gasto acumulado de 24 horas son las señales principales."
+        },
+        "senales_citadas": [
+          "monto",
+          "monto_24h",
+          "hora"
+        ],
+        "lo_que_no_se_sabe": "No se sabe si el cliente reconoce las dos compras ni si las autorizó. El perfil no muestra si sus compras grandes previas en comercios similares son habituales en la cuenta.",
+        "por_que_es_riesgo": "La compra de 842,65 es 13,4 veces el promedio previo del cliente (62,83). El gasto de las últimas 24 horas llegó a 1.125,43, frente a un gasto diario habitual de 239,53. La primera compra, de 24,84, ocurrió a una hora en la que solo el 3,0 % de sus transacciones previas se hacían.",
+        "nivel_riesgo_en_palabras": "Riesgo alto: sus 2 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 33,4 % (en la mitad de la cola)."
+      },
+      "con_fallo": false,
+      "descripcion_fallo": null,
+      "recuperada": false,
+      "metricas": {
+        "tarea_id": "45b4de75-6fda-4b19-831f-e15e5997d179",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 2053,
+        "ttft_cliente_ms": null,
+        "primer_evento_ms": 2018,
+        "latencia_servidor_ms": 29,
+        "ttft_servidor_ms": null,
+        "costo_usd": 0.0,
+        "tokens_entrada": 0,
+        "tokens_salida": 0,
+        "iteraciones": 0,
+        "proveedor_final": null,
+        "modelo_final": null,
+        "reintentos": 0,
+        "conmutaciones": 0,
+        "desde_cache": true,
+        "es_respaldo": false,
+        "falla_aplicada": null,
+        "herramientas_pedidas": [],
+        "fragmentos_streaming": 0
+      },
+      "traza": [
+        {
+          "t_ms": 2018,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2030,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "45b4de75-6fda-4b19-831f-e15e5997d179",
+            "tipo_tarea": "explicacion",
+            "id_caso": "SPK-000093",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": null
+          }
+        },
+        {
+          "t_ms": 2048,
+          "tipo": "cache",
+          "datos": {
+            "explicacion": {
+              "id": 132,
+              "id_caso": "SPK-000093",
+              "tarea_id": "be7703fc-bc2d-4fc0-bd8d-1641a9268eef",
+              "contenido": {
+                "que_paso": "El 21/06/2020 a las 22:06 se registró una compra de 24,84 en Hamill-D'Amore (health_fitness, Notrees). A las 23:02 siguió una compra de 842,65 en Hermann and Sons (shopping_pos, Notrees). Son las dos transacciones del caso, por un total de 867,49. Antes, desde el 18/06, la tarjeta tenía compras de menor monto; las dos más grandes previas fueron 1.063,03 (20/06, Fisher-Schowalter) y 834,60 (20/06, Dach-Nader). Tras el caso, a las 05:21 del 23/06 hubo otra compra de 975,81 en Kunde-Sanford.",
+                "es_respaldo": false,
+                "recomendacion": {
+                  "accion": "bloquear_tarjeta",
+                  "objetivo": "la tarjeta terminada en 9375",
+                  "argumento": "La regla bloquea porque dos transacciones en 48 horas superan el umbral de bloqueo (0,97) y el patrón es de compras anómalas seguidas, compatible con uso no autorizado. El monto de la segunda compra y el gasto acumulado de 24 horas son las señales principales."
+                },
+                "senales_citadas": [
+                  "monto",
+                  "monto_24h",
+                  "hora"
+                ],
+                "lo_que_no_se_sabe": "No se sabe si el cliente reconoce las dos compras ni si las autorizó. El perfil no muestra si sus compras grandes previas en comercios similares son habituales en la cuenta.",
+                "por_que_es_riesgo": "La compra de 842,65 es 13,4 veces el promedio previo del cliente (62,83). El gasto de las últimas 24 horas llegó a 1.125,43, frente a un gasto diario habitual de 239,53. La primera compra, de 24,84, ocurrió a una hora en la que solo el 3,0 % de sus transacciones previas se hacían.",
+                "nivel_riesgo_en_palabras": "Riesgo alto: sus 2 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 33,4 % (en la mitad de la cola)."
+              },
+              "es_respaldo": false,
+              "proveedor": "claude",
+              "modelo": "claude-haiku-5-5",
+              "creada_en": "2026-11-09T02:00:47.695120+00:00"
+            }
+          }
+        },
+        {
+          "t_ms": 2053,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "45b4de75-6fda-4b19-831f-e15e5997d179",
+            "motivo_fin": "completada",
+            "iteraciones": 0,
+            "tokens_entrada": 0,
+            "tokens_salida": 0,
+            "costo_usd": 0.0,
+            "latencia_ms": 29,
+            "ttft_ms": null,
+            "proveedor_final": null,
+            "modelo_final": null,
+            "reintentos": 0,
+            "conmutaciones": 0,
+            "desde_cache": true,
+            "tokens": 0,
+            "fragmentos_streaming": 0,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L09",
+      "tipo": "explicacion",
+      "dorado": "D3",
+      "id_caso": "SPK-000104",
+      "proposito": "segunda apertura (caché) de L03",
+      "regenerar": false,
+      "falla_pedida": null,
+      "contaminada": false,
+      "exito": true,
+      "origen": "cache",
+      "explicacion_valida": true,
+      "motivos_de_fallo": [],
+      "hechos": [
+        {
+          "hecho": "cita la señal «monto_24h»",
+          "cumple": true
+        },
+        {
+          "hecho": "dice cuántas compras tuvo el caso (5) o cuántas superaron el umbral (5)",
+          "cumple": true
+        },
+        {
+          "hecho": "identifica la tarjeta por sus últimos cuatro dígitos (2826)",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 967,23",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 1.010,50 o 1.920,54 o 1.930,67 o 2.863,31",
+          "cumple": true
+        }
+      ],
+      "contenido": {
+        "que_paso": "Entre el 14-07-2020 a las 23:04 y el 15-07-2020 a las 22:14 se registraron 5 transacciones en Boyd por 3.794,35 en total: Jast Ltd por 967,23 (14/07, 23:04), Schmeler, Bashirian and Price por 930,27 (14/07, 23:08), Schmitt Inc por 10,13 (15/07, 02:42), Lemke-Gutmann por 932,64 (15/07, 18:58) y Heathcote LLC por 954,08 (15/07, 22:14). Antes, en las mismas horas del 13 y 14 de julio, la tarjeta tenía compras pequeñas (entre 10,04 y 94,54).",
+        "es_respaldo": false,
+        "recomendacion": {
+          "accion": "bloquear_tarjeta",
+          "objetivo": "la tarjeta terminada en 2826",
+          "argumento": "La regla bloquea porque 5 transacciones en 48 h superaron el umbral de bloqueo, con patrón de uso no autorizado: compras grandes seguidas en shopping_net, muy por encima de su gasto habitual, y un gasto de 24 horas que se disparó."
+        },
+        "senales_citadas": [
+          "monto",
+          "monto_24h"
+        ],
+        "lo_que_no_se_sabe": "No se sabe si el cliente reconoce las compras ni si el comercio es legítimo. Tampoco hay información sobre cómo se obtuvieron los datos de la tarjeta. El historial reciente es de 3 días y el perfil se basa en 548 transacciones previas.",
+        "por_que_es_riesgo": "Las compras grandes son de categoría shopping_net, de 967,23 y 930,27 en la primera hora, cuando el monto promedio previo del cliente es 88,44. El monto de cada una aparece como 10,3 a 10,9 veces ese promedio, y el gasto de las últimas 24 horas llegó a 2.863,31 frente a un gasto diario habitual de 91,60.",
+        "nivel_riesgo_en_palabras": "Riesgo alto: sus 5 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 94,1 % (de los más altos de la cola)."
+      },
+      "con_fallo": false,
+      "descripcion_fallo": null,
+      "recuperada": false,
+      "metricas": {
+        "tarea_id": "cf006e73-1f8d-4f64-95b4-d6fe12738420",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 2050,
+        "ttft_cliente_ms": null,
+        "primer_evento_ms": 2021,
+        "latencia_servidor_ms": 22,
+        "ttft_servidor_ms": null,
+        "costo_usd": 0.0,
+        "tokens_entrada": 0,
+        "tokens_salida": 0,
+        "iteraciones": 0,
+        "proveedor_final": null,
+        "modelo_final": null,
+        "reintentos": 0,
+        "conmutaciones": 0,
+        "desde_cache": true,
+        "es_respaldo": false,
+        "falla_aplicada": null,
+        "herramientas_pedidas": [],
+        "fragmentos_streaming": 0
+      },
+      "traza": [
+        {
+          "t_ms": 2021,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2029,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "cf006e73-1f8d-4f64-95b4-d6fe12738420",
+            "tipo_tarea": "explicacion",
+            "id_caso": "SPK-000104",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": null
+          }
+        },
+        {
+          "t_ms": 2045,
+          "tipo": "cache",
+          "datos": {
+            "explicacion": {
+              "id": 133,
+              "id_caso": "SPK-000104",
+              "tarea_id": "074e91ae-fd38-413b-935a-b6a7d94454a7",
+              "contenido": {
+                "que_paso": "Entre el 14-07-2020 a las 23:04 y el 15-07-2020 a las 22:14 se registraron 5 transacciones en Boyd por 3.794,35 en total: Jast Ltd por 967,23 (14/07, 23:04), Schmeler, Bashirian and Price por 930,27 (14/07, 23:08), Schmitt Inc por 10,13 (15/07, 02:42), Lemke-Gutmann por 932,64 (15/07, 18:58) y Heathcote LLC por 954,08 (15/07, 22:14). Antes, en las mismas horas del 13 y 14 de julio, la tarjeta tenía compras pequeñas (entre 10,04 y 94,54).",
+                "es_respaldo": false,
+                "recomendacion": {
+                  "accion": "bloquear_tarjeta",
+                  "objetivo": "la tarjeta terminada en 2826",
+                  "argumento": "La regla bloquea porque 5 transacciones en 48 h superaron el umbral de bloqueo, con patrón de uso no autorizado: compras grandes seguidas en shopping_net, muy por encima de su gasto habitual, y un gasto de 24 horas que se disparó."
+                },
+                "senales_citadas": [
+                  "monto",
+                  "monto_24h"
+                ],
+                "lo_que_no_se_sabe": "No se sabe si el cliente reconoce las compras ni si el comercio es legítimo. Tampoco hay información sobre cómo se obtuvieron los datos de la tarjeta. El historial reciente es de 3 días y el perfil se basa en 548 transacciones previas.",
+                "por_que_es_riesgo": "Las compras grandes son de categoría shopping_net, de 967,23 y 930,27 en la primera hora, cuando el monto promedio previo del cliente es 88,44. El monto de cada una aparece como 10,3 a 10,9 veces ese promedio, y el gasto de las últimas 24 horas llegó a 2.863,31 frente a un gasto diario habitual de 91,60.",
+                "nivel_riesgo_en_palabras": "Riesgo alto: sus 5 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 94,1 % (de los más altos de la cola)."
+              },
+              "es_respaldo": false,
+              "proveedor": "claude",
+              "modelo": "claude-haiku-5-5",
+              "creada_en": "2026-11-09T02:00:59.314222+00:00"
+            }
+          }
+        },
+        {
+          "t_ms": 2050,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "cf006e73-1f8d-4f64-95b4-d6fe12738420",
+            "motivo_fin": "completada",
+            "iteraciones": 0,
+            "tokens_entrada": 0,
+            "tokens_salida": 0,
+            "costo_usd": 0.0,
+            "latencia_ms": 22,
+            "ttft_ms": null,
+            "proveedor_final": null,
+            "modelo_final": null,
+            "reintentos": 0,
+            "conmutaciones": 0,
+            "desde_cache": true,
+            "tokens": 0,
+            "fragmentos_streaming": 0,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L10",
+      "tipo": "explicacion",
+      "dorado": "D4",
+      "id_caso": "SPK-000179",
+      "proposito": "segunda apertura (caché) de L04",
+      "regenerar": false,
+      "falla_pedida": null,
+      "contaminada": false,
+      "exito": true,
+      "origen": "cache",
+      "explicacion_valida": true,
+      "motivos_de_fallo": [],
+      "hechos": [
+        {
+          "hecho": "cita la señal «monto_24h»",
+          "cumple": true
+        },
+        {
+          "hecho": "habla de verificar o contactar al cliente, no de bloquear",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 18,44 o 8,32",
+          "cumple": true
+        }
+      ],
+      "contenido": {
+        "que_paso": "El caso tiene dos transacciones en la tarjeta terminada en 0710, por un total de 26,76. La primera fue el 30/11/2020 a las 22:26:50, por 18,44, en Hauck, Dietrich and Funk (kids_pets, Colton). La segunda fue el 01/12/2020 a las 07:20:44, por 8,32, en Maggio-Fahey (misc_pos, Colton). Antes del caso, en las 24 horas previas, el historial muestra un movimiento de gasto muy superior al habitual, incluida una compra de 2.253,20 el 30/11 a las 10:49.",
+        "es_respaldo": false,
+        "recomendacion": {
+          "accion": "verificar_cliente",
+          "objetivo": "contacto con el cliente (tarjeta terminada en 0710)",
+          "argumento": "El motivo de la regla es que una sola transacción supera el umbral de bloqueo, y una compra aislada se confirma con el cliente antes de bloquear. Las señales de gasto de 24 horas sustentan la revisión."
+        },
+        "senales_citadas": [
+          "monto",
+          "monto_24h",
+          "ritmo_24h"
+        ],
+        "lo_que_no_se_sabe": "No se sabe si el cliente reconoce las dos compras ni quién usó la tarjeta. La tarjeta tiene un historial amplio (1.361 transacciones previas), por lo que la comparación con su perfil es válida.",
+        "por_que_es_riesgo": "La señal principal es el gasto de las últimas 24 horas: en esa ventana movió 2.436,25, frente a un gasto diario habitual de 118,79, más inusual que el 99,7 % de las transacciones normales. La segunda compra también muestra un monto de 8,32, equivalente a 0,1 veces su promedio previo de 61,00, y un ritmo de 5 transacciones en 24 horas frente a 1,95 por día habitual.",
+        "nivel_riesgo_en_palabras": "Riesgo alto: 1 de sus 2 transacciones supera el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 48,1 % (en la mitad de la cola)."
+      },
+      "con_fallo": false,
+      "descripcion_fallo": null,
+      "recuperada": false,
+      "metricas": {
+        "tarea_id": "b5566945-de9a-4f83-a246-82ba1e20487b",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 2036,
+        "ttft_cliente_ms": null,
+        "primer_evento_ms": 2007,
+        "latencia_servidor_ms": 23,
+        "ttft_servidor_ms": null,
+        "costo_usd": 0.0,
+        "tokens_entrada": 0,
+        "tokens_salida": 0,
+        "iteraciones": 0,
+        "proveedor_final": null,
+        "modelo_final": null,
+        "reintentos": 0,
+        "conmutaciones": 0,
+        "desde_cache": true,
+        "es_respaldo": false,
+        "falla_aplicada": null,
+        "herramientas_pedidas": [],
+        "fragmentos_streaming": 0
+      },
+      "traza": [
+        {
+          "t_ms": 2007,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2016,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "b5566945-de9a-4f83-a246-82ba1e20487b",
+            "tipo_tarea": "explicacion",
+            "id_caso": "SPK-000179",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": null
+          }
+        },
+        {
+          "t_ms": 2032,
+          "tipo": "cache",
+          "datos": {
+            "explicacion": {
+              "id": 134,
+              "id_caso": "SPK-000179",
+              "tarea_id": "55e1933a-b065-46c2-bd17-3524adf7fe22",
+              "contenido": {
+                "que_paso": "El caso tiene dos transacciones en la tarjeta terminada en 0710, por un total de 26,76. La primera fue el 30/11/2020 a las 22:26:50, por 18,44, en Hauck, Dietrich and Funk (kids_pets, Colton). La segunda fue el 01/12/2020 a las 07:20:44, por 8,32, en Maggio-Fahey (misc_pos, Colton). Antes del caso, en las 24 horas previas, el historial muestra un movimiento de gasto muy superior al habitual, incluida una compra de 2.253,20 el 30/11 a las 10:49.",
+                "es_respaldo": false,
+                "recomendacion": {
+                  "accion": "verificar_cliente",
+                  "objetivo": "contacto con el cliente (tarjeta terminada en 0710)",
+                  "argumento": "El motivo de la regla es que una sola transacción supera el umbral de bloqueo, y una compra aislada se confirma con el cliente antes de bloquear. Las señales de gasto de 24 horas sustentan la revisión."
+                },
+                "senales_citadas": [
+                  "monto",
+                  "monto_24h",
+                  "ritmo_24h"
+                ],
+                "lo_que_no_se_sabe": "No se sabe si el cliente reconoce las dos compras ni quién usó la tarjeta. La tarjeta tiene un historial amplio (1.361 transacciones previas), por lo que la comparación con su perfil es válida.",
+                "por_que_es_riesgo": "La señal principal es el gasto de las últimas 24 horas: en esa ventana movió 2.436,25, frente a un gasto diario habitual de 118,79, más inusual que el 99,7 % de las transacciones normales. La segunda compra también muestra un monto de 8,32, equivalente a 0,1 veces su promedio previo de 61,00, y un ritmo de 5 transacciones en 24 horas frente a 1,95 por día habitual.",
+                "nivel_riesgo_en_palabras": "Riesgo alto: 1 de sus 2 transacciones supera el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 48,1 % (en la mitad de la cola)."
+              },
+              "es_respaldo": false,
+              "proveedor": "claude",
+              "modelo": "claude-haiku-5-5",
+              "creada_en": "2026-11-09T02:01:09.677817+00:00"
+            }
+          }
+        },
+        {
+          "t_ms": 2036,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "b5566945-de9a-4f83-a246-82ba1e20487b",
+            "motivo_fin": "completada",
+            "iteraciones": 0,
+            "tokens_entrada": 0,
+            "tokens_salida": 0,
+            "costo_usd": 0.0,
+            "latencia_ms": 23,
+            "ttft_ms": null,
+            "proveedor_final": null,
+            "modelo_final": null,
+            "reintentos": 0,
+            "conmutaciones": 0,
+            "desde_cache": true,
+            "tokens": 0,
+            "fragmentos_streaming": 0,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L11",
+      "tipo": "explicacion",
+      "dorado": "D5",
+      "id_caso": "SIN-000026",
+      "proposito": "segunda apertura (caché) de L05",
+      "regenerar": false,
+      "falla_pedida": null,
+      "contaminada": false,
+      "exito": true,
+      "origen": "cache",
+      "explicacion_valida": true,
+      "motivos_de_fallo": [],
+      "hechos": [
+        {
+          "hecho": "cita la señal «ubicacion»",
+          "cumple": true
+        },
+        {
+          "hecho": "nombra la ciudad de la compra imposible (Cali)",
+          "cumple": true
+        },
+        {
+          "hecho": "nombra la ciudad de la compra anterior (Barranquilla)",
+          "cumple": true
+        },
+        {
+          "hecho": "habla de bloquear el acceso a la cuenta (no solo la tarjeta)",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 361.143,19",
+          "cumple": true
+        }
+      ],
+      "contenido": {
+        "que_paso": "El 26/03/2026 a las 07:04 se registró una compra de 361.143,19 en Cali, la única transacción del caso. Minutos antes, a las 06:59, la misma tarjeta había operado por 416.776,68 en Barranquilla, donde hacía casi todas sus compras previas. Las transacciones de los días anteriores (24 y 25/03) también fueron en Barranquilla, con montos entre 119.971,68 y 644.552,21. La tarjeta tiene 41 transacciones previas.",
+        "es_respaldo": false,
+        "recomendacion": {
+          "accion": "bloquear_acceso_cuenta",
+          "objetivo": "el acceso a la cuenta (tarjeta terminada en 0257)",
+          "argumento": "La regla marcó viaje imposible: la misma cuenta operó en dos lugares que no se pueden recorrer en ese tiempo, lo que sugiere una posible toma de control. Las señales de ubicación, hora y ritmo refuerzan esa lectura."
+        },
+        "senales_citadas": [
+          "ubicacion",
+          "viaje_imposible",
+          "hora",
+          "ritmo_24h"
+        ],
+        "lo_que_no_se_sabe": "No se sabe si el titular reconoce la compra en Cali ni si pudo estar físicamente en ambos lugares. La evidencia no incluye comercio ni categoría de las transacciones.",
+        "por_que_es_riesgo": "El sistema detectó un viaje imposible: la misma tarjeta operó en Barranquilla a las 06:59 y en Cali a las 07:04, distancia que no se puede recorrer en cinco minutos. Además, Cali no aparece en sus ubicaciones habituales, la compra es a una hora poco frecuente para este cliente y el ritmo de transacciones de las últimas 24 horas es inusual.",
+        "nivel_riesgo_en_palabras": "Las compras en sí no superan los umbrales de riesgo del sistema: la alerta viene del viaje imposible entre dos transacciones. Entre los 52 casos marcados de su fuente, su riesgo es mayor que el del 59,6 % (en la mitad de la cola)."
+      },
+      "con_fallo": false,
+      "descripcion_fallo": null,
+      "recuperada": false,
+      "metricas": {
+        "tarea_id": "45eb09be-621b-4ec4-b2ed-9cb3d1d9794e",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 2032,
+        "ttft_cliente_ms": null,
+        "primer_evento_ms": 2008,
+        "latencia_servidor_ms": 18,
+        "ttft_servidor_ms": null,
+        "costo_usd": 0.0,
+        "tokens_entrada": 0,
+        "tokens_salida": 0,
+        "iteraciones": 0,
+        "proveedor_final": null,
+        "modelo_final": null,
+        "reintentos": 0,
+        "conmutaciones": 0,
+        "desde_cache": true,
+        "es_respaldo": false,
+        "falla_aplicada": null,
+        "herramientas_pedidas": [],
+        "fragmentos_streaming": 0
+      },
+      "traza": [
+        {
+          "t_ms": 2008,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2015,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "45eb09be-621b-4ec4-b2ed-9cb3d1d9794e",
+            "tipo_tarea": "explicacion",
+            "id_caso": "SIN-000026",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": null
+          }
+        },
+        {
+          "t_ms": 2028,
+          "tipo": "cache",
+          "datos": {
+            "explicacion": {
+              "id": 135,
+              "id_caso": "SIN-000026",
+              "tarea_id": "397c1bf5-4502-43af-b92c-eab7af10194c",
+              "contenido": {
+                "que_paso": "El 26/03/2026 a las 07:04 se registró una compra de 361.143,19 en Cali, la única transacción del caso. Minutos antes, a las 06:59, la misma tarjeta había operado por 416.776,68 en Barranquilla, donde hacía casi todas sus compras previas. Las transacciones de los días anteriores (24 y 25/03) también fueron en Barranquilla, con montos entre 119.971,68 y 644.552,21. La tarjeta tiene 41 transacciones previas.",
+                "es_respaldo": false,
+                "recomendacion": {
+                  "accion": "bloquear_acceso_cuenta",
+                  "objetivo": "el acceso a la cuenta (tarjeta terminada en 0257)",
+                  "argumento": "La regla marcó viaje imposible: la misma cuenta operó en dos lugares que no se pueden recorrer en ese tiempo, lo que sugiere una posible toma de control. Las señales de ubicación, hora y ritmo refuerzan esa lectura."
+                },
+                "senales_citadas": [
+                  "ubicacion",
+                  "viaje_imposible",
+                  "hora",
+                  "ritmo_24h"
+                ],
+                "lo_que_no_se_sabe": "No se sabe si el titular reconoce la compra en Cali ni si pudo estar físicamente en ambos lugares. La evidencia no incluye comercio ni categoría de las transacciones.",
+                "por_que_es_riesgo": "El sistema detectó un viaje imposible: la misma tarjeta operó en Barranquilla a las 06:59 y en Cali a las 07:04, distancia que no se puede recorrer en cinco minutos. Además, Cali no aparece en sus ubicaciones habituales, la compra es a una hora poco frecuente para este cliente y el ritmo de transacciones de las últimas 24 horas es inusual.",
+                "nivel_riesgo_en_palabras": "Las compras en sí no superan los umbrales de riesgo del sistema: la alerta viene del viaje imposible entre dos transacciones. Entre los 52 casos marcados de su fuente, su riesgo es mayor que el del 59,6 % (en la mitad de la cola)."
+              },
+              "es_respaldo": false,
+              "proveedor": "claude",
+              "modelo": "claude-haiku-5-5",
+              "creada_en": "2026-11-09T02:01:20.513687+00:00"
+            }
+          }
+        },
+        {
+          "t_ms": 2032,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "45eb09be-621b-4ec4-b2ed-9cb3d1d9794e",
+            "motivo_fin": "completada",
+            "iteraciones": 0,
+            "tokens_entrada": 0,
+            "tokens_salida": 0,
+            "costo_usd": 0.0,
+            "latencia_ms": 18,
+            "ttft_ms": null,
+            "proveedor_final": null,
+            "modelo_final": null,
+            "reintentos": 0,
+            "conmutaciones": 0,
+            "desde_cache": true,
+            "tokens": 0,
+            "fragmentos_streaming": 0,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L12",
+      "tipo": "explicacion",
+      "dorado": "D6",
+      "id_caso": "SPK-000171",
+      "proposito": "segunda apertura (caché) de L06",
+      "regenerar": false,
+      "falla_pedida": null,
+      "contaminada": false,
+      "exito": true,
+      "origen": "cache",
+      "explicacion_valida": true,
+      "motivos_de_fallo": [],
+      "hechos": [
+        {
+          "hecho": "cita la señal «historial»",
+          "cumple": true
+        },
+        {
+          "hecho": "dice que la tarjeta no tiene historial suficiente",
+          "cumple": true
+        },
+        {
+          "hecho": "identifica la tarjeta por sus últimos cuatro dígitos (7373)",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 1.038,53",
+          "cumple": true
+        }
+      ],
+      "contenido": {
+        "que_paso": "Entre el 25-10-2020 a las 22:34 y las 23:32 se registraron 4 compras seguidas en Wever, por un total de 3.645,79: Baumbach, Hodkiewicz and Walsh (22:34, 1.038,53, shopping_pos), Little, Gutmann and Lynch (22:51, 773,18, shopping_net), Bednar Group (23:02, 772,55, misc_net) y Langworth, Boehm and Gulgowski (23:32, 1.061,53, shopping_net). Antes, a las 20:43, hubo una compra de 614,29 en Bednar Group y a las 06:57 una de 12,40 en gas_transport. La tarjeta casi no tiene compras previas.",
+        "es_respaldo": false,
+        "recomendacion": {
+          "accion": "bloquear_tarjeta",
+          "objetivo": "la tarjeta terminada en 7373",
+          "argumento": "La regla bloquea porque 4 transacciones en 48 h superan el umbral de bloqueo 0,97, con compras anómalas seguidas y patrón de uso no autorizado. La señal principal es el historial de la tarjeta."
+        },
+        "senales_citadas": [
+          "historial"
+        ],
+        "lo_que_no_se_sabe": "No hay un perfil habitual con el cual comparar: la tarjeta tiene solo 2 compras previas. No se sabe si el cliente reconoce las compras del caso ni el origen de la tarjeta usada.",
+        "por_que_es_riesgo": "El sistema señala que la tarjeta tiene muy poco historial: sin un perfil con el cual comparar, cada compra del caso queda en el percentil de rareza 99,2. Las cuatro transacciones superan el umbral de bloqueo, con un patrón de compras de montos altos y seguidas en menos de una hora.",
+        "nivel_riesgo_en_palabras": "Riesgo alto: sus 4 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 78,0 % (de los más altos de la cola)."
+      },
+      "con_fallo": false,
+      "descripcion_fallo": null,
+      "recuperada": false,
+      "metricas": {
+        "tarea_id": "0fa1b847-a6fb-433b-93ae-90242660a58e",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 2041,
+        "ttft_cliente_ms": null,
+        "primer_evento_ms": 2012,
+        "latencia_servidor_ms": 24,
+        "ttft_servidor_ms": null,
+        "costo_usd": 0.0,
+        "tokens_entrada": 0,
+        "tokens_salida": 0,
+        "iteraciones": 0,
+        "proveedor_final": null,
+        "modelo_final": null,
+        "reintentos": 0,
+        "conmutaciones": 0,
+        "desde_cache": true,
+        "es_respaldo": false,
+        "falla_aplicada": null,
+        "herramientas_pedidas": [],
+        "fragmentos_streaming": 0
+      },
+      "traza": [
+        {
+          "t_ms": 2012,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2019,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "0fa1b847-a6fb-433b-93ae-90242660a58e",
+            "tipo_tarea": "explicacion",
+            "id_caso": "SPK-000171",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": null
+          }
+        },
+        {
+          "t_ms": 2037,
+          "tipo": "cache",
+          "datos": {
+            "explicacion": {
+              "id": 136,
+              "id_caso": "SPK-000171",
+              "tarea_id": "09840ac3-4eab-4131-85f1-c74b5e5ec0e8",
+              "contenido": {
+                "que_paso": "Entre el 25-10-2020 a las 22:34 y las 23:32 se registraron 4 compras seguidas en Wever, por un total de 3.645,79: Baumbach, Hodkiewicz and Walsh (22:34, 1.038,53, shopping_pos), Little, Gutmann and Lynch (22:51, 773,18, shopping_net), Bednar Group (23:02, 772,55, misc_net) y Langworth, Boehm and Gulgowski (23:32, 1.061,53, shopping_net). Antes, a las 20:43, hubo una compra de 614,29 en Bednar Group y a las 06:57 una de 12,40 en gas_transport. La tarjeta casi no tiene compras previas.",
+                "es_respaldo": false,
+                "recomendacion": {
+                  "accion": "bloquear_tarjeta",
+                  "objetivo": "la tarjeta terminada en 7373",
+                  "argumento": "La regla bloquea porque 4 transacciones en 48 h superan el umbral de bloqueo 0,97, con compras anómalas seguidas y patrón de uso no autorizado. La señal principal es el historial de la tarjeta."
+                },
+                "senales_citadas": [
+                  "historial"
+                ],
+                "lo_que_no_se_sabe": "No hay un perfil habitual con el cual comparar: la tarjeta tiene solo 2 compras previas. No se sabe si el cliente reconoce las compras del caso ni el origen de la tarjeta usada.",
+                "por_que_es_riesgo": "El sistema señala que la tarjeta tiene muy poco historial: sin un perfil con el cual comparar, cada compra del caso queda en el percentil de rareza 99,2. Las cuatro transacciones superan el umbral de bloqueo, con un patrón de compras de montos altos y seguidas en menos de una hora.",
+                "nivel_riesgo_en_palabras": "Riesgo alto: sus 4 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 78,0 % (de los más altos de la cola)."
+              },
+              "es_respaldo": false,
+              "proveedor": "claude",
+              "modelo": "claude-haiku-5-5",
+              "creada_en": "2026-11-09T02:01:31.309131+00:00"
+            }
+          }
+        },
+        {
+          "t_ms": 2041,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "0fa1b847-a6fb-433b-93ae-90242660a58e",
+            "motivo_fin": "completada",
+            "iteraciones": 0,
+            "tokens_entrada": 0,
+            "tokens_salida": 0,
+            "costo_usd": 0.0,
+            "latencia_ms": 24,
+            "ttft_ms": null,
+            "proveedor_final": null,
+            "modelo_final": null,
+            "reintentos": 0,
+            "conmutaciones": 0,
+            "desde_cache": true,
+            "tokens": 0,
+            "fragmentos_streaming": 0,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L13",
+      "tipo": "pregunta",
+      "dorado": "D1",
+      "id_caso": "SPK-000266",
+      "proposito": "pregunta libre: la tarea 2 de la prueba del compañero",
+      "regenerar": null,
+      "falla_pedida": null,
+      "contaminada": false,
+      "exito": true,
+      "respuesta_valida": true,
+      "motivos_de_fallo": [],
+      "hechos": [],
+      "respuesta": "La compra más rara del caso fue la de **1.037,69** en Huel-Langworth (misc_net, Dallas), el 28/09/2020 a las 22:51:20... pero hay que precisar qué entendemos por \"más rara\".\n\nPor la señal de monto, la más extrema es la de **987,00** en Romaguera, Cruickshank and Greenholt (shopping_net, Dallas, 27/09/2020 a las 17:13:05): el sistema dice que es **17,3 veces su promedio previo (57,22)** y más inusual que el **99,8 %** de las transacciones normales. La de **1.037,69** tiene un percentil similar (99,8 %) y es **17,2 veces** su promedio previo (60,49).\n\nPor el conjunto de señales, la transacción con el puntaje más alto es la de **1.037,69** en Huel-Langworth, con score **1,00**, y el sistema la marca con la señal de gasto de las últimas 24 horas, que llegaba a **2.549,93**.\n\nLas compras de ese tipo (montos muy por encima de su promedio, en comercios en línea y todas en Dallas) son las que explican la recomendación de bloqueo: 12 transacciones en 48 horas por un total de **6.824,70**, con score máximo de **1,00**.",
+      "con_fallo": false,
+      "descripcion_fallo": null,
+      "recuperada": false,
+      "metricas": {
+        "tarea_id": "28098ea2-60ed-4fa8-b796-5b666d96cd72",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 6141,
+        "ttft_cliente_ms": 2722,
+        "primer_evento_ms": 2011,
+        "latencia_servidor_ms": 4125,
+        "ttft_servidor_ms": 2106,
+        "costo_usd": 0.00142,
+        "tokens_entrada": 11662,
+        "tokens_salida": 508,
+        "iteraciones": 2,
+        "proveedor_final": "claude",
+        "modelo_final": "claude-haiku-5-5",
+        "reintentos": 0,
+        "conmutaciones": 0,
+        "desde_cache": false,
+        "es_respaldo": false,
+        "falla_aplicada": null,
+        "herramientas_pedidas": [
+          "obtener_caso"
+        ],
+        "fragmentos_streaming": 101
+      },
+      "traza": [
+        {
+          "t_ms": 2011,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Pregunta recibida: consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2018,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "28098ea2-60ed-4fa8-b796-5b666d96cd72",
+            "tipo_tarea": "pregunta",
+            "id_caso": "SPK-000266",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": null
+          }
+        },
+        {
+          "t_ms": 2028,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 1,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 3041,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "argumentos": {
+              "id_caso": "SPK-000266"
+            },
+            "id_llamada": "toolu_01LZ58xtmuT9QxNZoNDZp7Qv"
+          }
+        },
+        {
+          "t_ms": 3045,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "resumen": {
+              "campos": [
+                "fin_ventana",
+                "fuente",
+                "id_caso",
+                "inicio_ventana",
+                "monto_total",
+                "motivo_recomendacion",
+                "n_transacciones",
+                "nivel_recomendacion",
+                "score_maximo",
+                "senal_principal",
+                "senales_que_puedes_citar",
+                "tarjeta",
+                "tipos_fraude_sospechados",
+                "transacciones",
+                "transacciones_sobre_umbral_bloqueo"
+              ],
+              "tamano_caracteres": 7873,
+              "n_transacciones": 12
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 3048,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 2,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 6137,
+          "tipo": "respuesta",
+          "datos": {
+            "texto": "La compra más rara del caso fue la de **1.037,69** en Huel-Langworth (misc_net, Dallas), el 28/09/2020 a las 22:51:20... pero hay que precisar qué entendemos por \"más rara\".\n\nPor la señal de monto, la más extrema es la de **987,00** en Romaguera, Cruickshank and Greenholt (shopping_net, Dallas, 27/09/2020 a las 17:13:05): el sistema dice que es **17,3 veces su promedio previo (57,22)** y más inusual que el **99,8 %** de las transacciones normales. La de **1.037,69** tiene un percentil similar (99,8 %) y es **17,2 veces** su promedio previo (60,49).\n\nPor el conjunto de señales, la transacción con el puntaje más alto es la de **1.037,69** en Huel-Langworth, con score **1,00**, y el sistema la marca con la señal de gasto de las últimas 24 horas, que llegaba a **2.549,93**.\n\nLas compras de ese tipo (montos muy por encima de su promedio, en comercios en línea y todas en Dallas) son las que explican la recomendación de bloqueo: 12 transacciones en 48 horas por un total de **6.824,70**, con score máximo de **1,00**.",
+            "rechazo": false
+          }
+        },
+        {
+          "t_ms": 6141,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "28098ea2-60ed-4fa8-b796-5b666d96cd72",
+            "motivo_fin": "completada",
+            "iteraciones": 2,
+            "tokens_entrada": 11662,
+            "tokens_salida": 508,
+            "costo_usd": 0.00142,
+            "latencia_ms": 4125,
+            "ttft_ms": 2106,
+            "proveedor_final": "claude",
+            "modelo_final": "claude-haiku-5-5",
+            "reintentos": 0,
+            "conmutaciones": 0,
+            "desde_cache": false,
+            "tokens": 12170,
+            "fragmentos_streaming": 101,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L14",
+      "tipo": "pregunta",
+      "dorado": "D5",
+      "id_caso": "SIN-000026",
+      "proposito": "pregunta libre: el viaje imposible narrado por el agente",
+      "regenerar": null,
+      "falla_pedida": null,
+      "contaminada": false,
+      "exito": true,
+      "respuesta_valida": true,
+      "motivos_de_fallo": [],
+      "hechos": [
+        {
+          "hecho": "nombra la ciudad de la compra imposible (Cali)",
+          "cumple": true
+        },
+        {
+          "hecho": "nombra la ciudad de la compra anterior (Barranquilla)",
+          "cumple": true
+        }
+      ],
+      "respuesta": "Según los datos del caso, la cuenta operó en dos ciudades: **Barranquilla** y **Cali**.\n\nLa última compra en Barranquilla fue el 26/03/2026 a las 06:59, por 416.776,68. La primera en Cali fue el 26/03/2026 a las 07:04, por 361.143,19. Entre ambas transacciones pasaron **5 minutos**, lo que el sistema marcó como viaje imposible: la misma cuenta operó en dos lugares que no se pueden recorrer en ese tiempo.",
+      "con_fallo": false,
+      "descripcion_fallo": null,
+      "recuperada": false,
+      "metricas": {
+        "tarea_id": "3b1acc22-3c9d-4a26-b8e6-38e0c26b3647",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 4199,
+        "ttft_cliente_ms": 2530,
+        "primer_evento_ms": 2011,
+        "latencia_servidor_ms": 2183,
+        "ttft_servidor_ms": 1491,
+        "costo_usd": 0.001118,
+        "tokens_entrada": 9444,
+        "tokens_salida": 347,
+        "iteraciones": 2,
+        "proveedor_final": "claude",
+        "modelo_final": "claude-haiku-5-5",
+        "reintentos": 0,
+        "conmutaciones": 0,
+        "desde_cache": false,
+        "es_respaldo": false,
+        "falla_aplicada": null,
+        "herramientas_pedidas": [
+          "obtener_caso",
+          "obtener_historial_reciente"
+        ],
+        "fragmentos_streaming": 39
+      },
+      "traza": [
+        {
+          "t_ms": 2011,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Pregunta recibida: consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2020,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "3b1acc22-3c9d-4a26-b8e6-38e0c26b3647",
+            "tipo_tarea": "pregunta",
+            "id_caso": "SIN-000026",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": null
+          }
+        },
+        {
+          "t_ms": 2030,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 1,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 3019,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "argumentos": {
+              "id_caso": "SIN-000026"
+            },
+            "id_llamada": "toolu_01EzTz5QHwW4AVi6LVAzd3BG"
+          }
+        },
+        {
+          "t_ms": 3023,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "resumen": {
+              "campos": [
+                "fin_ventana",
+                "fuente",
+                "id_caso",
+                "inicio_ventana",
+                "monto_total",
+                "motivo_recomendacion",
+                "n_transacciones",
+                "nivel_recomendacion",
+                "score_maximo",
+                "senal_principal",
+                "senales_que_puedes_citar",
+                "tarjeta",
+                "tipos_fraude_sospechados",
+                "transacciones",
+                "transacciones_sobre_umbral_bloqueo"
+              ],
+              "tamano_caracteres": 1487,
+              "n_transacciones": 1
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 3025,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "argumentos": {
+              "id_caso": "SIN-000026",
+              "dias": 7
+            },
+            "id_llamada": "toolu_01UyWBEwB74DkBWCCYcNCQUB"
+          }
+        },
+        {
+          "t_ms": 3029,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "resumen": {
+              "campos": [
+                "dias",
+                "n_transacciones",
+                "transacciones"
+              ],
+              "tamano_caracteres": 1329,
+              "n_transacciones": 9
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 3032,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 2,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 4195,
+          "tipo": "respuesta",
+          "datos": {
+            "texto": "Según los datos del caso, la cuenta operó en dos ciudades: **Barranquilla** y **Cali**.\n\nLa última compra en Barranquilla fue el 26/03/2026 a las 06:59, por 416.776,68. La primera en Cali fue el 26/03/2026 a las 07:04, por 361.143,19. Entre ambas transacciones pasaron **5 minutos**, lo que el sistema marcó como viaje imposible: la misma cuenta operó en dos lugares que no se pueden recorrer en ese tiempo.",
+            "rechazo": false
+          }
+        },
+        {
+          "t_ms": 4199,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "3b1acc22-3c9d-4a26-b8e6-38e0c26b3647",
+            "motivo_fin": "completada",
+            "iteraciones": 2,
+            "tokens_entrada": 9444,
+            "tokens_salida": 347,
+            "costo_usd": 0.001118,
+            "latencia_ms": 2183,
+            "ttft_ms": 1491,
+            "proveedor_final": "claude",
+            "modelo_final": "claude-haiku-5-5",
+            "reintentos": 0,
+            "conmutaciones": 0,
+            "desde_cache": false,
+            "tokens": 9791,
+            "fragmentos_streaming": 39,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L15",
+      "tipo": "pregunta",
+      "dorado": "D4",
+      "id_caso": "SPK-000179",
+      "proposito": "pregunta libre: el agente explica la regla sin cambiarla",
+      "regenerar": null,
+      "falla_pedida": null,
+      "contaminada": false,
+      "exito": true,
+      "respuesta_valida": true,
+      "motivos_de_fallo": [],
+      "hechos": [],
+      "respuesta": "La regla recomienda solo verificar con el cliente porque, aunque una de las dos transacciones del caso (la de 18,44 en Hauck, Dietrich and Funk, del 30 de noviembre a las 22:26) supera el umbral de bloqueo, es una sola compra aislada, y la regla exige confirmarla con el cliente antes de bloquear. La segunda transacción (8,32 en Maggio-Fahey, el 1 de diciembre a las 07:20) queda por debajo de ese umbral, con un score de 0,949 frente a un umbral de bloqueo de 0,966.\n\nLa señal principal es el gasto de las últimas 24 horas: en la primera compra el sistema registra que en las 24 horas anteriores se movieron **2.436,25**, frente a un gasto diario habitual de 118,79, más inusual que el 99,7 % de las transacciones normales. En la segunda, ese gasto de 24 horas es 2.349,73, y además el monto de 8,32 es 0,1 veces su promedio previo de 61,00 y hubo 5 transacciones en 24 horas frente a un ritmo habitual de 1,95 por día.\n\nEn resumen, la evidencia es fuerte pero concentrada en una compra que el sistema no puede confirmar sola como fraude, así que la regla pide preguntarle al cliente antes de bloquear. El nivel de riesgo del sistema es \"Riesgo alto\", con el caso en el percentil 48,1 entre 287 casos marcados de su fuente.",
+      "con_fallo": false,
+      "descripcion_fallo": null,
+      "recuperada": false,
+      "metricas": {
+        "tarea_id": "8f2ea7c4-746c-4db8-bb4a-ce208c1239b0",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 5954,
+        "ttft_cliente_ms": 2541,
+        "primer_evento_ms": 2012,
+        "latencia_servidor_ms": 3936,
+        "ttft_servidor_ms": 1713,
+        "costo_usd": 0.001241,
+        "tokens_entrada": 9133,
+        "tokens_salida": 656,
+        "iteraciones": 2,
+        "proveedor_final": "claude",
+        "modelo_final": "claude-haiku-5-5",
+        "reintentos": 0,
+        "conmutaciones": 0,
+        "desde_cache": false,
+        "es_respaldo": false,
+        "falla_aplicada": null,
+        "herramientas_pedidas": [
+          "obtener_caso",
+          "obtener_score_y_umbrales"
+        ],
+        "fragmentos_streaming": 114
+      },
+      "traza": [
+        {
+          "t_ms": 2012,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Pregunta recibida: consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2021,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "8f2ea7c4-746c-4db8-bb4a-ce208c1239b0",
+            "tipo_tarea": "pregunta",
+            "id_caso": "SPK-000179",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": null
+          }
+        },
+        {
+          "t_ms": 2032,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 1,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 3167,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "argumentos": {
+              "id_caso": "SPK-000179"
+            },
+            "id_llamada": "toolu_01MFhX3xTVPaJtFzsxh6pBrs"
+          }
+        },
+        {
+          "t_ms": 3170,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "resumen": {
+              "campos": [
+                "fin_ventana",
+                "fuente",
+                "id_caso",
+                "inicio_ventana",
+                "monto_total",
+                "motivo_recomendacion",
+                "n_transacciones",
+                "nivel_recomendacion",
+                "score_maximo",
+                "senal_principal",
+                "senales_que_puedes_citar",
+                "tarjeta",
+                "tipos_fraude_sospechados",
+                "transacciones",
+                "transacciones_sobre_umbral_bloqueo"
+              ],
+              "tamano_caracteres": 1858,
+              "n_transacciones": 2
+            },
+            "duracion_ms": 1
+          }
+        },
+        {
+          "t_ms": 3172,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_score_y_umbrales",
+            "argumentos": {
+              "id_caso": "SPK-000179"
+            },
+            "id_llamada": "toolu_01Kz7bt4tuwSrVdFEyDZJZsR"
+          }
+        },
+        {
+          "t_ms": 3183,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_score_y_umbrales",
+            "resumen": {
+              "campos": [
+                "modelo",
+                "n_casos_comparados",
+                "nivel_riesgo_en_palabras",
+                "percentil_entre_casos",
+                "score_maximo",
+                "transacciones_sobre_umbral_bloqueo",
+                "umbral_bloqueo",
+                "umbral_verificacion"
+              ],
+              "tamano_caracteres": 424
+            },
+            "duracion_ms": 8
+          }
+        },
+        {
+          "t_ms": 3185,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 2,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 5949,
+          "tipo": "respuesta",
+          "datos": {
+            "texto": "La regla recomienda solo verificar con el cliente porque, aunque una de las dos transacciones del caso (la de 18,44 en Hauck, Dietrich and Funk, del 30 de noviembre a las 22:26) supera el umbral de bloqueo, es una sola compra aislada, y la regla exige confirmarla con el cliente antes de bloquear. La segunda transacción (8,32 en Maggio-Fahey, el 1 de diciembre a las 07:20) queda por debajo de ese umbral, con un score de 0,949 frente a un umbral de bloqueo de 0,966.\n\nLa señal principal es el gasto de las últimas 24 horas: en la primera compra el sistema registra que en las 24 horas anteriores se movieron **2.436,25**, frente a un gasto diario habitual de 118,79, más inusual que el 99,7 % de las transacciones normales. En la segunda, ese gasto de 24 horas es 2.349,73, y además el monto de 8,32 es 0,1 veces su promedio previo de 61,00 y hubo 5 transacciones en 24 horas frente a un ritmo habitual de 1,95 por día.\n\nEn resumen, la evidencia es fuerte pero concentrada en una compra que el sistema no puede confirmar sola como fraude, así que la regla pide preguntarle al cliente antes de bloquear. El nivel de riesgo del sistema es \"Riesgo alto\", con el caso en el percentil 48,1 entre 287 casos marcados de su fuente.",
+            "rechazo": false
+          }
+        },
+        {
+          "t_ms": 5954,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "8f2ea7c4-746c-4db8-bb4a-ce208c1239b0",
+            "motivo_fin": "completada",
+            "iteraciones": 2,
+            "tokens_entrada": 9133,
+            "tokens_salida": 656,
+            "costo_usd": 0.001241,
+            "latencia_ms": 3936,
+            "ttft_ms": 1713,
+            "proveedor_final": "claude",
+            "modelo_final": "claude-haiku-5-5",
+            "reintentos": 0,
+            "conmutaciones": 0,
+            "desde_cache": false,
+            "tokens": 9789,
+            "fragmentos_streaming": 114,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L16",
+      "tipo": "explicacion",
+      "dorado": "D2",
+      "id_caso": "SPK-000093",
+      "proposito": "falla forzada 429 en el principal: backoff y conmutación al respaldo",
+      "regenerar": true,
+      "falla_pedida": "429",
+      "contaminada": false,
+      "exito": false,
+      "origen": "agente",
+      "explicacion_valida": true,
+      "motivos_de_fallo": [
+        "hecho: no menciona 62,83 ni 62,84"
+      ],
+      "hechos": [
+        {
+          "hecho": "cita la señal «monto»",
+          "cumple": true
+        },
+        {
+          "hecho": "identifica la tarjeta por sus últimos cuatro dígitos (9375)",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 842,65",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 62,83 o 62,84",
+          "cumple": false
+        }
+      ],
+      "contenido": {
+        "que_paso": "El caso registra 2 transacciones entre el 2020-06-21T22:06:39 y el 2020-06-21T23:02:16, sumando 867,49. La primera fue por 24,84 en Hamill-D'Amore y la segunda por 842,65 en Hermann and Sons, ambas en Notrees.",
+        "por_que_es_riesgo": "Las transacciones presentan un monto muy superior al promedio y un gasto acumulado en el gasto de las últimas 24 horas inusual frente a su comportamiento habitual, además de realizarse a una hora poco frecuente.",
+        "lo_que_no_se_sabe": "No se sabe si el cliente reconoce las transacciones ni los motivos exactos de los consumos.",
+        "nivel_riesgo_en_palabras": "Riesgo alto: sus 2 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 33,4 % (en la mitad de la cola).",
+        "recomendacion": {
+          "accion": "bloquear_tarjeta",
+          "objetivo": "la tarjeta **** **** **** 9375",
+          "argumento": "2 transacciones en 48 h superan el umbral de bloqueo 0,97 debido a compras anómalas seguidas y un patrón de uso no autorizado."
+        },
+        "senales_citadas": [
+          "monto_24h",
+          "hora",
+          "monto"
+        ],
+        "es_respaldo": false
+      },
+      "con_fallo": true,
+      "descripcion_fallo": "forzada: 429",
+      "recuperada": true,
+      "metricas": {
+        "tarea_id": "c446f429-8cc2-4106-84a2-675b345d904d",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 11845,
+        "ttft_cliente_ms": 11161,
+        "primer_evento_ms": 2018,
+        "latencia_servidor_ms": 9823,
+        "ttft_servidor_ms": 9142,
+        "costo_usd": 0.003144,
+        "tokens_entrada": 7022,
+        "tokens_salida": 415,
+        "iteraciones": 2,
+        "proveedor_final": "gemini",
+        "modelo_final": "gemini-3.5-flash-lite",
+        "reintentos": 3,
+        "conmutaciones": 1,
+        "desde_cache": false,
+        "es_respaldo": false,
+        "falla_aplicada": "429",
+        "herramientas_pedidas": [
+          "obtener_caso",
+          "obtener_historial_reciente",
+          "obtener_perfil_cuenta"
+        ],
+        "fragmentos_streaming": 14
+      },
+      "traza": [
+        {
+          "t_ms": 2018,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Regenerando: consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2051,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "c446f429-8cc2-4106-84a2-675b345d904d",
+            "tipo_tarea": "explicacion",
+            "id_caso": "SPK-000093",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": "429"
+          }
+        },
+        {
+          "t_ms": 2062,
+          "tipo": "estado",
+          "datos": {
+            "texto": "El asistente está consultando la evidencia del caso…"
+          }
+        },
+        {
+          "t_ms": 2064,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 1,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 2065,
+          "tipo": "reintento",
+          "datos": {
+            "proveedor": "claude",
+            "motivo": "cuota",
+            "intento": 1,
+            "de": 3,
+            "espera_s": 1.0,
+            "detalle": "Falla forzada: 429 simulado (no se llamó a la red)",
+            "texto": "Claude respondió 429 (cuota agotada) · reintento 1/3 en 1 s"
+          }
+        },
+        {
+          "t_ms": 3071,
+          "tipo": "reintento",
+          "datos": {
+            "proveedor": "claude",
+            "motivo": "cuota",
+            "intento": 2,
+            "de": 3,
+            "espera_s": 2.0,
+            "detalle": "Falla forzada: 429 simulado (no se llamó a la red)",
+            "texto": "Claude respondió 429 (cuota agotada) · reintento 2/3 en 2 s"
+          }
+        },
+        {
+          "t_ms": 5075,
+          "tipo": "reintento",
+          "datos": {
+            "proveedor": "claude",
+            "motivo": "cuota",
+            "intento": 3,
+            "de": 3,
+            "espera_s": 4.0,
+            "detalle": "Falla forzada: 429 simulado (no se llamó a la red)",
+            "texto": "Claude respondió 429 (cuota agotada) · reintento 3/3 en 4 s"
+          }
+        },
+        {
+          "t_ms": 9078,
+          "tipo": "conmutacion",
+          "datos": {
+            "de": "claude",
+            "a": "gemini",
+            "motivo": "cuota",
+            "detalle": "Falla forzada: 429 simulado (no se llamó a la red)",
+            "texto": "Claude respondió 429 (cuota agotada): se cambia a Gemini"
+          }
+        },
+        {
+          "t_ms": 10020,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "argumentos": {
+              "id_caso": "SPK-000093"
+            },
+            "id_llamada": "call_16606184296710412115"
+          }
+        },
+        {
+          "t_ms": 10024,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "resumen": {
+              "campos": [
+                "fin_ventana",
+                "fuente",
+                "id_caso",
+                "inicio_ventana",
+                "monto_total",
+                "motivo_recomendacion",
+                "n_transacciones",
+                "nivel_recomendacion",
+                "score_maximo",
+                "senal_principal",
+                "senales_que_puedes_citar",
+                "tarjeta",
+                "tipos_fraude_sospechados",
+                "transacciones",
+                "transacciones_sobre_umbral_bloqueo"
+              ],
+              "tamano_caracteres": 2052,
+              "n_transacciones": 2
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 10026,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "argumentos": {
+              "dias": 3,
+              "id_caso": "SPK-000093"
+            },
+            "id_llamada": "call_16606184296710410786"
+          }
+        },
+        {
+          "t_ms": 10030,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "resumen": {
+              "campos": [
+                "dias",
+                "n_transacciones",
+                "transacciones"
+              ],
+              "tamano_caracteres": 4113,
+              "n_transacciones": 26
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 10032,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "argumentos": {
+              "id_caso": "SPK-000093"
+            },
+            "id_llamada": "call_16606184296710413553"
+          }
+        },
+        {
+          "t_ms": 10035,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "resumen": {
+              "campos": [
+                "categorias_habituales",
+                "horas_habituales",
+                "monto_desviacion",
+                "monto_promedio",
+                "n_transacciones_previas",
+                "sin_historial",
+                "tarjeta",
+                "transacciones_por_dia"
+              ],
+              "tamano_caracteres": 471
+            },
+            "duracion_ms": 1
+          }
+        },
+        {
+          "t_ms": 10038,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 2,
+            "proveedor": "gemini",
+            "modelo": "gemini-3.5-flash-lite"
+          }
+        },
+        {
+          "t_ms": 11842,
+          "tipo": "explicacion",
+          "datos": {
+            "contenido": {
+              "que_paso": "El caso registra 2 transacciones entre el 2020-06-21T22:06:39 y el 2020-06-21T23:02:16, sumando 867,49. La primera fue por 24,84 en Hamill-D'Amore y la segunda por 842,65 en Hermann and Sons, ambas en Notrees.",
+              "por_que_es_riesgo": "Las transacciones presentan un monto muy superior al promedio y un gasto acumulado en el gasto de las últimas 24 horas inusual frente a su comportamiento habitual, además de realizarse a una hora poco frecuente.",
+              "lo_que_no_se_sabe": "No se sabe si el cliente reconoce las transacciones ni los motivos exactos de los consumos.",
+              "nivel_riesgo_en_palabras": "Riesgo alto: sus 2 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 33,4 % (en la mitad de la cola).",
+              "recomendacion": {
+                "accion": "bloquear_tarjeta",
+                "objetivo": "la tarjeta **** **** **** 9375",
+                "argumento": "2 transacciones en 48 h superan el umbral de bloqueo 0,97 debido a compras anómalas seguidas y un patrón de uso no autorizado."
+              },
+              "senales_citadas": [
+                "monto_24h",
+                "hora",
+                "monto"
+              ],
+              "es_respaldo": false
+            },
+            "proveedor": "gemini",
+            "modelo": "gemini-3.5-flash-lite"
+          }
+        },
+        {
+          "t_ms": 11845,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "c446f429-8cc2-4106-84a2-675b345d904d",
+            "motivo_fin": "completada",
+            "iteraciones": 2,
+            "tokens_entrada": 7022,
+            "tokens_salida": 415,
+            "costo_usd": 0.003144,
+            "latencia_ms": 9823,
+            "ttft_ms": 9142,
+            "proveedor_final": "gemini",
+            "modelo_final": "gemini-3.5-flash-lite",
+            "reintentos": 3,
+            "conmutaciones": 1,
+            "desde_cache": false,
+            "tokens": 7437,
+            "fragmentos_streaming": 14,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L17",
+      "tipo": "explicacion",
+      "dorado": "D3",
+      "id_caso": "SPK-000104",
+      "proposito": "falla forzada timeout en el principal: reintentos y conmutación",
+      "regenerar": true,
+      "falla_pedida": "timeout",
+      "contaminada": false,
+      "exito": false,
+      "origen": "agente",
+      "explicacion_valida": true,
+      "motivos_de_fallo": [
+        "hecho: no menciona 967,23",
+        "hecho: no menciona 1.010,50 ni 1.920,54 ni 1.930,67 ni 2.863,31"
+      ],
+      "hechos": [
+        {
+          "hecho": "cita la señal «monto_24h»",
+          "cumple": true
+        },
+        {
+          "hecho": "dice cuántas compras tuvo el caso (5) o cuántas superaron el umbral (5)",
+          "cumple": true
+        },
+        {
+          "hecho": "identifica la tarjeta por sus últimos cuatro dígitos (2826)",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 967,23",
+          "cumple": false
+        },
+        {
+          "hecho": "menciona la cifra 1.010,50 o 1.920,54 o 1.930,67 o 2.863,31",
+          "cumple": false
+        }
+      ],
+      "contenido": {
+        "que_paso": "Entre el 14 de julio de 2020 a las 23:04 y el 15 de julio de 2020 a las 22:14, se registraron 5 transacciones por un total de 3.794,35. Comenzó con compras en Jast Ltd y Schmeler, Bashirian and Price, continuó con Schmitt Inc y Lemke-Gutmann, y finalizó con Heathcote LLC.",
+        "por_que_es_riesgo": "Las transacciones presentan montos muy elevados que superan ampliamente su promedio previo y un ritmo anómalo de acumulación de gasto en periodos de 24 horas, con un score máximo de 1,00 que supera el umbral de bloqueo.",
+        "lo_que_no_se_sabe": "No se sabe si el titular de la tarjeta reconoce y autorizó las 5 transacciones realizadas en la ventana del caso.",
+        "nivel_riesgo_en_palabras": "Riesgo alto: sus 5 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 94,1 % (de los más altos de la cola).",
+        "recomendacion": {
+          "accion": "bloquear_tarjeta",
+          "objetivo": "la tarjeta **** **** **** 2826",
+          "argumento": "5 transacciones en 48 h superan el umbral de bloqueo 0,97 (score máximo 1,00): compras anómalas seguidas, patrón de uso no autorizado."
+        },
+        "senales_citadas": [
+          "monto",
+          "monto_24h"
+        ],
+        "es_respaldo": false
+      },
+      "con_fallo": true,
+      "descripcion_fallo": "forzada: timeout",
+      "recuperada": true,
+      "metricas": {
+        "tarea_id": "92ae71a6-b8dc-44a6-ab55-df24807306fc",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 12337,
+        "ttft_cliente_ms": 11468,
+        "primer_evento_ms": 2011,
+        "latencia_servidor_ms": 10320,
+        "ttft_servidor_ms": 9455,
+        "costo_usd": 0.003016,
+        "tokens_entrada": 6461,
+        "tokens_salida": 431,
+        "iteraciones": 2,
+        "proveedor_final": "gemini",
+        "modelo_final": "gemini-3.5-flash-lite",
+        "reintentos": 3,
+        "conmutaciones": 1,
+        "desde_cache": false,
+        "es_respaldo": false,
+        "falla_aplicada": "timeout",
+        "herramientas_pedidas": [
+          "obtener_caso",
+          "obtener_historial_reciente",
+          "obtener_perfil_cuenta"
+        ],
+        "fragmentos_streaming": 14
+      },
+      "traza": [
+        {
+          "t_ms": 2011,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Regenerando: consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2020,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "92ae71a6-b8dc-44a6-ab55-df24807306fc",
+            "tipo_tarea": "explicacion",
+            "id_caso": "SPK-000104",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": "timeout"
+          }
+        },
+        {
+          "t_ms": 2032,
+          "tipo": "estado",
+          "datos": {
+            "texto": "El asistente está consultando la evidencia del caso…"
+          }
+        },
+        {
+          "t_ms": 2034,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 1,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 2035,
+          "tipo": "reintento",
+          "datos": {
+            "proveedor": "claude",
+            "motivo": "timeout",
+            "intento": 1,
+            "de": 3,
+            "espera_s": 1.0,
+            "detalle": "Falla forzada: timeout simulado (no se llamó a la red)",
+            "texto": "Claude no respondió a tiempo · reintento 1/3 en 1 s"
+          }
+        },
+        {
+          "t_ms": 3044,
+          "tipo": "reintento",
+          "datos": {
+            "proveedor": "claude",
+            "motivo": "timeout",
+            "intento": 2,
+            "de": 3,
+            "espera_s": 2.0,
+            "detalle": "Falla forzada: timeout simulado (no se llamó a la red)",
+            "texto": "Claude no respondió a tiempo · reintento 2/3 en 2 s"
+          }
+        },
+        {
+          "t_ms": 5049,
+          "tipo": "reintento",
+          "datos": {
+            "proveedor": "claude",
+            "motivo": "timeout",
+            "intento": 3,
+            "de": 3,
+            "espera_s": 4.0,
+            "detalle": "Falla forzada: timeout simulado (no se llamó a la red)",
+            "texto": "Claude no respondió a tiempo · reintento 3/3 en 4 s"
+          }
+        },
+        {
+          "t_ms": 9056,
+          "tipo": "conmutacion",
+          "datos": {
+            "de": "claude",
+            "a": "gemini",
+            "motivo": "timeout",
+            "detalle": "Falla forzada: timeout simulado (no se llamó a la red)",
+            "texto": "Claude no respondió a tiempo: se cambia a Gemini"
+          }
+        },
+        {
+          "t_ms": 10275,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "argumentos": {
+              "id_caso": "SPK-000104"
+            },
+            "id_llamada": "call_10388194332269734657"
+          }
+        },
+        {
+          "t_ms": 10278,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "resumen": {
+              "campos": [
+                "fin_ventana",
+                "fuente",
+                "id_caso",
+                "inicio_ventana",
+                "monto_total",
+                "motivo_recomendacion",
+                "n_transacciones",
+                "nivel_recomendacion",
+                "score_maximo",
+                "senal_principal",
+                "senales_que_puedes_citar",
+                "tarjeta",
+                "tipos_fraude_sospechados",
+                "transacciones",
+                "transacciones_sobre_umbral_bloqueo"
+              ],
+              "tamano_caracteres": 3393,
+              "n_transacciones": 5
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 10281,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "argumentos": {
+              "dias": 3,
+              "id_caso": "SPK-000104"
+            },
+            "id_llamada": "call_10388194332269732328"
+          }
+        },
+        {
+          "t_ms": 10284,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "resumen": {
+              "campos": [
+                "dias",
+                "n_transacciones",
+                "transacciones"
+              ],
+              "tamano_caracteres": 1623,
+              "n_transacciones": 10
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 10286,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "argumentos": {
+              "id_caso": "SPK-000104"
+            },
+            "id_llamada": "call_10388194332269734095"
+          }
+        },
+        {
+          "t_ms": 10290,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "resumen": {
+              "campos": [
+                "categorias_habituales",
+                "horas_habituales",
+                "monto_desviacion",
+                "monto_promedio",
+                "n_transacciones_previas",
+                "sin_historial",
+                "tarjeta",
+                "transacciones_por_dia"
+              ],
+              "tamano_caracteres": 462
+            },
+            "duracion_ms": 1
+          }
+        },
+        {
+          "t_ms": 10292,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 2,
+            "proveedor": "gemini",
+            "modelo": "gemini-3.5-flash-lite"
+          }
+        },
+        {
+          "t_ms": 12332,
+          "tipo": "explicacion",
+          "datos": {
+            "contenido": {
+              "que_paso": "Entre el 14 de julio de 2020 a las 23:04 y el 15 de julio de 2020 a las 22:14, se registraron 5 transacciones por un total de 3.794,35. Comenzó con compras en Jast Ltd y Schmeler, Bashirian and Price, continuó con Schmitt Inc y Lemke-Gutmann, y finalizó con Heathcote LLC.",
+              "por_que_es_riesgo": "Las transacciones presentan montos muy elevados que superan ampliamente su promedio previo y un ritmo anómalo de acumulación de gasto en periodos de 24 horas, con un score máximo de 1,00 que supera el umbral de bloqueo.",
+              "lo_que_no_se_sabe": "No se sabe si el titular de la tarjeta reconoce y autorizó las 5 transacciones realizadas en la ventana del caso.",
+              "nivel_riesgo_en_palabras": "Riesgo alto: sus 5 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 94,1 % (de los más altos de la cola).",
+              "recomendacion": {
+                "accion": "bloquear_tarjeta",
+                "objetivo": "la tarjeta **** **** **** 2826",
+                "argumento": "5 transacciones en 48 h superan el umbral de bloqueo 0,97 (score máximo 1,00): compras anómalas seguidas, patrón de uso no autorizado."
+              },
+              "senales_citadas": [
+                "monto",
+                "monto_24h"
+              ],
+              "es_respaldo": false
+            },
+            "proveedor": "gemini",
+            "modelo": "gemini-3.5-flash-lite"
+          }
+        },
+        {
+          "t_ms": 12337,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "92ae71a6-b8dc-44a6-ab55-df24807306fc",
+            "motivo_fin": "completada",
+            "iteraciones": 2,
+            "tokens_entrada": 6461,
+            "tokens_salida": 431,
+            "costo_usd": 0.003016,
+            "latencia_ms": 10320,
+            "ttft_ms": 9455,
+            "proveedor_final": "gemini",
+            "modelo_final": "gemini-3.5-flash-lite",
+            "reintentos": 3,
+            "conmutaciones": 1,
+            "desde_cache": false,
+            "tokens": 6892,
+            "fragmentos_streaming": 14,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L18",
+      "tipo": "explicacion",
+      "dorado": "D4",
+      "id_caso": "SPK-000179",
+      "proposito": "falla forzada JSON roto: reparación o reintento del contrato",
+      "regenerar": true,
+      "falla_pedida": "json",
+      "contaminada": false,
+      "exito": true,
+      "origen": "agente",
+      "explicacion_valida": true,
+      "motivos_de_fallo": [],
+      "hechos": [
+        {
+          "hecho": "cita la señal «monto_24h»",
+          "cumple": true
+        },
+        {
+          "hecho": "habla de verificar o contactar al cliente, no de bloquear",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 18,44 o 8,32",
+          "cumple": true
+        }
+      ],
+      "contenido": {
+        "que_paso": "El caso tiene 2 transacciones en la tarjeta terminada en 0710, por un total de 26,76. La primera fue el 30/11/2020 a las 22:26:50, por 18,44, en Hauck, Dietrich and Funk (kids_pets, Colton). La segunda fue el 01/12/2020 a las 07:20:44, por 8,32, en Maggio-Fahey (misc_pos, Colton). Antes, en el historial de 3 días, la tarjeta registró un pago de 2.253,20 en Kihn Inc el 30/11/2020 a las 10:49:24.",
+        "por_que_es_riesgo": "La señal principal es el gasto de las últimas 24 horas: antes de la primera compra se movieron 2.436,25, cuando su gasto diario habitual es 118,79, en el percentil 99,7. Antes de la segunda compra se movieron 2.349,73, frente a un gasto diario habitual de 118,81, en el percentil 99,6. La segunda compra, además, es 0,1 veces su promedio previo (61,00), y en las 24 horas anteriores hizo 5 transacciones, frente a un ritmo habitual de 1,95 por día.",
+        "lo_que_no_se_sabe": "No se sabe si el cliente reconoce las dos compras ni si autorizó los movimientos previos de gran monto. La evidencia no indica cómo se originó el gasto de las 24 horas anteriores ni si la tarjeta fue usada por otra persona.",
+        "nivel_riesgo_en_palabras": "Riesgo alto: 1 de sus 2 transacciones supera el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 48,1 % (en la mitad de la cola).",
+        "recomendacion": {
+          "accion": "verificar_cliente",
+          "objetivo": "contacto con el cliente",
+          "argumento": "Una sola transacción supera el umbral de bloqueo (score 1,00), por lo que la regla indica confirmar la compra con el cliente antes de bloquear. La señal principal es el gasto de las últimas 24 horas, muy por encima de su gasto diario habitual."
+        },
+        "senales_citadas": [
+          "monto",
+          "monto_24h",
+          "ritmo_24h"
+        ],
+        "es_respaldo": false
+      },
+      "con_fallo": true,
+      "descripcion_fallo": "forzada: json",
+      "recuperada": true,
+      "metricas": {
+        "tarea_id": "df6fdc1a-452c-4ebc-9c5f-ca98bdf57860",
+        "motivo_fin": "completada",
+        "latencia_cliente_ms": 9063,
+        "ttft_cliente_ms": 3303,
+        "primer_evento_ms": 2013,
+        "latencia_servidor_ms": 7044,
+        "ttft_servidor_ms": 4591,
+        "costo_usd": 0.002519,
+        "tokens_entrada": 17581,
+        "tokens_salida": 1521,
+        "iteraciones": 3,
+        "proveedor_final": "claude",
+        "modelo_final": "claude-haiku-5-5",
+        "reintentos": 0,
+        "conmutaciones": 0,
+        "desde_cache": false,
+        "es_respaldo": false,
+        "falla_aplicada": "json",
+        "herramientas_pedidas": [
+          "obtener_caso",
+          "obtener_historial_reciente",
+          "obtener_perfil_cuenta"
+        ],
+        "fragmentos_streaming": 122
+      },
+      "traza": [
+        {
+          "t_ms": 2013,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Regenerando: consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2021,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "df6fdc1a-452c-4ebc-9c5f-ca98bdf57860",
+            "tipo_tarea": "explicacion",
+            "id_caso": "SPK-000179",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": "json"
+          }
+        },
+        {
+          "t_ms": 2031,
+          "tipo": "estado",
+          "datos": {
+            "texto": "El asistente está consultando la evidencia del caso…"
+          }
+        },
+        {
+          "t_ms": 2033,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 1,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 3309,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "argumentos": {
+              "id_caso": "SPK-000179"
+            },
+            "id_llamada": "toolu_01759CqWPCdoGwog8k8xLj3m"
+          }
+        },
+        {
+          "t_ms": 3313,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_caso",
+            "resumen": {
+              "campos": [
+                "fin_ventana",
+                "fuente",
+                "id_caso",
+                "inicio_ventana",
+                "monto_total",
+                "motivo_recomendacion",
+                "n_transacciones",
+                "nivel_recomendacion",
+                "score_maximo",
+                "senal_principal",
+                "senales_que_puedes_citar",
+                "tarjeta",
+                "tipos_fraude_sospechados",
+                "transacciones",
+                "transacciones_sobre_umbral_bloqueo"
+              ],
+              "tamano_caracteres": 1858,
+              "n_transacciones": 2
+            },
+            "duracion_ms": 1
+          }
+        },
+        {
+          "t_ms": 3315,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "argumentos": {
+              "id_caso": "SPK-000179",
+              "dias": 3
+            },
+            "id_llamada": "toolu_01AZ46DRDZQb3Z3GGckybLH7"
+          }
+        },
+        {
+          "t_ms": 3320,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_historial_reciente",
+            "resumen": {
+              "campos": [
+                "dias",
+                "n_transacciones",
+                "transacciones"
+              ],
+              "tamano_caracteres": 3175,
+              "n_transacciones": 20
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 3322,
+          "tipo": "herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "argumentos": {
+              "id_caso": "SPK-000179"
+            },
+            "id_llamada": "toolu_0164soo2ZFDgrjxH4qe4n2Td"
+          }
+        },
+        {
+          "t_ms": 3326,
+          "tipo": "resultado_herramienta",
+          "datos": {
+            "nombre": "obtener_perfil_cuenta",
+            "resumen": {
+              "campos": [
+                "categorias_habituales",
+                "horas_habituales",
+                "monto_desviacion",
+                "monto_promedio",
+                "n_transacciones_previas",
+                "sin_historial",
+                "tarjeta",
+                "transacciones_por_dia"
+              ],
+              "tamano_caracteres": 477
+            },
+            "duracion_ms": 2
+          }
+        },
+        {
+          "t_ms": 3328,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 2,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 6113,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Falla forzada «json»: la respuesta se cortó a la mitad a propósito."
+          }
+        },
+        {
+          "t_ms": 6115,
+          "tipo": "contrato_invalido",
+          "datos": {
+            "errores": [
+              "falta el campo «lo_que_no_se_sabe» o está vacío",
+              "falta el objeto «recomendacion»",
+              "«senales_citadas» debe ser una lista de textos"
+            ],
+            "reintenta": true
+          }
+        },
+        {
+          "t_ms": 6118,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 3,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 9058,
+          "tipo": "explicacion",
+          "datos": {
+            "contenido": {
+              "que_paso": "El caso tiene 2 transacciones en la tarjeta terminada en 0710, por un total de 26,76. La primera fue el 30/11/2020 a las 22:26:50, por 18,44, en Hauck, Dietrich and Funk (kids_pets, Colton). La segunda fue el 01/12/2020 a las 07:20:44, por 8,32, en Maggio-Fahey (misc_pos, Colton). Antes, en el historial de 3 días, la tarjeta registró un pago de 2.253,20 en Kihn Inc el 30/11/2020 a las 10:49:24.",
+              "por_que_es_riesgo": "La señal principal es el gasto de las últimas 24 horas: antes de la primera compra se movieron 2.436,25, cuando su gasto diario habitual es 118,79, en el percentil 99,7. Antes de la segunda compra se movieron 2.349,73, frente a un gasto diario habitual de 118,81, en el percentil 99,6. La segunda compra, además, es 0,1 veces su promedio previo (61,00), y en las 24 horas anteriores hizo 5 transacciones, frente a un ritmo habitual de 1,95 por día.",
+              "lo_que_no_se_sabe": "No se sabe si el cliente reconoce las dos compras ni si autorizó los movimientos previos de gran monto. La evidencia no indica cómo se originó el gasto de las 24 horas anteriores ni si la tarjeta fue usada por otra persona.",
+              "nivel_riesgo_en_palabras": "Riesgo alto: 1 de sus 2 transacciones supera el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 48,1 % (en la mitad de la cola).",
+              "recomendacion": {
+                "accion": "verificar_cliente",
+                "objetivo": "contacto con el cliente",
+                "argumento": "Una sola transacción supera el umbral de bloqueo (score 1,00), por lo que la regla indica confirmar la compra con el cliente antes de bloquear. La señal principal es el gasto de las últimas 24 horas, muy por encima de su gasto diario habitual."
+              },
+              "senales_citadas": [
+                "monto",
+                "monto_24h",
+                "ritmo_24h"
+              ],
+              "es_respaldo": false
+            },
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 9063,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "df6fdc1a-452c-4ebc-9c5f-ca98bdf57860",
+            "motivo_fin": "completada",
+            "iteraciones": 3,
+            "tokens_entrada": 17581,
+            "tokens_salida": 1521,
+            "costo_usd": 0.002519,
+            "latencia_ms": 7044,
+            "ttft_ms": 4591,
+            "proveedor_final": "claude",
+            "modelo_final": "claude-haiku-5-5",
+            "reintentos": 0,
+            "conmutaciones": 0,
+            "desde_cache": false,
+            "tokens": 19102,
+            "fragmentos_streaming": 122,
+            "es_respaldo": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "L19",
+      "tipo": "explicacion",
+      "dorado": "D6",
+      "id_caso": "SPK-000171",
+      "proposito": "caída total de proveedores: degradación a la plantilla",
+      "regenerar": true,
+      "falla_pedida": "todo",
+      "contaminada": false,
+      "exito": false,
+      "origen": "plantilla",
+      "explicacion_valida": true,
+      "motivos_de_fallo": [
+        "motivo_fin = respaldo",
+        "la explicación salió de: plantilla"
+      ],
+      "hechos": [
+        {
+          "hecho": "cita la señal «historial»",
+          "cumple": true
+        },
+        {
+          "hecho": "dice que la tarjeta no tiene historial suficiente",
+          "cumple": true
+        },
+        {
+          "hecho": "identifica la tarjeta por sus últimos cuatro dígitos (7373)",
+          "cumple": true
+        },
+        {
+          "hecho": "menciona la cifra 1.038,53",
+          "cumple": true
+        }
+      ],
+      "contenido": {
+        "que_paso": "Entre el 2020-10-25 22:34 y el 2020-10-27 22:34, la tarjeta **** **** **** 7373 tuvo 4 transacciones marcadas: el 2020-10-25 22:34 pagó 1.038,53 en Baumbach, Hodkiewicz and Walsh (Wever); el 2020-10-25 22:51 pagó 773,18 en Little, Gutmann and Lynch (Wever); el 2020-10-25 23:02 pagó 772,55 en Bednar Group (Wever); el 2020-10-25 23:32 pagó 1.061,53 en Langworth, Boehm and Gulgowski (Wever). Antes de la ventana, el historial reciente muestra 2 transacciones; la última fue el 2020-10-25 20:43 por 614,29 en Bednar Group (Wever). La tarjeta casi no tiene historial previo, así que no hay un perfil habitual con el cual comparar.",
+        "por_que_es_riesgo": "La tarjeta casi no tiene compras previas, así que no hay un perfil propio con el cual comparar: el sistema la marcó por la secuencia de compras del caso. En la transacción más riesgosa (2020-10-25 23:32, 1.061,53) señaló: Sin historial suficiente (5 transacciones previas) para compararla contra un perfil habitual.",
+        "recomendacion": {
+          "accion": "bloquear_tarjeta",
+          "objetivo": "la tarjeta **** **** **** 7373",
+          "argumento": "4 transacciones en 48 h superan el umbral de bloqueo 0,97 (score máximo 1,00): compras anómalas seguidas, patrón de uso no autorizado. La decisión final es del analista."
+        },
+        "senales_citadas": [
+          "historial"
+        ],
+        "nivel_riesgo_en_palabras": "Riesgo alto: sus 4 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 78,0 % (de los más altos de la cola).",
+        "lo_que_no_se_sabe": "Esta explicación la armó una regla, sin el asistente de IA, solo con las señales guardadas del caso. No se sabe si el cliente reconoce estas compras ni si ya hubo contacto con el banco.",
+        "es_respaldo": true
+      },
+      "con_fallo": true,
+      "descripcion_fallo": "forzada: todo",
+      "recuperada": true,
+      "metricas": {
+        "tarea_id": "ac154ed4-599a-42b3-8e80-9c20c40edd70",
+        "motivo_fin": "respaldo",
+        "latencia_cliente_ms": 16116,
+        "ttft_cliente_ms": null,
+        "primer_evento_ms": 2025,
+        "latencia_servidor_ms": 14086,
+        "ttft_servidor_ms": null,
+        "costo_usd": 0.0,
+        "tokens_entrada": 0,
+        "tokens_salida": 0,
+        "iteraciones": 1,
+        "proveedor_final": null,
+        "modelo_final": null,
+        "reintentos": 6,
+        "conmutaciones": 1,
+        "desde_cache": false,
+        "es_respaldo": true,
+        "falla_aplicada": "todo",
+        "herramientas_pedidas": [],
+        "fragmentos_streaming": 0
+      },
+      "traza": [
+        {
+          "t_ms": 2025,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Regenerando: consultando el caso…",
+            "origen": "api"
+          }
+        },
+        {
+          "t_ms": 2051,
+          "tipo": "inicio",
+          "datos": {
+            "tarea_id": "ac154ed4-599a-42b3-8e80-9c20c40edd70",
+            "tipo_tarea": "explicacion",
+            "id_caso": "SPK-000171",
+            "limites": {
+              "max_iteraciones": 6,
+              "presupuesto_tokens": 40000,
+              "timeout_modelo_s": 25.0,
+              "timeout_herramienta_s": 5.0,
+              "max_tokens_respuesta": 2500,
+              "max_herramientas_por_iteracion": 6
+            },
+            "falla_forzada": "todo"
+          }
+        },
+        {
+          "t_ms": 2061,
+          "tipo": "estado",
+          "datos": {
+            "texto": "El asistente está consultando la evidencia del caso…"
+          }
+        },
+        {
+          "t_ms": 2063,
+          "tipo": "modelo_llamado",
+          "datos": {
+            "iteracion": 1,
+            "proveedor": "claude",
+            "modelo": "claude-haiku-5-5"
+          }
+        },
+        {
+          "t_ms": 2064,
+          "tipo": "reintento",
+          "datos": {
+            "proveedor": "claude",
+            "motivo": "servidor",
+            "intento": 1,
+            "de": 3,
+            "espera_s": 1.0,
+            "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)",
+            "texto": "Claude tuvo un error del servidor · reintento 1/3 en 1 s"
+          }
+        },
+        {
+          "t_ms": 3070,
+          "tipo": "reintento",
+          "datos": {
+            "proveedor": "claude",
+            "motivo": "servidor",
+            "intento": 2,
+            "de": 3,
+            "espera_s": 2.0,
+            "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)",
+            "texto": "Claude tuvo un error del servidor · reintento 2/3 en 2 s"
+          }
+        },
+        {
+          "t_ms": 5076,
+          "tipo": "reintento",
+          "datos": {
+            "proveedor": "claude",
+            "motivo": "servidor",
+            "intento": 3,
+            "de": 3,
+            "espera_s": 4.0,
+            "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)",
+            "texto": "Claude tuvo un error del servidor · reintento 3/3 en 4 s"
+          }
+        },
+        {
+          "t_ms": 9082,
+          "tipo": "conmutacion",
+          "datos": {
+            "de": "claude",
+            "a": "gemini",
+            "motivo": "servidor",
+            "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)",
+            "texto": "Claude tuvo un error del servidor: se cambia a Gemini"
+          }
+        },
+        {
+          "t_ms": 9090,
+          "tipo": "reintento",
+          "datos": {
+            "proveedor": "gemini",
+            "motivo": "servidor",
+            "intento": 1,
+            "de": 3,
+            "espera_s": 1.0,
+            "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)",
+            "texto": "Gemini tuvo un error del servidor · reintento 1/3 en 1 s"
+          }
+        },
+        {
+          "t_ms": 10094,
+          "tipo": "reintento",
+          "datos": {
+            "proveedor": "gemini",
+            "motivo": "servidor",
+            "intento": 2,
+            "de": 3,
+            "espera_s": 2.0,
+            "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)",
+            "texto": "Gemini tuvo un error del servidor · reintento 2/3 en 2 s"
+          }
+        },
+        {
+          "t_ms": 12098,
+          "tipo": "reintento",
+          "datos": {
+            "proveedor": "gemini",
+            "motivo": "servidor",
+            "intento": 3,
+            "de": 3,
+            "espera_s": 4.0,
+            "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)",
+            "texto": "Gemini tuvo un error del servidor · reintento 3/3 en 4 s"
+          }
+        },
+        {
+          "t_ms": 16100,
+          "tipo": "estado",
+          "datos": {
+            "texto": "Ningún proveedor de IA respondió."
+          }
+        },
+        {
+          "t_ms": 16112,
+          "tipo": "respaldo",
+          "datos": {
+            "motivo": "Ningún proveedor de IA respondió: explicación armada por reglas con las señales guardadas.",
+            "contenido": {
+              "que_paso": "Entre el 2020-10-25 22:34 y el 2020-10-27 22:34, la tarjeta **** **** **** 7373 tuvo 4 transacciones marcadas: el 2020-10-25 22:34 pagó 1.038,53 en Baumbach, Hodkiewicz and Walsh (Wever); el 2020-10-25 22:51 pagó 773,18 en Little, Gutmann and Lynch (Wever); el 2020-10-25 23:02 pagó 772,55 en Bednar Group (Wever); el 2020-10-25 23:32 pagó 1.061,53 en Langworth, Boehm and Gulgowski (Wever). Antes de la ventana, el historial reciente muestra 2 transacciones; la última fue el 2020-10-25 20:43 por 614,29 en Bednar Group (Wever). La tarjeta casi no tiene historial previo, así que no hay un perfil habitual con el cual comparar.",
+              "por_que_es_riesgo": "La tarjeta casi no tiene compras previas, así que no hay un perfil propio con el cual comparar: el sistema la marcó por la secuencia de compras del caso. En la transacción más riesgosa (2020-10-25 23:32, 1.061,53) señaló: Sin historial suficiente (5 transacciones previas) para compararla contra un perfil habitual.",
+              "recomendacion": {
+                "accion": "bloquear_tarjeta",
+                "objetivo": "la tarjeta **** **** **** 7373",
+                "argumento": "4 transacciones en 48 h superan el umbral de bloqueo 0,97 (score máximo 1,00): compras anómalas seguidas, patrón de uso no autorizado. La decisión final es del analista."
+              },
+              "senales_citadas": [
+                "historial"
+              ],
+              "nivel_riesgo_en_palabras": "Riesgo alto: sus 4 transacciones superan el umbral de bloqueo del sistema. Entre los 287 casos marcados de su fuente, su riesgo es mayor que el del 78,0 % (de los más altos de la cola).",
+              "lo_que_no_se_sabe": "Esta explicación la armó una regla, sin el asistente de IA, solo con las señales guardadas del caso. No se sabe si el cliente reconoce estas compras ni si ya hubo contacto con el banco.",
+              "es_respaldo": true
+            }
+          }
+        },
+        {
+          "t_ms": 16116,
+          "tipo": "fin",
+          "datos": {
+            "tarea_id": "ac154ed4-599a-42b3-8e80-9c20c40edd70",
+            "motivo_fin": "respaldo",
+            "iteraciones": 1,
+            "tokens_entrada": 0,
+            "tokens_salida": 0,
+            "costo_usd": 0.0,
+            "latencia_ms": 14086,
+            "ttft_ms": null,
+            "proveedor_final": null,
+            "modelo_final": null,
+            "reintentos": 6,
+            "conmutaciones": 1,
+            "desde_cache": false,
+            "tokens": 0,
+            "fragmentos_streaming": 0,
+            "es_respaldo": true
+          }
+        }
+      ]
+    }
+  ]
+}

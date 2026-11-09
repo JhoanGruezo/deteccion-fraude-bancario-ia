@@ -329,3 +329,71 @@ PENDIENTE (equipo): repetir la prueba de arranque en la máquina del compañero 
 - Verificar las tarifas en las páginas oficiales de los proveedores.
 - Opcional: exponer las herramientas con un adaptador FastMCP, SHAP por predicción y
   una suite de navegador de punta a punta.
+
+## 13. Momento 3 (2026-11-08): bloqueo automático, cifras finales y qué empeoró
+
+**Qué se decidió y dónde está el porqué.** El feedback del profesor tras el M2 (bloquear sin
+esperar al analista; el agente puede bloquear las tarjetas de mayor riesgo y avisar al titular)
+se convirtió en el diseño D de `docs/analisis-respuesta-fraude.md`, especificado en `docs/SPEC.md`
+y construido según `PLAN.md`. Las decisiones que cambian algo de este documento:
+
+- **§2 Frontera de la IA.** El agente ya no solo explica: en el triaje bloquea (bandas alta y
+  crítica), pide verificación o deja el caso al analista. La banda la decide el código; el
+  desbloqueo es solo humano; la regla bloquea los críticos si el agente no lo hace.
+- **§8 Motor de riesgo.** Puntúa cada compra en vivo con un perfil incremental por tarjeta, en
+  paridad con el motor fuera de línea (111.342 compras, 0 cambios de banda; `scripts/validar_paridad_en_vivo.py`).
+  El caso se abre en la primera compra marcada, no en la segunda.
+- **§7 Manejo de fallos.** Si caen todos los proveedores, la regla bloquea los críticos y pide
+  verificación en los demás; la red de seguridad cubre a los 90 s.
+- **Seguridad y gobernanza**: `docs/seguridad.md`, `docs/gobernanza.md`, `docs/respuesta_auditoria.md`.
+
+### 13.1 Las cifras del Momento 3 (noche del 19-jul-2020, 5.810 compras, con la IA real)
+
+`eval/medir_momento3.py`; evidencia en `eval/resultados/momento3_2026-11-09_base.json` y
+`…_ia_caida.json` (los nombres de archivo van en hora UTC del contenedor). El dinero se mide
+**a tiempo real**: la simulación corre a 3600x y ahí los ~5 s del triaje equivalen a ~5 horas del
+dataset, un artefacto que se explica en el script.
+
+| Cifra | Valor |
+|---|---|
+| Decisión por compra (puntuar + guardar) | mediana 5,1 ms, p99 23,1 ms (solo puntuar: 3,2 / 7,5 ms) |
+| Compra sospechosa → tarjeta bloqueada | mediana 5,7 s, máximo 8,2 s (meta: 5 min) |
+| Fraude detenido, M3 | **71,4 %** |
+| Fraude detenido, regla del M2 | 29,3 % de noche sin turno; 34,9 % con cola de 90 min; 61,8 % con un analista instantáneo (techo teórico) |
+| Fraude detenido con la IA caída (`--falla todo`) | 61,8 % (la regla bloqueó los 10 críticos; máximo 64 s) |
+| Compras fraudulentas que pasan por tarjeta robada | mediana 2 (las primeras, que el modelo no marca) |
+| Bloqueos por tarjeta | 10; 9 con fraude: precisión 0,90, recall 1,00; 0,17 bloqueos falsos por cada 1.000 compras |
+| Costo del LLM | 0,054 USD la noche completa: 0,0023 USD por triaje, 0,009 USD por cada 1.000 compras |
+
+**Prueba de necesidad (banda alta, 13 triajes, 5 con fraude).** El agente bloqueó 3 (los 3 con
+fraude: precisión 1,0) y pidió verificación en 10 (2 con fraude, que la regla bloqueó en la segunda
+compra). "Bloquear siempre en alta" habría tenido precisión 0,385: 8 clientes honestos bloqueados.
+**Lo que aporta el LLM, medido: 71,4 % contra 61,8 % sin él** (9,6 puntos más de fraude detenido)
+sin bloquear a un solo cliente honesto en esa banda.
+
+### 13.2 Las cuatro cifras contra la línea base (mismo método: `eval/correr_lote.py`, 19 tareas)
+
+| Cifra | 21-oct (línea base) | 31-oct | **08-nov (final)** |
+|---|---|---|---|
+| Tasa de éxito | 94,7 % (18/19) | 89,5 % | **84,2 % (16/19)** |
+| Costo por tarea (mediana, sin caché) | 0,001481 USD | 0,00186 USD | **0,001749 USD** |
+| Latencia (mediana, sin caché) | 5,8 s | 5,5 s | **6,8 s** (P90 12,2 s) |
+| Recuperación | 100 % (4/4) | 100 % | **100 % (4/4)** |
+
+Evidencia: `eval/resultados/lote_2026-11-08_2100.json`. El lote corrió con el límite de 10
+consultas al agente por minuto apagado: mide al agente, no al limitador.
+
+**Qué empeoró y por qué, sin maquillaje.** La caída total forzada termina en la plantilla por
+diseño y cuenta como fallo, igual que en la línea base. Las otras dos tareas sin éxito son
+explicaciones del **respaldo Gemini 3.5 Flash-Lite** (con 429 y timeout forzados en Claude) que no
+citaron cifras del caso dorado. El respaldo cambió de 3.1 a 3.5 Flash-Lite el 31-oct porque 3.1
+daba 503. El flujo principal (Claude) pasó todas sus tareas. Con 19 tareas, una tarea mueve la tasa
+5,3 puntos: la diferencia está en el respaldo, no en el diseño. La latencia sube ~1 s, que
+coincide con la sesión (una consulta por petición) y el pool del rol del agente. Lo dejamos así
+porque son controles de seguridad.
+
+### 13.3 Pendiente honesto
+
+- La suite de casos dorados sigue **sin verificación humana** (`verificado_por` vacío).
+- Rotar las llaves de IA usadas en el desarrollo (las rota el equipo en las consolas).
+- La prueba con alguien ajeno al equipo (protocolo en `docs/presentaciones/prueba-tercero.md`).
