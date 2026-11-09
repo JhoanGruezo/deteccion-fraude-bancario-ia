@@ -29,6 +29,9 @@ def _booleano(nombre, por_defecto):
 # --- Base de datos -----------------------------------------------------------------
 DATABASE_URL = _texto("DATABASE_URL", "postgresql://fraude:fraude_dev@localhost:5432/fraude")
 CARPETA_SEMILLA = _texto("CARPETA_SEMILLA", os.path.join(os.path.dirname(os.path.dirname(__file__)), "semilla"))
+# Paquete del modelo de riesgo (modelo + features + umbrales + referencias) que escribe
+# src/entrenar_modelo.py; se copia a semilla/ para que la app puntúe en vivo sin el dataset.
+RUTA_MODELO = _texto("RUTA_MODELO", os.path.join(CARPETA_SEMILLA, "modelo_riesgo_sparkov.joblib"))
 
 # --- Proveedores de IA ---------------------------------------------------------------
 GEMINI_API_KEY = _texto("GEMINI_API_KEY")

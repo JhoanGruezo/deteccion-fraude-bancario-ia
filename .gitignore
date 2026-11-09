@@ -9,4 +9,7 @@ __pycache__/
 .pytest_cache/
 # Modelos entrenados y paquetes de entrega (se regeneran).
 *.joblib
+# Excepción: el modelo que la app usa para puntuar en vivo (≈5 MB) sí va al repositorio,
+# porque un clon limpio no tiene el dataset para entrenarlo (SPEC, RF1).
+!semilla/modelo_riesgo_sparkov.joblib
 *.zip

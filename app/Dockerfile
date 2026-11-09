@@ -16,6 +16,8 @@ COPY app/requirements.txt app/requirements.txt
 RUN pip install -r app/requirements.txt
 
 COPY app/ app/
+# src/: el motor de riesgo fuera de línea; la app reutiliza sus fórmulas (app/riesgo).
+COPY src/ src/
 COPY semilla/ semilla/
 
 # Usuario sin privilegios: la app no necesita ser root dentro del contenedor.

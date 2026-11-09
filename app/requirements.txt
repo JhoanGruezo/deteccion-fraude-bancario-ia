@@ -4,3 +4,9 @@ psycopg[binary]==3.2.9
 psycopg-pool==3.2.6
 httpx==0.28.1
 pytest==8.3.5
+# Motor de riesgo en vivo (app/riesgo): versiones fijas porque el modelo de semilla/ se
+# guardó con estas y joblib no garantiza cargarlo con otras.
+numpy==2.4.2
+pandas==3.0.1
+scikit-learn==1.8.0
+joblib==1.5.3

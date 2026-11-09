@@ -1,9 +1,11 @@
-# Lo que NO entra a la imagen de la app. La imagen solo necesita app/ y semilla/.
+# Lo que NO entra a la imagen de la app. La imagen necesita app/, src/ y semilla/.
 
 # Datos de Kaggle y salidas del motor (cientos de MB; la app usa semilla/).
 datos/
 *.csv
 *.joblib
+# Excepción: el modelo con el que la app puntúa en vivo.
+!semilla/modelo_riesgo_sparkov.joblib
 
 # Llaves de API: nunca dentro de una imagen; llegan por variables de entorno.
 .env

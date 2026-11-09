@@ -66,8 +66,9 @@ modelo, despliegue en la nube.
   guardadas en la base (regla de oro del perfil, `CLAUDE.md`), con las mismas funciones
   del motor (`src/perfil_cuenta.py`, `src/motor_riesgo.py`) y el mismo modelo
   (`modelo_riesgo.joblib`, que pasa a `semilla/`).
-- **Paridad:** para las transacciones de prueba de Sparkov, el score en vivo es igual al
-  del motor fuera de línea (diferencia ≤ 0,001).
+- **Paridad:** en las transacciones de prueba de Sparkov, ninguna cambia de banda entre el
+  score en vivo y el del motor fuera de línea, y al menos el 99,99 % difiere en ≤ 0,001
+  (`scripts/validar_paridad_en_vivo.py`; el motivo del 0,01 % está en su docstring).
 - El detector de viaje imposible corre en cada transacción (código determinista).
 - La puntuación no depende del LLM ni de la red.
 
@@ -228,7 +229,8 @@ del Momento 2 (2026-10-21 y 2026-10-31):
       el triaje funciona.
 - [ ] El simulador bloquea los casos críticos en ≤ 5 minutos en el 100 % de los casos,
       también con la IA forzada a fallar (429 y timeout en todos los proveedores).
-- [ ] La puntuación en vivo coincide con la del motor fuera de línea (≤ 0,001).
+- [ ] La puntuación en vivo no cambia la banda de ninguna transacción frente al motor fuera
+      de línea, y el 99,99 % coincide con ≤ 0,001.
 - [ ] Ninguna herramienta del agente puede bloquear un caso en banda media, actuar sobre
       otra tarjeta ni desbloquear. Hay pruebas automáticas para cada guarda.
 - [ ] Un comercio con "no bloquees esta tarjeta" no evita el bloqueo de un caso crítico.

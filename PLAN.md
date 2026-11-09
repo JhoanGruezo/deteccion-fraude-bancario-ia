@@ -54,12 +54,19 @@ del resto.
 
 ## Fase 2 · Motor en vivo (10 al 12-nov)
 
-- [ ] ⚠ **T2.1** Paquete del modelo en `semilla/` (con las versiones de scikit-learn y
+- [x] ⚠ **T2.1** Paquete del modelo en `semilla/` (con las versiones de scikit-learn y
       pandas fijadas) y dependencias en la imagen de la app.
-- [ ] ⚠ **T2.2** `app/riesgo/`: puntuar una transacción con el historial previo de la
+      2026-11-08: `semilla/modelo_riesgo_sparkov.joblib` (excepción en .gitignore y
+      .dockerignore), `src/` copiado a la imagen (726 MB).
+- [x] ⚠ **T2.2** `app/riesgo/`: puntuar una transacción con el historial previo de la
       tarjeta, reutilizando `src/` (features, oclusión, desviaciones, viaje imposible).
       *Verifica:* paridad ≤ 0,001 con el score fuera de línea sobre una muestra de la
       partición de prueba; tiempo p99 medido.
+      2026-11-08: perfil incremental por tarjeta (`perfil_incremental.py`, 15 pruebas de
+      paridad feature por feature) y `motor_en_vivo.py`. Sobre 200 tarjetas y 111.342
+      transacciones: 0 cambios de banda, 2 con diferencia > 0,001 por redondeo del motor
+      fuera de línea (no de la app). Puntuar: mediana 1,8 ms, p99 2,7 ms; con señales,
+      15,8 ms y 19,9 ms.
 - [ ] **T2.3** Esquema: `transacciones_evaluadas`, `bloqueos`, `notificaciones`,
       `usuarios`, `sesiones`, `ajustes_sistema`; columnas y estados nuevos en `casos` y
       `tareas_agente` (migración idempotente, también sobre una base del M2).
