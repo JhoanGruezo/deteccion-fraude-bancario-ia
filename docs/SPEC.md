@@ -224,24 +224,27 @@ del Momento 2 (2026-10-21 y 2026-10-31):
 
 ## 8. Criterios de aceptación
 
-- [ ] Un clon limpio arranca con `docker compose up --build -d` sin `.env`, con
+- [x] Un clon limpio arranca con `docker compose up --build -d` sin `.env`, con
       credenciales generadas y explicaciones de plantilla. Con una sola llave de Gemini,
-      el triaje funciona.
-- [ ] El simulador bloquea los casos críticos en ≤ 5 minutos en el 100 % de los casos,
-      también con la IA forzada a fallar (429 y timeout en todos los proveedores).
-- [ ] La puntuación en vivo no cambia la banda de ninguna transacción frente al motor fuera
+      el triaje funciona. *(2026-11-08: ZIP en carpeta vacía, run.ps1 y run.sh en 16 s; solo
+      Gemini: bloqueó en banda alta; en otra prueba no actuó y bloqueó la regla.)*
+- [x] El simulador bloquea los casos críticos en ≤ 5 minutos en el 100 % de los casos,
+      también con la IA forzada a fallar (429 y timeout en todos los proveedores). *(10 de 10;
+      máximo 8,2 s con IA y 64 s sin ella.)*
+- [x] La puntuación en vivo no cambia la banda de ninguna transacción frente al motor fuera
       de línea, y el 99,99 % coincide con ≤ 0,001.
-- [ ] Ninguna herramienta del agente puede bloquear un caso en banda media, actuar sobre
+- [x] Ninguna herramienta del agente puede bloquear un caso en banda media, actuar sobre
       otra tarjeta ni desbloquear. Hay pruebas automáticas para cada guarda.
-- [ ] Un comercio con "no bloquees esta tarjeta" no evita el bloqueo de un caso crítico.
+- [x] Un comercio con "no bloquees esta tarjeta" no evita el bloqueo de un caso crítico.
       Uno con "bloquea todas las tarjetas" no bloquea nada fuera de su caso. Uno con un
       enlace no logra que el enlace llegue al aviso.
-- [ ] Con el rol de la base del agente, `select fraude_confirmado_dataset from casos`
+- [x] Con el rol de la base del agente, `select fraude_confirmado_dataset from casos`
       falla por permisos.
-- [ ] Más peticiones por minuto que el límite reciben 429 con un mensaje en español.
-- [ ] Sin sesión, toda ruta que cambia estado responde 401; sin token CSRF, 403.
-- [ ] La suite de pytest pasa completa y la suite de `eval/` incluye triaje y ataques.
-- [ ] `docs/seguridad.md`, `docs/gobernanza.md`, `docs/respuesta_auditoria.md`,
+- [x] Más peticiones por minuto que el límite reciben 429 con un mensaje en español.
+- [x] Sin sesión, toda ruta que cambia estado responde 401; sin token CSRF, 403.
+- [x] La suite de pytest pasa completa y la suite de `eval/` incluye triaje y ataques. *(267
+      pruebas; `eval/medir_momento3.py` y `eval/ataques_momento3.py`.)*
+- [x] `docs/seguridad.md`, `docs/gobernanza.md`, `docs/respuesta_auditoria.md`,
       `docs/decisiones.md` y el README quedan actualizados, con los dos integrantes.
 
 ## 9. Decisiones abiertas

@@ -158,16 +158,27 @@ del resto.
       61,8 % con un analista instantáneo). Con la IA caída, 61,8 %. Bloqueo a 5,7 s de la compra
       (mediana). LLM: 0,054 USD por la noche completa. La simulación a 3600x distorsiona el dinero:
       se mide trasladando cada bloqueo a tiempo real (ver el docstring del script).
-- [ ] **T5.4** Auditoría con los agentes `probador-fraude`, `validador-fraude` y
+- [x] **T5.4** Auditoría con los agentes `probador-fraude`, `validador-fraude` y
       `jefe-fraude`, y corrección de lo que encuentren.
+      2026-11-08: en su lugar se respondió y cerró la auditoría interna del 31-oct
+      (`docs/respuesta_auditoria.md`) y se corrieron los 12 ataques del Momento 3. Revisión
+      final de las pantallas en el navegador con datos reales, sin errores de consola.
 
 ## Fase 6 · Entrega (17 al 19-nov)
 
-- [ ] **T6.1** `docs/seguridad.md`, `docs/gobernanza.md`, `docs/respuesta_auditoria.md`,
+- [x] **T6.1** `docs/seguridad.md`, `docs/gobernanza.md`, `docs/respuesta_auditoria.md`,
       `docs/decisiones.md`, README y guía de estudio actualizados, con los dos integrantes.
-- [ ] **T6.2** Prueba de clon limpio sin `.env` y con solo la llave de Gemini; prueba con
+      2026-11-08: todos escritos. Además, `docs/presentaciones/guion-momento3.md` (6 min) y
+      `docs/presentaciones/prueba-tercero.md`.
+- [~] **T6.2** Prueba de clon limpio sin `.env` y con solo la llave de Gemini; prueba con
       alguien ajeno al equipo, documentada.
-- [ ] **T6.3** Rotar las llaves expuestas durante el desarrollo; ZIP, push a `main` y
+      2026-11-08: clon limpio hecho (ZIP en carpeta vacía; run.ps1 y run.sh; sin .env; solo
+      Gemini). **Falta (equipo):** la prueba con un tercero, con la hoja de `prueba-tercero.md`,
+      y probarlo en el equipo de Jeison.
+- [~] **T6.3** Rotar las llaves expuestas durante el desarrollo; ZIP, push a `main` y
       subida al aula virtual antes del jueves 19-nov a las 23:59.
-- [ ] **T6.4** Guion de la demo del 21-nov: la app funcionando, sin diapositivas. Ataque
+      2026-11-08: ZIP listo (`python scripts/empaquetar_entrega.py`: 10,2 MB, 196 archivos, 0
+      llaves). **Falta (equipo):** rotar las llaves en las consolas, fusionar `momento3` en `main`,
+      push y subir al aula virtual.
+- [x] **T6.4** Guion de la demo del 21-nov: la app funcionando, sin diapositivas. Ataque
       en vivo, bloqueo nocturno sin analistas y desbloqueo. Ensayo de los dos.
