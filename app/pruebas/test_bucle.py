@@ -432,3 +432,49 @@ def test_pregunta_normal():
                                                limites=Limites(), falla_forzada=""))
     assert eventos[-2] == {"tipo": "respuesta", "texto": "Porque a la 1 h casi no compra.", "rechazo": False}
     assert eventos[-1]["motivo_fin"] == "completada"
+
+
+# --- Tope de gasto diario (SPEC, RS5) ----------------------------------------------------
+class RepositorioConGasto(RepositorioFalso):
+    def __init__(self, gasto, **kwargs):
+        super().__init__(**kwargs)
+        self.gasto = gasto
+
+    def gasto_del_dia(self):
+        return self.gasto
+
+
+def test_tope_de_gasto_manda_la_explicacion_a_la_plantilla_sin_llamar_al_modelo(monkeypatch):
+    monkeypatch.setattr(servicio.config, "TOPE_GASTO_DIARIO_USD", 1.0)
+    proveedor = ProveedorFalso("gemini", [PIDE_CASO, FINAL_VALIDA])
+    eventos, repositorio = explicar(ProveedorEnCascada([proveedor]), RepositorioConGasto(1.0), falla_forzada="")
+    assert tipos(eventos) == ["inicio", "respaldo", "fin"]
+    assert "tope de gasto diario" in eventos[1]["motivo"]
+    assert proveedor.llamadas == 0
+    assert next(iter(repositorio.tareas.values()))["motivo_fin"] == "tope_gasto"
+
+
+def test_bajo_el_tope_de_gasto_el_agente_trabaja_normal(monkeypatch):
+    monkeypatch.setattr(servicio.config, "TOPE_GASTO_DIARIO_USD", 1.0)
+    eventos, _ = explicar(cascada_con(PIDE_CASO, FINAL_VALIDA), RepositorioConGasto(0.99), falla_forzada="")
+    assert "explicacion" in tipos(eventos)
+
+
+def test_tope_de_gasto_rechaza_preguntas_con_aviso(monkeypatch):
+    monkeypatch.setattr(servicio.config, "TOPE_GASTO_DIARIO_USD", 1.0)
+    proveedor = ProveedorFalso("gemini", [respuesta("hola")])
+    repositorio = RepositorioConGasto(5.0)
+    eventos = list(servicio.responder_pregunta(ID, "¿Qué pasó?", repositorio=repositorio,
+                                               cascada=ProveedorEnCascada([proveedor]), limites=Limites()))
+    error = next(e for e in eventos if e["tipo"] == "error")
+    assert "tope de gasto" in error["mensaje"] and proveedor.llamadas == 0
+
+
+def test_si_el_gasto_no_se_puede_medir_no_se_bloquea_la_ia(monkeypatch):
+    monkeypatch.setattr(servicio.config, "TOPE_GASTO_DIARIO_USD", 1.0)
+
+    class RepositorioSinMedicion(RepositorioFalso):
+        def gasto_del_dia(self):
+            raise RuntimeError("base caída justo aquí")
+    eventos, _ = explicar(cascada_con(PIDE_CASO, FINAL_VALIDA), RepositorioSinMedicion(), falla_forzada="")
+    assert "explicacion" in tipos(eventos)

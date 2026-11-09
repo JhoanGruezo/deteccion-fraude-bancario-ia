@@ -511,3 +511,60 @@ def test_cuerpo_ilegible_responde_400_en_espanol(cliente):
 def test_detalle_trae_el_nivel_de_riesgo_armado_en_codigo(cliente):
     nivel = cliente.get("/api/casos/SPK-000001").json()["explicacion"]["contenido"]["nivel_riesgo_en_palabras"]
     assert nivel != "Muy alto" and nivel.startswith("Riesgo alto")
+
+
+# --- Límite de peticiones (SPEC, RS5) -----------------------------------------------------
+from app.api import limites  # noqa: E402
+
+
+def test_categorias_del_limite():
+    assert limites.categoria_de("GET", "/api/casos/SPK-000001/explicacion/stream") == "agente"
+    assert limites.categoria_de("GET", "/api/casos/SPK-000001/preguntas/stream") == "agente"
+    assert limites.categoria_de("POST", "/api/casos/SPK-000001/decisiones") == "escritura"
+    assert limites.categoria_de("GET", "/api/casos") == "lectura"
+    assert limites.categoria_de("GET", "/static/estilos.css") is None
+    assert limites.categoria_de("GET", "/") is None
+
+
+def test_ventana_deslizante_libera_al_pasar_el_minuto():
+    ahora = [1000.0]
+    limitador = limites.LimitadorDePeticiones({"agente": 2}, reloj=lambda: ahora[0])
+    assert limitador.registrar("ip", "agente") is None
+    assert limitador.registrar("ip", "agente") is None
+    espera = limitador.registrar("ip", "agente")
+    assert espera is not None and 59 <= espera <= 60
+    assert limitador.registrar("otra-ip", "agente") is None      # cada cliente tiene su cuota
+    ahora[0] += 60
+    assert limitador.registrar("ip", "agente") is None
+
+
+def test_pasar_el_limite_responde_429_en_espanol_con_retry_after(cliente):
+    cliente.app.state.limitador = limites.LimitadorDePeticiones({"escritura": 2, "lectura": 0, "agente": 0})
+    cuerpo = {"accion": "descartar", "analista": "Ana Analista", "comentario": "prueba"}
+    for _ in range(2):
+        assert cliente.post("/api/casos/SPK-000001/decisiones", json=cuerpo).status_code != 429
+    respuesta = cliente.post("/api/casos/SPK-000001/decisiones", json=cuerpo)
+    assert respuesta.status_code == 429
+    assert "Demasiadas acciones seguidas" in respuesta.json()["error"]
+    assert int(respuesta.headers["Retry-After"]) >= 1
+    # Las lecturas tienen su propia cuota (0 = sin límite) y siguen funcionando.
+    assert cliente.get("/api/casos").status_code == 200
+
+
+def test_cabeceras_de_seguridad_en_html_api_y_429(cliente):
+    from app.principal import CABECERAS_SEGURIDAD
+    cliente.app.state.limitador = limites.LimitadorDePeticiones({"escritura": 0, "lectura": 1, "agente": 0})
+    respuestas = [cliente.get("/"), cliente.get("/api/casos"), cliente.get("/api/casos")]
+    assert respuestas[-1].status_code == 429
+    for respuesta in respuestas:
+        for nombre, valor in CABECERAS_SEGURIDAD.items():
+            assert respuesta.headers[nombre] == valor
+    assert "'unsafe-inline'" not in CABECERAS_SEGURIDAD["Content-Security-Policy"]
+
+
+def test_el_html_no_tiene_scripts_en_linea(cliente):
+    import re
+    html = cliente.get("/").text
+    for etiqueta in re.findall(r"<script[^>]*>", html):
+        assert "src=" in etiqueta, f"script en línea: {etiqueta}"
+    assert " style=" not in html and "onclick=" not in html.lower()

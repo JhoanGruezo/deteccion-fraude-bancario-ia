@@ -26,6 +26,13 @@ def repositorio():
     return importlib.import_module("app.db.repositorio")
 
 
+def _roles_activos() -> bool:
+    try:
+        return importlib.import_module("app.db.conexion").roles_activos()
+    except Exception:  # noqa: BLE001 — sin el driver de Postgres (pruebas), no hay roles
+        return False
+
+
 class EstadoDemo:
     """Falla forzada elegida desde el panel de demo, en memoria del proceso.
 
@@ -89,6 +96,13 @@ def salud(request: Request):
     except Exception:  # noqa: BLE001 — la salud informa, no propaga
         registro.exception("La consulta de salud a la base falló")
         base["mensaje"] = base["mensaje"] or "No se pudo consultar la base de datos."
+
+    # Si la app trabaja con los roles de mínimo privilegio o, porque no se pudieron
+    # crear, con el dueño de la base (app/db/roles.py). Solo se informan los nombres.
+    roles_arranque = (arranque.get("roles") or {}) if isinstance(arranque, dict) else {}
+    base["roles_minimo_privilegio"] = _roles_activos()
+    if not base["roles_minimo_privilegio"] and roles_arranque.get("error"):
+        base["roles_error"] = roles_arranque["error"]
 
     proveedores = _proveedores()
     con_llave = [p for p in proveedores if p["con_llave"]]

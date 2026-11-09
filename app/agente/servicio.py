@@ -37,6 +37,7 @@ from app.agente.contrato import armar_evidencia, senales_citables, validar_expli
 from app.agente.herramientas import ContextoHerramientas
 from app.agente.plantilla import explicacion_de_plantilla
 from app.agente.riesgo_en_palabras import con_nivel_de_codigo, nivel_riesgo_en_palabras, posicion_tolerante
+from app.db.repositorio_agente import RepositorioDelAgente
 from app.proveedores.base import Mensaje
 from app.proveedores.cascada import cascada_desde_config
 
@@ -52,7 +53,25 @@ MOTIVOS_DE_RESPALDO = {
     "limite_tokens": "Se agotó el presupuesto de tokens de la tarea: explicación armada por reglas.",
     "timeout": "El asistente de IA no respondió a tiempo: explicación armada por reglas.",
     "contrato": "La IA no logró una explicación anclada a la evidencia en dos intentos: explicación armada por reglas.",
+    "tope_gasto": "Se alcanzó el tope de gasto diario en IA: explicación armada por reglas hasta mañana.",
 }
+
+
+def tope_de_gasto_alcanzado(repositorio) -> bool:
+    """True si el gasto de hoy en el LLM llegó a TOPE_GASTO_DIARIO_USD (SPEC, RS5).
+
+    Si el gasto no se puede consultar (un doble de prueba sin la función, o la base
+    falla justo ahí), no se bloquea: los límites por tarea siguen protegiendo, y negar
+    toda la IA por un error de medición sería peor que el riesgo que se evita.
+    """
+    tope = config.TOPE_GASTO_DIARIO_USD
+    consultar = getattr(repositorio, "gasto_del_dia", None)
+    if tope <= 0 or consultar is None:
+        return False
+    try:
+        return float(consultar()) >= tope
+    except Exception:  # noqa: BLE001
+        return False
 
 
 def _candado_de(id_caso: str) -> threading.Lock:
@@ -176,14 +195,19 @@ def _explicar(id_caso, regenerar, falla, repositorio, cascada, limites) -> Itera
             yield tarea.cerrar("completada", desde_cache=True, es_respaldo=bool(vigente.get("es_respaldo")))
             return
 
-        # 2. Sin proveedores no hay bucle: directo a la plantilla.
+        # 2. Sin proveedores, o con el tope de gasto del día alcanzado, no hay bucle:
+        #    directo a la plantilla.
         if proveedor.vacia:
             yield from _respaldo(tarea, caso, repositorio, "sin_proveedor", "respaldo")
+            return
+        if tope_de_gasto_alcanzado(repositorio):
+            yield from _respaldo(tarea, caso, repositorio, "tope_gasto", "tope_gasto")
             return
 
         # 3. Bucle + contrato, con un reintento si el contrato falla.
         yield tarea.emitir({"tipo": "estado", "texto": "El asistente está consultando la evidencia del caso…"})
-        contexto = ContextoHerramientas(id_caso=id_caso, tarea_id=tarea_id, repositorio=repositorio)
+        contexto = ContextoHerramientas(id_caso=id_caso, tarea_id=tarea_id,
+                                        repositorio=RepositorioDelAgente(repositorio))
         contenido = None
         for intento in (1, 2):
             for evento in bucle.ejecutar("explicacion", id_caso, None, contexto, limites, proveedor,
@@ -266,8 +290,15 @@ def responder_pregunta(id_caso: str, pregunta: str, falla_forzada: str | None = 
                 "La explicación armada por reglas sigue disponible en el detalle del caso."))
             yield tarea.cerrar("error")
             return
+        if tope_de_gasto_alcanzado(repositorio):
+            yield tarea.emitir(_error_para_usuario(
+                "Se alcanzó el tope de gasto diario en IA: las preguntas al asistente se reanudan mañana.",
+                "La explicación armada por reglas sigue disponible en el detalle del caso."))
+            yield tarea.cerrar("tope_gasto")
+            return
 
-        contexto = ContextoHerramientas(id_caso=id_caso, tarea_id=tarea_id, repositorio=repositorio)
+        contexto = ContextoHerramientas(id_caso=id_caso, tarea_id=tarea_id,
+                                        repositorio=RepositorioDelAgente(repositorio))
         for evento in bucle.ejecutar("pregunta", id_caso, pregunta, contexto, limites, proveedor,
                                      estado, falla_forzada=falla):
             yield tarea.emitir(evento)

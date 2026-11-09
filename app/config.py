@@ -87,5 +87,16 @@ FALLA_FORZADA = _texto("FALLA_FORZADA")
 FALLAS_VALIDAS = {"", "429", "timeout", "json", "todo"}
 PERMITIR_FALLAS_DESDE_UI = _booleano("PERMITIR_FALLAS_DESDE_UI", True)
 
+# --- Consumo desmedido (SPEC, RS5; clase 12) ------------------------------------------
+# Peticiones por minuto por cliente (0 = sin límite). Ver app/api/limites.py.
+LIMITE_AGENTE_POR_MINUTO = _entero("LIMITE_AGENTE_POR_MINUTO", 10)
+LIMITE_ESCRITURA_POR_MINUTO = _entero("LIMITE_ESCRITURA_POR_MINUTO", 30)
+LIMITE_LECTURA_POR_MINUTO = _entero("LIMITE_LECTURA_POR_MINUTO", 240)
+# Tope de gasto en USD de lista por día (zona horaria de la base), sumando todas las
+# tareas del agente. Al llegar, ninguna tarea nueva llama al LLM: las explicaciones (y
+# luego el triaje) caen a la plantilla y las preguntas se rechazan con un aviso.
+# Con Claude Haiku 5.5 una explicación cuesta ~0,0016 USD: 2 USD son unas 1.200.
+TOPE_GASTO_DIARIO_USD = _decimal("TOPE_GASTO_DIARIO_USD", 2.0)
+
 # --- Servidor -----------------------------------------------------------------------
 PUERTO = _entero("PUERTO", 8000)

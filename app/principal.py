@@ -28,7 +28,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app import config
-from app.api import rutas_agente, rutas_casos, rutas_sistema
+from app.api import limites, rutas_agente, rutas_casos, rutas_sistema
 
 CARPETA_WEB = os.path.join(os.path.dirname(os.path.abspath(__file__)), "web")
 
@@ -86,8 +86,8 @@ def preparar_base_tolerante() -> dict:
     vivos y avisar en pantalla.
     """
     try:
-        importlib.import_module("app.db.migrar").preparar_base()
-        return {"preparada": True, "mensaje": None}
+        resultado = importlib.import_module("app.db.migrar").preparar_base()
+        return {"preparada": True, "mensaje": None, "roles": resultado.get("roles")}
     except (Exception, SystemExit):  # noqa: BLE001 — el arranque no se cae por la base
         registro.exception("No se pudo preparar la base al arrancar; la app sigue en modo degradado")
         return {
@@ -162,6 +162,33 @@ def _instalar_manejadores(app: FastAPI):
         return _respuesta_error(500, mensaje, referencia)
 
 
+# Cabeceras de seguridad de toda respuesta (SPEC, RS9). La CSP solo permite scripts,
+# estilos y conexiones del mismo origen: sin scripts en línea ni de terceros, una
+# inyección de HTML no puede ejecutar código aunque llegara al DOM. `data:` en img-src
+# es por el ícono de la pestaña.
+CABECERAS_SEGURIDAD = {
+    "Content-Security-Policy": (
+        "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; "
+        "connect-src 'self'; font-src 'self'; object-src 'none'; base-uri 'none'; "
+        "frame-ancestors 'none'; form-action 'self'"
+    ),
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "no-referrer",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=()",
+    "Cross-Origin-Opener-Policy": "same-origin",
+}
+
+
+def _instalar_cabeceras_seguridad(app: FastAPI):
+    @app.middleware("http")
+    async def cabeceras_seguridad(request: Request, siguiente):
+        respuesta = await siguiente(request)
+        for nombre, valor in CABECERAS_SEGURIDAD.items():
+            respuesta.headers.setdefault(nombre, valor)
+        return respuesta
+
+
 def crear_app() -> FastAPI:
     """Fábrica de la app: una instancia nueva por llamada, útil para las pruebas."""
     _configurar_registro()
@@ -182,6 +209,9 @@ def crear_app() -> FastAPI:
     app.state.demo = rutas_sistema.EstadoDemo(config.FALLA_FORZADA)
 
     _instalar_manejadores(app)
+    limites.instalar(app)
+    # Se instala después del límite para que también el 429 lleve las cabeceras.
+    _instalar_cabeceras_seguridad(app)
     app.include_router(rutas_casos.router)
     app.include_router(rutas_agente.router)
     app.include_router(rutas_sistema.router)

@@ -7,13 +7,7 @@
   <title>Riesgo · Analista</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l9 3.4v6.8c0 5-3.8 9.3-9 10-5.2-.7-9-5-9-10V5.4z' fill='%231f5fbf'/%3E%3Cpath d='M8 12.2l2.8 2.8L16.5 9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/static/estilos.css">
-  <script>
-    // Aplica el tema guardado antes de pintar, para que no parpadee el tema equivocado.
-    try {
-      var tema = localStorage.getItem("tema");
-      if (tema === "claro" || tema === "oscuro") document.documentElement.dataset.tema = tema;
-    } catch (e) { /* sin almacenamiento: se usa el del sistema */ }
-  </script>
+  <script src="/static/js/tema-inicial.js"></script>
   <script type="module" src="/static/js/principal.js"></script>
 </head>
 <body>

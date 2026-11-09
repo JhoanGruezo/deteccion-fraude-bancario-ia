@@ -198,13 +198,17 @@ def contar_casos():
 
 
 def _leer_caso(id_caso, con_etiqueta):
+    # La etiqueta solo se pide cuando se necesita: los roles de la app y del agente no
+    # tienen permiso sobre esa columna (app/db/roles.py), así que pedirla siempre haría
+    # fallar la consulta. La pide únicamente eval/ con el usuario dueño de la base.
+    etiqueta = ", fraude_confirmado_dataset" if con_etiqueta else ""
     with cursor() as cur:
         cur.execute(
-            """
+            f"""
             select id_caso, fuente, id_cuenta, inicio_ventana, fin_ventana, tipos_fraude, score_maximo,
                    transacciones_sobre_umbral_bloqueo, nivel_recomendacion, motivo_recomendacion,
                    senal_principal, perfil_previo, modelo, umbral_verificacion, umbral_bloqueo,
-                   fraude_confirmado_dataset, estado
+                   estado{etiqueta}
             from casos
             where id_caso = %s
             """,
@@ -225,9 +229,8 @@ def _leer_caso(id_caso, con_etiqueta):
         )
         caso["transacciones"] = _filas(cur.fetchall())
     if not con_etiqueta:
-        # Se quita aquí, no en el SELECT, para que sea imposible olvidarla en una
-        # consulta nueva: la única ruta que la conserva es la de evaluación.
-        caso.pop("fraude_confirmado_dataset")
+        # Segunda barrera, por si alguien la agrega al SELECT: nunca sale de aquí.
+        caso.pop("fraude_confirmado_dataset", None)
     return _con_tarjeta_enmascarada(caso)
 
 
@@ -547,6 +550,14 @@ def decisiones_del_caso(id_caso):
 
 
 # --- Métricas en vivo ------------------------------------------------------------------
+
+
+def gasto_del_dia():
+    """USD de lista gastados hoy (día de la base) por todas las tareas del agente, cerradas o no."""
+    with cursor() as cur:
+        cur.execute("select coalesce(sum(costo_usd), 0) as gasto from tareas_agente "
+                    "where creada_en >= date_trunc('day', now())")
+        return float(cur.fetchone()["gasto"])
 
 
 def resumen_metricas(desde=None):

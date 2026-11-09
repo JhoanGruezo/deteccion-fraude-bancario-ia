@@ -14,6 +14,9 @@ Reglas:
 - Un candado de Postgres (pg_advisory_xact_lock) evita que dos procesos de la app
   arrancando a la vez carguen la semilla dos veces.
 - Sin semilla, la app arranca igual con la bandeja vacía (/api/salud lo informa).
+- El esquema y la semilla se escriben con el usuario dueño de la base (DATABASE_URL),
+  en una conexión propia. Después se crean los roles de mínimo privilegio
+  (app/db/roles.py) y el resto de la app ya no usa al dueño.
 
 Se puede correr solo: python -m app.db.migrar
 """
@@ -27,9 +30,10 @@ import sys
 import time
 
 import psycopg
+from psycopg.rows import dict_row
 
 from app import config
-from app.db.conexion import cursor
+from app.db import conexion, roles
 from app.db.repositorio import _json
 
 registro = logging.getLogger("app.db.migrar")
@@ -154,7 +158,7 @@ def preparar_base(carpeta_semilla=None):
         esquema = archivo.read()
 
     resultado = {"preparada": True, "semilla": "ya_cargada", "faltantes": []}
-    with cursor() as cur:
+    with psycopg.connect(config.DATABASE_URL, connect_timeout=5) as administracion,             administracion.cursor(row_factory=dict_row) as cur:
         # Candado de la transacción: el segundo proceso espera aquí y, al entrar, ya
         # encuentra la tabla casos llena.
         cur.execute("select pg_advisory_xact_lock(%s)", (CANDADO_MIGRACION,))
@@ -184,6 +188,14 @@ def preparar_base(carpeta_semilla=None):
             """
         )
         resultado.update(cur.fetchone())
+
+    # Roles de mínimo privilegio: desde aquí la app deja de usar al dueño de la base.
+    resultado_roles = roles.aplicar_roles(config.DATABASE_URL)
+    if resultado_roles["activos"]:
+        conexion.configurar_roles(resultado_roles["urls"])
+        resultado["roles"] = {"activos": True, **resultado_roles["roles"]}
+    else:
+        resultado["roles"] = {"activos": False, "error": resultado_roles["error"]}
 
     resultado["segundos"] = round(time.monotonic() - inicio, 2)
     registro.info(

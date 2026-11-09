@@ -29,7 +29,8 @@ import pytest
 from psycopg import sql
 
 from app import config
-from app.db import conexion, migrar, repositorio
+from app.db import conexion, migrar, repositorio, roles
+from app.db.repositorio_agente import RepositorioDelAgente
 
 CARPETA_SEMILLA = config.CARPETA_SEMILLA
 BASE_PRUEBAS = "fraude_pruebas"
@@ -50,6 +51,9 @@ def _recrear_base(url_administracion, base):
 def _borrar_base(url_administracion, base):
     with psycopg.connect(url_administracion, autocommit=True) as administracion:
         administracion.execute(sql.SQL("drop database if exists {} with (force)").format(sql.Identifier(base)))
+        # Los roles de mínimo privilegio son de todo el servidor: se borran con su base.
+        for rol in roles.PERMISOS:
+            administracion.execute(sql.SQL("drop role if exists {}").format(sql.Identifier(roles.nombre_rol(base, rol))))
 
 
 def _usar_base(url):
@@ -150,8 +154,10 @@ def test_obtener_caso_oculta_etiqueta_y_tarjeta(base_cargada, semilla):
     assert caso["tarjeta_enmascarada"].endswith(semilla[id_caso]["id_cuenta"][-4:])
     assert semilla[id_caso]["id_cuenta"] not in json.dumps(caso)
 
-    para_eval = repositorio.obtener_caso_para_evaluacion(id_caso)
-    assert para_eval["fraude_confirmado_dataset"] == semilla[id_caso]["fraude_confirmado_dataset"]
+    # Con el rol de la app la etiqueta no se puede leer ni pidiéndola: solo eval/, con el
+    # usuario dueño de la base, la ve (ver test_la_app_no_lee_la_etiqueta_ni_borra).
+    with pytest.raises(psycopg.errors.InsufficientPrivilege):
+        repositorio.obtener_caso_para_evaluacion(id_caso)
     assert repositorio.obtener_caso("NO-EXISTE") is None
 
 
@@ -330,3 +336,73 @@ def test_resumen_metricas(base_cargada):
     assert resumen["tasa_recuperacion"] == 0.75
     assert resumen["por_motivo_fin"] == {"completada": 4, "respaldo": 2}
     assert set(resumen["definiciones"]) >= {"tasa_exito", "recuperacion"}
+
+
+# --- Roles de mínimo privilegio (SPEC, RS3) ----------------------------------------------
+
+
+def _intentar(rol, consulta, parametros=()):
+    with conexion.usar_rol(rol), conexion.cursor() as cur:
+        cur.execute(consulta, parametros)
+
+
+def test_la_app_trabaja_con_roles_de_minimo_privilegio(base_cargada):
+    assert base_cargada["roles"]["activos"] is True
+    assert conexion.roles_activos()
+    with conexion.cursor() as cur:
+        cur.execute("select current_user as usuario")
+        assert cur.fetchone()["usuario"] == roles.nombre_rol(BASE_PRUEBAS, "app")
+
+
+@pytest.mark.parametrize("consulta", [
+    "select fraude_confirmado_dataset from casos limit 1",
+    "update casos set estado = 'descartado' where id_caso = 'SPK-000001'",
+    "insert into decisiones (id_caso, accion, analista) values ('SPK-000001', 'descartar', 'agente')",
+    "update propuestas_decision set estado = 'confirmada'",
+    "delete from trazas",
+    "create table intrusa (x int)",
+])
+def test_el_agente_solo_lee_y_sin_la_etiqueta(base_cargada, consulta):
+    with pytest.raises(psycopg.errors.InsufficientPrivilege):
+        _intentar("agente", consulta)
+
+
+@pytest.mark.parametrize("consulta", [
+    "select fraude_confirmado_dataset from casos limit 1",
+    "select * from casos limit 1",
+    "delete from decisiones",
+    "update casos set score_maximo = 0",
+    "insert into historial (fuente, id_cuenta, id_transaccion, fecha_hora, monto) values ('sparkov', '1', 'x', now(), 1)",
+    "drop table trazas",
+    "create table intrusa (x int)",
+])
+def test_la_app_no_lee_la_etiqueta_ni_borra(base_cargada, consulta):
+    with pytest.raises((psycopg.errors.InsufficientPrivilege, psycopg.errors.lookup("42501"))):
+        _intentar("app", consulta)
+
+
+def test_el_dueno_si_ve_la_etiqueta_para_eval(base_cargada, semilla):
+    # La etiqueta sigue en la base para eval/: solo el dueño la lee.
+    with psycopg.connect(config.DATABASE_URL) as dueno:
+        fila = dueno.execute("select fraude_confirmado_dataset from casos where id_caso = 'SPK-000001'").fetchone()
+    assert fila[0] == semilla["SPK-000001"]["fraude_confirmado_dataset"]
+
+
+def test_las_herramientas_del_agente_leen_con_su_rol(base_cargada):
+    agente = RepositorioDelAgente(repositorio)
+    caso = agente.obtener_caso("SPK-000001")
+    assert caso["id_caso"] == "SPK-000001" and "fraude_confirmado_dataset" not in caso
+    assert agente.obtener_historial("SPK-000001", dias=7, limite=10)
+    assert agente.listar_casos(fuente="sparkov", limite=5)
+    # La vista del agente no tiene funciones para decidir ni para leer la etiqueta.
+    for prohibida in ("resolver_propuesta", "registrar_decision", "obtener_caso_para_evaluacion", "cerrar_tarea"):
+        assert not hasattr(agente, prohibida)
+
+
+def test_el_rol_del_contexto_no_se_filtra_a_otras_consultas(base_cargada):
+    with conexion.usar_rol("agente"), conexion.cursor() as cur:
+        cur.execute("select current_user as usuario")
+        assert cur.fetchone()["usuario"] == roles.nombre_rol(BASE_PRUEBAS, "agente")
+    with conexion.cursor() as cur:
+        cur.execute("select current_user as usuario")
+        assert cur.fetchone()["usuario"] == roles.nombre_rol(BASE_PRUEBAS, "app")
