@@ -265,3 +265,73 @@ medio llegar; `explicacion.js` pinta los bloques y enlaza cada cifra a su eviden
 
 Si alguna no le sale, vuelva a la ficha correspondiente y anote la duda en
 `docs/verificacion-jeison.md` (sección "Dudas sobre el código") para resolverla juntos.
+
+---
+
+## 8. Momento 3: lo nuevo, repartido para la sustentación del 21-nov
+
+Reparto acordado: **Jeison** explica el motor en vivo, los datos y la medición; **Jhoan**, el agente
+de triaje, la app, la seguridad y la gobernanza. Cada uno debe poder responder las preguntas del otro
+a nivel básico, porque el profesor puede preguntarle a cualquiera.
+
+### 8.1 El recorrido de una compra (apréndalo de memoria)
+
+1. Llega una compra (`POST /api/transacciones` o el simulador) → `app/riesgo/flujo.py: evaluar_transaccion`.
+2. Se bloquea la fila del perfil de esa tarjeta (`for update`), se calculan las 12 features con el
+   **perfil incremental** (`app/riesgo/perfil_incremental.py`) y el modelo da el score (~2 ms,
+   `app/riesgo/motor_en_vivo.py`).
+3. Si la tarjeta ya está bloqueada, la compra se **rechaza** (es dinero detenido) y no toca el perfil.
+4. Si el score pasa el umbral de verificación, se abre o actualiza el caso y **el código decide la
+   banda**: crítica (≥ 2 compras sobre el umbral de bloqueo, o viaje imposible donde cuenta), alta
+   (una) o media.
+5. Se guarda todo en una transacción de Postgres y, **después**, se avisa al despachador.
+6. El despachador corre el **triaje** en un hilo (`app/agente/triaje.py`): el agente lee el caso y
+   toma una acción. Las guardas están en la base (`app/db/repositorio_acciones.py`).
+7. Si bloquea, `app/riesgo/avisos.py` arma el aviso al titular: plantilla + motivo validado.
+8. Si el caso es crítico y nadie lo bloqueó, la regla lo bloquea en el acto, o la red de seguridad
+   a los 90 s.
+9. Un humano desbloquea desde la vista Bloqueos, con sesión y motivo (`app/api/rutas_operacion.py`).
+
+### 8.2 Jeison: motor, datos y medición
+
+| Archivo | Lo que tiene que saber explicar |
+|---|---|
+| `app/riesgo/perfil_incremental.py` | Por qué un perfil acumulado (n, suma, suma de cuadrados, conteos por hora y categoría, ventana de 24 h) en vez de releer la historia; la paridad con `src/perfil_cuenta.py` y por qué una diferencia de 0,002 en 2 de 111.342 compras no es un error de la app (el redondeo de `monto_24h_previo` en el motor fuera de línea) |
+| `app/riesgo/motor_en_vivo.py` | Qué trae el paquete del modelo (modelo, features, umbrales, referencias) y por qué las señales se calculan solo para las compras sospechosas |
+| `app/riesgo/flujo.py` | Las bandas, que el caso se abra en la primera compra marcada (13 % del monto en juego), el rechazo de la tarjeta bloqueada y por qué el viaje imposible no abre casos en Sparkov |
+| `scripts/analisis_ritmo_fraude.py` | Las cifras del análisis: 88 % nocturno, 7,8 % perdido a los 5 min, 58,2 % a las 24 h |
+| `scripts/generar_semilla_simulador.py` | Por qué esa noche (partición de prueba, 5 episodios que empiezan, 54 compras fraudulentas) |
+| `eval/medir_momento3.py` | **Por qué el dinero se mide a tiempo real** (a 3600x, 5 s de triaje son 5 h del dataset), los tres escenarios de la regla del M2 y la prueba de necesidad en la banda alta |
+
+### 8.3 Jhoan: agente, app, seguridad y gobernanza
+
+| Archivo | Lo que tiene que saber explicar |
+|---|---|
+| `app/agente/triaje.py` | El despachador (un triaje por caso a la vez, repetir si subió de banda), el respaldo de la regla y la red de seguridad |
+| `app/agente/herramientas.py` y `prompts.py` | Qué herramientas tiene cada modo y por qué el triaje no puede proponer ni desbloquear; el prompt `SISTEMA_TRIAJE` y su regla 9 (salió en inglés) |
+| `app/db/repositorio_acciones.py` | Las guardas leídas de la base dentro de la transacción y el índice único que impide dos bloqueos activos |
+| `app/riesgo/avisos.py` | Qué valida el motivo (y por qué eso **no** es la defensa contra la inyección) |
+| `app/db/roles.py` | Los tres usuarios de Postgres y por qué el agente no puede ver la etiqueta ni escribir |
+| `app/api/sesion.py` y `limites.py` | scrypt, sesión guardada como hash, CSRF, roles, 429, CSP |
+| `app/web/` | Sin `innerHTML`; cómo la vista En vivo sondea solo la pestaña visible |
+
+### 8.4 Preguntas incómodas del Momento 3
+
+- *"¿El LLM está en el camino crítico?"* No para puntuar: el score sale en ~2 ms sin LLM. Sí para
+  decidir el bloqueo en la banda alta, y por eso la regla cubre la crítica si el LLM falla.
+- *"Si el modelo obedece una inyección, ¿qué pasa?"* Puede, como mucho, no bloquear un caso de banda
+  alta (la regla bloquea cuando pasa a crítica) o escribir un mal motivo (la validación lo cambia por
+  la plantilla). No puede bloquear otra tarjeta, desbloquear ni escribirle a nadie más.
+- *"¿Por qué 71,4 % y no 100 %?"* Las primeras compras de cada robo no superan el umbral: ningún
+  diseño las detiene. En mediana pasan 2 por tarjeta robada.
+- *"¿Por qué bajó la tasa de éxito de las explicaciones?"* Por el respaldo Gemini 3.5 Flash-Lite con
+  fallas forzadas; Claude pasó todas sus tareas.
+
+### 8.5 Autoevaluación del Momento 3
+
+1. ¿Qué tres cosas pasan, en orden, cuando llega una compra de una tarjeta bloqueada?
+2. ¿Quién decide la banda y quién decide el bloqueo en cada banda?
+3. ¿Por qué medir el dinero a 3600x da una cifra falsa, y cómo se corrige?
+4. ¿Qué usuario de Postgres usa el agente y qué le niega la base?
+5. Nombre dos controles contra el abuso de costo del LLM.
+6. ¿Qué hace la app si el supervisor apaga la autonomía del agente?
