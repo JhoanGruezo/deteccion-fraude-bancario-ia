@@ -1,0 +1,41 @@
+# Restricciones: versiones exactas de TODAS las dependencias, también las transitivas (auditoría
+# del 2026-10-31, B5). Sin esto, cada build podía traer otras versiones de starlette, pydantic,
+# anyio, etc., y la app podía construirse distinto en la máquina del profesor.
+# Se generó con `pip freeze` dentro de la imagen que pasó las 267 pruebas (2026-11-09).
+# Todas tienen ruedas para Linux x86_64 y arm64 (Docker en Windows y en Mac con Apple Silicon).
+annotated-types==0.8.0
+anyio==4.16.0
+certifi==2026.10.23
+click==8.5.1
+fastapi==0.115.12
+h11==0.16.0
+httpcore==1.0.9
+httptools==0.9.0
+httpx==0.28.1
+idna==3.20
+iniconfig==2.3.1
+joblib==1.5.3
+numpy==2.4.2
+packaging==26.3
+pandas==3.0.1
+pluggy==1.7.0
+psycopg==3.2.9
+psycopg-binary==3.2.9
+psycopg-pool==3.2.6
+pydantic==2.14.3
+pydantic_core==2.50.4
+pytest==8.3.5
+python-dateutil==4.0.0
+python-dotenv==1.2.4
+PyYAML==6.0.3
+scikit-learn==1.8.0
+scipy==1.18.1
+starlette==0.46.2
+threadpoolctl==3.8.0
+typing-inspection==0.4.5
+typing_extensions==4.16.0
+tzdata==2026.6
+uvicorn==0.34.2
+uvloop==0.23.0
+watchfiles==1.3.0
+websockets==17.4

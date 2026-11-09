@@ -13,3 +13,7 @@ __pycache__/
 # porque un clon limpio no tiene el dataset para entrenarlo (SPEC, RF1).
 !semilla/modelo_riesgo_sparkov.joblib
 *.zip
+
+# Variantes locales del .env (auditoría B7); la plantilla sí va al repositorio.
+.env.*
+!.env.example

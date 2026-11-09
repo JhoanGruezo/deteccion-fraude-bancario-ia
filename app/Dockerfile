@@ -12,8 +12,8 @@ WORKDIR /srv
 
 # Primero solo las dependencias: si cambia el código pero no requirements.txt, esta
 # capa se reutiliza y la reconstrucción tarda segundos.
-COPY app/requirements.txt app/requirements.txt
-RUN pip install -r app/requirements.txt
+COPY app/requirements.txt app/restricciones.txt app/
+RUN pip install -r app/requirements.txt -c app/restricciones.txt
 
 COPY app/ app/
 # src/: el motor de riesgo fuera de línea; la app reutiliza sus fórmulas (app/riesgo).

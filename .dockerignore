@@ -20,3 +20,9 @@ venv/
 # Control de versiones y herramientas del equipo.
 .git/
 .claude/
+
+# Variantes locales del .env y la documentación: no hacen falta para construir la imagen
+# (auditoría B7: docs/ llevaba al contexto de build un archivo local con llaves).
+.env.*
+!.env.example
+docs/
