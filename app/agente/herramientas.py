@@ -28,7 +28,7 @@ from dataclasses import dataclass
 from typing import Any, Callable
 
 from app.agente.contrato import senales_citables, tiene_poco_historial
-from app.agente.prompts import DESCRIPCION_PARAMETRO_ID_CASO, DESCRIPCIONES
+from app.agente.prompts import DESCRIPCION_PARAMETRO_ID_CASO, DESCRIPCION_PARAMETRO_MOTIVO, DESCRIPCIONES
 from app.agente.riesgo_en_palabras import nivel_riesgo_en_palabras, posicion_del_caso
 
 ACCIONES_DE_DECISION = ("confirmar_bloqueo", "descartar", "escalar")
@@ -40,6 +40,18 @@ class ContextoHerramientas:
     id_caso: str
     tarea_id: str
     repositorio: Any   # app.db.repositorio o un doble de prueba con la misma interfaz
+    # Solo en triaje: app.riesgo.acciones.AccionesDelAgente, atado a ESTE caso y con el
+    # actor fijo en "agente". Las herramientas de acción no reciben la tarjeta ni el actor.
+    acciones: Any = None
+
+
+# Qué puede hacer el agente en cada banda (SPEC, RF2). Lo decide el código; el modelo lo ve
+# para no intentar lo imposible, pero aunque lo intente, repositorio_acciones lo rechaza.
+ACCIONES_POR_BANDA = {
+    "critica": ["bloquear_tarjeta", "bloquear_acceso_cuenta"],
+    "alta": ["bloquear_tarjeta", "bloquear_acceso_cuenta", "solicitar_verificacion", "dejar_a_analista"],
+    "media": ["solicitar_verificacion", "dejar_a_analista"],
+}
 
 
 @dataclass
@@ -50,6 +62,7 @@ class Herramienta:
     escribe: bool
     ejecutar: Callable[[dict, ContextoHerramientas], dict]
     solo_pregunta: bool = False                        # no se ofrece en modo explicación
+    solo_triaje: bool = False                          # solo existe en el triaje (Momento 3)
 
     def esquema_neutro(self) -> dict:
         """Formato que entienden los clientes de proveedor (cada uno lo traduce al suyo)."""
@@ -126,6 +139,11 @@ def resumir_caso(caso: dict) -> dict:
     }
     if tiene_poco_historial(caso):
         resumen_caso["aviso_historial"] = AVISO_POCO_HISTORIAL
+    if caso.get("banda"):
+        # Casos en vivo (Momento 3): la banda la decidió el código y define qué se puede hacer.
+        resumen_caso["banda"] = caso["banda"]
+        resumen_caso["acciones_permitidas"] = ACCIONES_POR_BANDA.get(caso["banda"], [])
+        resumen_caso["estado"] = caso.get("estado")
     return {
         **resumen_caso,
         "fuente": caso.get("fuente"),
@@ -224,6 +242,24 @@ def _registrar_decision(argumentos: dict, contexto: ContextoHerramientas) -> dic
     }
 
 
+def _accion_de_triaje(nombre: str):
+    """Las cuatro acciones del triaje: delegan en contexto.acciones (guardas en código y en la base)."""
+    def ejecutar(argumentos: dict, contexto: ContextoHerramientas) -> dict:
+        error = _fuera_de_alcance(argumentos, contexto)
+        if error:
+            return error
+        if contexto.acciones is None:
+            return {"error": "no_permitido", "detalle": "Las acciones sobre la tarjeta solo existen en el triaje."}
+        if nombre == "bloquear_tarjeta":
+            return contexto.acciones.bloquear("tarjeta", argumentos["motivo_para_titular"])
+        if nombre == "bloquear_acceso_cuenta":
+            return contexto.acciones.bloquear("acceso_cuenta", argumentos["motivo_para_titular"])
+        if nombre == "solicitar_verificacion":
+            return contexto.acciones.solicitar_verificacion(argumentos["motivo_para_titular"])
+        return contexto.acciones.dejar_a_analista(argumentos["razon"])
+    return ejecutar
+
+
 def _declarar_fuera_de_alcance(argumentos: dict, contexto: ContextoHerramientas) -> dict:
     # No toca la base: su efecto es que el bucle marque la tarea como rechazo
     # (EstadoTarea.rechazo_declarado) de forma determinista, sin leer el texto.
@@ -236,6 +272,7 @@ def _declarar_fuera_de_alcance(argumentos: dict, contexto: ContextoHerramientas)
 
 # --- Esquemas ---------------------------------------------------------------------------
 _ID_CASO = {"type": "string", "description": DESCRIPCION_PARAMETRO_ID_CASO}
+_MOTIVO = {"type": "string", "description": DESCRIPCION_PARAMETRO_MOTIVO}
 
 
 def _esquema(propiedades: dict, requeridos: list[str]) -> dict:
@@ -265,16 +302,41 @@ HERRAMIENTAS: dict[str, Herramienta] = {
                     _esquema({"motivo": {"type": "string",
                                          "description": "En una frase, qué pidió el analista y por qué no se puede."}},
                              ["motivo"]), False, _declarar_fuera_de_alcance, solo_pregunta=True),
+        # Triaje (Momento 3). escribe=True: el bucle exige haber leído el caso antes.
+        Herramienta("bloquear_tarjeta", DESCRIPCIONES["bloquear_tarjeta"],
+                    _esquema({"id_caso": _ID_CASO, "motivo_para_titular": _MOTIVO}, ["id_caso", "motivo_para_titular"]),
+                    True, _accion_de_triaje("bloquear_tarjeta"), solo_triaje=True),
+        Herramienta("bloquear_acceso_cuenta", DESCRIPCIONES["bloquear_acceso_cuenta"],
+                    _esquema({"id_caso": _ID_CASO, "motivo_para_titular": _MOTIVO}, ["id_caso", "motivo_para_titular"]),
+                    True, _accion_de_triaje("bloquear_acceso_cuenta"), solo_triaje=True),
+        Herramienta("solicitar_verificacion", DESCRIPCIONES["solicitar_verificacion"],
+                    _esquema({"id_caso": _ID_CASO, "motivo_para_titular": _MOTIVO}, ["id_caso", "motivo_para_titular"]),
+                    True, _accion_de_triaje("solicitar_verificacion"), solo_triaje=True),
+        Herramienta("dejar_a_analista", DESCRIPCIONES["dejar_a_analista"],
+                    _esquema({"id_caso": _ID_CASO,
+                              "razon": {"type": "string", "description": "En una frase, por qué un analista debe decidir."}},
+                             ["id_caso", "razon"]),
+                    True, _accion_de_triaje("dejar_a_analista"), solo_triaje=True),
     ]
 }
+ACCIONES_DE_TRIAJE = [n for n, h in HERRAMIENTAS.items() if h.solo_triaje]
 
 # En modo explicación el agente solo lee el caso: no propone decisiones ni rechaza.
-SOLO_LECTURA = [n for n, h in HERRAMIENTAS.items() if not h.escribe and not h.solo_pregunta]
+SOLO_LECTURA = [n for n, h in HERRAMIENTAS.items() if not h.escribe and not h.solo_pregunta and not h.solo_triaje]
 
 
 def nombres_para(tipo: str) -> list[str]:
-    """Nombres de las herramientas permitidas en el modo de la tarea (el bucle rechaza las demás)."""
-    return SOLO_LECTURA if tipo == "explicacion" else list(HERRAMIENTAS)
+    """Nombres de las herramientas permitidas en el modo de la tarea (el bucle rechaza las demás).
+
+    - explicación: solo lectura;
+    - pregunta: lectura + proponer decisión + declarar fuera de alcance (nunca bloquear);
+    - triaje: lectura + las cuatro acciones de triaje (nunca proponer ni responder preguntas).
+    """
+    if tipo == "explicacion":
+        return SOLO_LECTURA
+    if tipo == "triaje":
+        return SOLO_LECTURA + ACCIONES_DE_TRIAJE
+    return [n for n, h in HERRAMIENTAS.items() if not h.solo_triaje]
 
 
 def esquemas_para(tipo: str) -> list[dict]:

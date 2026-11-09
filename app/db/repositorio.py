@@ -208,7 +208,7 @@ def _leer_caso(id_caso, con_etiqueta):
             select id_caso, fuente, id_cuenta, inicio_ventana, fin_ventana, tipos_fraude, score_maximo,
                    transacciones_sobre_umbral_bloqueo, nivel_recomendacion, motivo_recomendacion,
                    senal_principal, perfil_previo, modelo, umbral_verificacion, umbral_bloqueo,
-                   estado{etiqueta}
+                   estado, origen, banda, banda_desde, abierto_en{etiqueta}
             from casos
             where id_caso = %s
             """,

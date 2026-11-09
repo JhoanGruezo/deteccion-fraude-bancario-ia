@@ -167,6 +167,11 @@ def _ejecutar_llamada(llamada, contexto: ContextoHerramientas, limites: Limites,
                 estado.rechazo_declarado = True
             yield {"tipo": "resultado_herramienta", "nombre": llamada.nombre,
                    "resumen": _resumen_resultado(resultado), "duracion_ms": duracion_ms}
+            if herramienta.solo_triaje:
+                # Acción del triaje sobre la tarjeta: visible en la traza y en la vista En vivo.
+                yield {"tipo": "accion_triaje", "accion": llamada.nombre, "resultado": resultado.get("resultado"),
+                       "detalle": resultado.get("detalle"), "aviso": resultado.get("aviso"),
+                       "segundos_hasta_bloqueo": resultado.get("segundos_hasta_bloqueo")}
             if herramienta.escribe and resultado.get("propuesta_id") is not None:
                 yield {"tipo": "propuesta", "propuesta_id": resultado["propuesta_id"],
                        "accion": llamada.argumentos.get("accion"),

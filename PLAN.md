@@ -91,16 +91,30 @@ del resto.
 
 ## Fase 3 · Agente de triaje, red de seguridad y avisos (12 al 14-nov)
 
-- [ ] ⚠ **T3.1** Modo `triaje` del agente: prompt, herramientas de acción con las seis
+- [x] ⚠ **T3.1** Modo `triaje` del agente: prompt, herramientas de acción con las seis
       guardas de RF3, tarea en segundo plano al abrir o subir de banda un caso.
       *Verifica:* una prueba por guarda (banda, otra tarjeta, tope, autonomía apagada,
       repetición, sin desbloqueo).
-- [ ] **T3.2** Red de seguridad de 90 s (RF4) en un hilo propio de la app.
+      2026-11-08: `app/agente/triaje.py` (servicio, despachador en segundo plano),
+      `app/riesgo/acciones.py`, `app/db/repositorio_acciones.py`, prompt `SISTEMA_TRIAJE`.
+      Las guardas están en la base: banda, autonomía, tope por hora y un índice único que
+      impide dos bloqueos activos. Si las guardas rechazan una acción del agente, no cuenta
+      como decisión y actúa la regla. **Prueba real con Claude:** tarjeta bloqueada 3,8 s
+      después de abrirse el caso, 0,002 USD y 5 s por triaje. Destapó dos fallas, ya
+      corregidas: el resumen salía en inglés (regla 9 del prompt) y las fechas "20/07/2020"
+      se tomaban como montos inventados.
+- [x] **T3.2** Red de seguridad de 90 s (RF4) en un hilo propio de la app.
       *Verifica:* con todos los proveedores forzados a fallar, todo caso crítico queda
       bloqueado por la regla en ≤ 90 s.
-- [ ] **T3.3** Avisos (RF5): plantilla, validación del motivo, directorio simulado,
+      2026-11-08: hilo `RedDeSeguridad` más el respaldo inmediato del triaje (si el triaje
+      termina sin bloquear un caso crítico, la regla bloquea en ese momento, sin esperar los
+      90 s). Probado con los proveedores caídos y con la autonomía apagada.
+- [x] **T3.3** Avisos (RF5): plantilla, validación del motivo, directorio simulado,
       canal simulado, canal de correo con lista blanca y respuesta del titular.
       *Verifica:* pruebas de la validación (enlace, correo, teléfono, monto inventado).
+      2026-11-08: `app/riesgo/avisos.py` y 19 pruebas, incluidos 4 motivos maliciosos que
+      llegan por el triaje: ninguno sale hacia el titular y el bloqueo igual protege. El
+      correo real queda listo pero apagado (lista blanca vacía = no sale nada).
 - [ ] **T3.4** Desbloqueo humano (RF6) con motivo y medición del tiempo; interruptor de
       autonomía y tope por hora en `ajustes_sistema`.
 

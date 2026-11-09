@@ -96,6 +96,26 @@ def preparar_base_tolerante() -> dict:
         }
 
 
+def iniciar_flujo_automatico() -> dict | None:
+    """Engancha el triaje del agente al flujo en vivo y arranca la red de seguridad (SPEC, RF3-RF4).
+
+    Si el motor de riesgo no se puede cargar (por ejemplo, falta el modelo en semilla/), la app
+    sigue sirviendo la bandeja del Momento 2 y el registro lo dice.
+    """
+    try:
+        flujo = importlib.import_module("app.riesgo.flujo")
+        triaje = importlib.import_module("app.agente.triaje")
+    except Exception:  # noqa: BLE001
+        registro.exception("No se pudo cargar el flujo en vivo; la app sigue sin triaje automático")
+        return None
+    despachador = triaje.Despachador()
+    flujo.al_cambiar_caso(despachador.al_cambiar_caso)
+    red = triaje.RedDeSeguridad()
+    red.start()
+    registro.info("Triaje automático y red de seguridad (%.0f s) activos.", red.segundos)
+    return {"despachador": despachador, "red": red}
+
+
 class EstaticosSinCacheVieja(StaticFiles):
     """Archivos del frontend que el navegador siempre revalida (ETag → 304 si no cambiaron).
 
@@ -196,7 +216,11 @@ def crear_app() -> FastAPI:
     @asynccontextmanager
     async def ciclo_de_vida(app: FastAPI):
         app.state.estado_base = preparar_base_tolerante()
+        app.state.flujo = iniciar_flujo_automatico() if config.FLUJO_AUTOMATICO else None
         yield
+        if app.state.flujo:
+            app.state.flujo["red"].detener()
+            app.state.flujo["despachador"].apagar()
 
     app = FastAPI(
         title="Vista del analista · Detección de fraude",

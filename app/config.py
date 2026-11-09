@@ -101,5 +101,26 @@ LIMITE_LECTURA_POR_MINUTO = _entero("LIMITE_LECTURA_POR_MINUTO", 240)
 # Con Claude Haiku 5.5 una explicación cuesta ~0,0016 USD: 2 USD son unas 1.200.
 TOPE_GASTO_DIARIO_USD = _decimal("TOPE_GASTO_DIARIO_USD", 2.0)
 
+# --- Triaje del agente, red de seguridad y avisos (SPEC, RF3-RF5) ---------------------
+# Segundos que un caso crítico puede estar sin bloqueo antes de que lo bloquee la regla.
+SEGUNDOS_RED_DE_SEGURIDAD = _decimal("SEGUNDOS_RED_DE_SEGURIDAD", 90.0)
+# Cada cuánto revisa la red de seguridad (segundos).
+INTERVALO_RED_DE_SEGURIDAD_S = _decimal("INTERVALO_RED_DE_SEGURIDAD_S", 5.0)
+# Triajes simultáneos (cada uno es una tarea del agente con sus cuatro límites).
+TRIAJES_SIMULTANEOS = _entero("TRIAJES_SIMULTANEOS", 3)
+# Encender el triaje automático y la red de seguridad al arrancar (las pruebas lo apagan).
+FLUJO_AUTOMATICO = _booleano("FLUJO_AUTOMATICO", True)
+# Avisos: "simulado" (buzón de la app) o "correo" (SMTP, solo a la lista blanca).
+CANAL_AVISOS = _texto("CANAL_AVISOS", "simulado")
+CORREOS_PERMITIDOS = {c.strip().lower() for c in _texto("CORREOS_PERMITIDOS", "").split(",") if c.strip()}
+CORREO_DEMO_TITULAR = _texto("CORREO_DEMO_TITULAR", "")
+SMTP_SERVIDOR = _texto("SMTP_SERVIDOR", "")
+SMTP_PUERTO = _entero("SMTP_PUERTO", 587)
+SMTP_USUARIO = _texto("SMTP_USUARIO", "")
+SMTP_CLAVE = _texto("SMTP_CLAVE", "")
+SMTP_REMITENTE = _texto("SMTP_REMITENTE", "")
+NOMBRE_BANCO = _texto("NOMBRE_BANCO", "Banco Demo")
+TELEFONO_OFICIAL_BANCO = _texto("TELEFONO_OFICIAL_BANCO", "601 000 0000")
+
 # --- Servidor -----------------------------------------------------------------------
 PUERTO = _entero("PUERTO", 8000)
