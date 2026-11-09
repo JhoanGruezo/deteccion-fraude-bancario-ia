@@ -119,7 +119,7 @@ def _con_tarjeta_enmascarada(fila):
 # --- Casos -----------------------------------------------------------------------------
 
 
-def listar_casos(fuente=None, nivel=None, estado=None, busqueda=None, orden="score", limite=300):
+def listar_casos(fuente=None, nivel=None, estado=None, busqueda=None, orden="score", limite=300, origen=None):
     """Bandeja del analista: un resumen por caso, filtrado y ordenado.
 
     busqueda: coincide con el id del caso (SPK-000123, también un pedazo) o con
@@ -140,6 +140,9 @@ def listar_casos(fuente=None, nivel=None, estado=None, busqueda=None, orden="sco
     if estado:
         condiciones.append("c.estado = %(estado)s")
         parametros["estado"] = estado
+    if origen:
+        condiciones.append("c.origen = %(origen)s")
+        parametros["origen"] = origen
     if busqueda and busqueda.strip():
         texto = busqueda.strip()
         parametros["patron_caso"] = f"%{texto}%"
@@ -153,14 +156,15 @@ def listar_casos(fuente=None, nivel=None, estado=None, busqueda=None, orden="sco
             condiciones.append("c.id_caso ilike %(patron_caso)s")
     donde = ("where " + " and ".join(condiciones)) if condiciones else ""
     # El orden se elige de una lista cerrada: nunca se interpola texto del usuario en el SQL.
-    ordenar = "c.inicio_ventana desc, c.id_caso" if orden == "fecha" else "c.score_maximo desc, c.id_caso"
+    ordenar = {"fecha": "c.inicio_ventana desc, c.id_caso",
+               "recientes": "c.abierto_en desc nulls last, c.id_caso desc"}.get(orden, "c.score_maximo desc, c.id_caso")
     parametros["limite"] = max(1, min(int(limite or 300), LIMITE_MAXIMO_BANDEJA))
 
     with cursor() as cur:
         cur.execute(
             f"""
             select c.id_caso, c.fuente, c.id_cuenta, c.inicio_ventana, c.nivel_recomendacion,
-                   c.senal_principal, c.score_maximo, c.estado,
+                   c.senal_principal, c.score_maximo, c.estado, c.origen, c.banda, c.abierto_en,
                    t.n_transacciones, t.monto_total,
                    exists (select 1 from explicaciones e where e.id_caso = c.id_caso) as tiene_explicacion
             from casos c
@@ -369,6 +373,18 @@ def ultima_tarea(id_caso):
 
 
 # --- Explicaciones ---------------------------------------------------------------------
+
+
+def ultima_tarea_de_tipo(id_caso, tipo):
+    """La tarea más reciente de un tipo (por ejemplo, el último triaje del caso) con su resumen final."""
+    with cursor() as cur:
+        cur.execute("""select t.tarea_id, t.motivo_fin, t.proveedor_final, t.modelo_final, t.iteraciones, t.costo_usd,
+                              t.latencia_ms, t.creada_en,
+                              (select detalle from trazas tr where tr.tarea_id = t.tarea_id
+                                 and tr.tipo in ('triaje', 'respaldo_triaje') order by paso desc limit 1) as resultado
+                       from tareas_agente t where t.id_caso = %s and t.tipo = %s
+                       order by t.creada_en desc limit 1""", (id_caso, tipo))
+        return _fila(cur.fetchone())
 
 
 def explicacion_vigente(id_caso):

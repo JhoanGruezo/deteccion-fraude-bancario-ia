@@ -33,7 +33,7 @@ CABECERA_CSRF = "x-csrf-token"
 RUTAS_PUBLICAS = {"/api/salud"}
 PREFIJO_PUBLICO = "/api/sesion"
 METODOS_SEGUROS = {"GET", "HEAD", "OPTIONS"}
-SOLO_SUPERVISOR = ("/api/ajustes", "/api/demo/", "/api/alertas")
+SOLO_SUPERVISOR = ("/api/ajustes", "/api/demo/", "/api/alertas", "/api/simulador")
 INTENTOS_MAXIMOS = 5
 VENTANA_INTENTOS_S = 15 * 60
 

@@ -69,3 +69,39 @@ def transacciones_recientes(desde_id: int = Query(0, ge=0), limite: int = Query(
 @router.get("/tarjetas")
 def tarjetas(limite: int = Query(50, ge=1, le=500)):
     return {"tarjetas": repositorio().listar_tarjetas(limite=limite)}
+
+
+# --- Simulador (SPEC, RF8). Leer: cualquier sesión; controlar: solo supervisor. ---------------
+
+
+def simulador():
+    return importlib.import_module("app.riesgo.simulador").simulador()
+
+
+class CuerpoSimulador(BaseModel):
+    velocidad: int | None = None
+
+
+@router.get("/simulador")
+def estado_simulador():
+    return simulador().resumen()
+
+
+@router.post("/simulador/{accion}")
+def controlar_simulador(accion: str, cuerpo: CuerpoSimulador | None = None):
+    sim = simulador()
+    velocidad = cuerpo.velocidad if cuerpo else None
+    try:
+        if accion == "iniciar":
+            return sim.iniciar(velocidad)
+        if accion == "pausar":
+            return sim.pausar()
+        if accion == "reanudar":
+            return sim.reanudar()
+        if accion == "detener":
+            return sim.detener()
+        if accion == "velocidad" and velocidad:
+            return sim.cambiar_velocidad(velocidad)
+    except (RuntimeError, ValueError, FileNotFoundError) as error:
+        raise HTTPException(409 if isinstance(error, RuntimeError) else 422, str(error)) from error
+    raise HTTPException(404, "Acción del simulador desconocida (iniciar, pausar, reanudar, detener, velocidad).")

@@ -167,6 +167,7 @@ def test_bandeja_resumen_filtros_y_enmascarado(base_cargada):
     claves = {
         "id_caso", "fuente", "tarjeta_enmascarada", "inicio_ventana", "nivel_recomendacion", "senal_principal",
         "score_maximo", "n_transacciones", "monto_total", "estado", "tiene_explicacion",
+        "origen", "banda", "abierto_en",            # Momento 3
     }
     assert set(casos[0]) == claves
     assert all(PATRON_TARJETA.match(c["tarjeta_enmascarada"]) for c in casos)

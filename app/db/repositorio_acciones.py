@@ -179,6 +179,14 @@ def responder_notificacion(notificacion_id, respuesta):
     return fila["id_caso"] if fila else None
 
 
+def bloqueos_del_caso(id_caso):
+    with cursor() as cur:
+        cur.execute("""select id, tipo, actor, usuario, banda, motivo, estado, creado_en, segundos_hasta_bloqueo,
+                              levantado_por, motivo_desbloqueo, levantado_en
+                       from bloqueos where id_caso = %s order by creado_en""", (id_caso,))
+        return _filas(cur.fetchall())
+
+
 def avisos_del_caso(id_caso):
     with cursor() as cur:
         cur.execute("""select id, tipo, canal, destinatario, cuerpo, autor_motivo, errores_validacion, estado,

@@ -23,7 +23,8 @@ FUENTES = {"sparkov", "sinteticos"}
 NIVELES = {"bloquear_tarjeta", "bloquear_acceso_cuenta", "verificar_cliente"}
 ESTADOS = {"pendiente", "bloqueo_confirmado", "descartado", "escalado",       # Momento 2
            "bloqueado", "en_verificacion", "desbloqueado"}                     # Momento 3
-ORDENES = {"score", "fecha"}
+ORDENES = {"score", "fecha", "recientes"}
+ORIGENES = {"semilla", "en_vivo"}
 ACCIONES = {"confirmar_bloqueo", "descartar", "escalar"}
 LARGO_MAXIMO_ANALISTA = 80
 LARGO_MAXIMO_COMENTARIO = 1000
@@ -108,6 +109,7 @@ def listar_casos(
     fuente: str | None = None,
     nivel: str | None = None,
     estado: str | None = None,
+    origen: str | None = None,
     q: str | None = Query(None, max_length=100),
     orden: str = "score",
     limite: int = Query(300, ge=1, le=1000),
@@ -121,6 +123,7 @@ def listar_casos(
         busqueda=(q or "").strip() or None,
         orden=_validar_opcion(orden, ORDENES, "orden") or "score",
         limite=limite,
+        **({"origen": _validar_opcion(origen, ORIGENES, "origen")} if origen else {}),
     )
     return depurar_para_interfaz(
         {"casos": casos, "total": len(casos), "contadores": normalizar_contadores(repo.contar_casos())}
@@ -149,8 +152,20 @@ def obtener_detalle(id_caso: str):
             "propuestas": repo.propuestas_pendientes(id_caso),
             "decisiones": repo.decisiones_del_caso(id_caso),
             "ultima_tarea": repo.ultima_tarea(id_caso),
+            # Momento 3: bloqueos y avisos del caso (vacíos en los casos de la semilla del M2).
+            **_operacion_del_caso(id_caso),
         }
     )
+
+
+def _operacion_del_caso(id_caso):
+    try:
+        acciones = importlib.import_module("app.db.repositorio_acciones")
+        ultima_triaje = repositorio().ultima_tarea_de_tipo(id_caso, "triaje")
+        return {"bloqueos": acciones.bloqueos_del_caso(id_caso), "avisos": acciones.avisos_del_caso(id_caso),
+                "ultimo_triaje": ultima_triaje}
+    except (ImportError, AttributeError):   # dobles de prueba del M2 sin estas funciones
+        return {"bloqueos": [], "avisos": [], "ultimo_triaje": None}
 
 
 @router.get("/casos/{id_caso}/historial")
