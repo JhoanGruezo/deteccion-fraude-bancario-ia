@@ -158,6 +158,8 @@ function etiquetaMetrica(clave) {
     costo_total_usd: "Costo total", costo_por_tarea_usd: "Costo por tarea", porcentaje_cache: "Desde caché",
     recuperacion: "Recuperación de fallas", tasa_recuperacion: "Recuperación de fallas",
     tareas_sin_cache: "Tareas sin caché", exitosas: "Exitosas (sin caché)", porcentaje_desde_cache: "Desde caché",
+    tokens_entrada: "Tokens de entrada", tokens_salida: "Tokens de salida", desde: "Medido desde",
+    tareas_con_fallo: "Tareas con alguna falla", recuperadas: "Recuperadas",
   };
   return nombres[clave] || clave.replace(/_/g, " ");
 }
