@@ -28,7 +28,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app import config
-from app.api import limites, rutas_agente, rutas_casos, rutas_sistema
+from app.api import limites, rutas_agente, rutas_casos, rutas_en_vivo, rutas_sistema
 
 CARPETA_WEB = os.path.join(os.path.dirname(os.path.abspath(__file__)), "web")
 
@@ -215,6 +215,7 @@ def crear_app() -> FastAPI:
     app.include_router(rutas_casos.router)
     app.include_router(rutas_agente.router)
     app.include_router(rutas_sistema.router)
+    app.include_router(rutas_en_vivo.router)
 
     app.mount("/static", EstaticosSinCacheVieja(directory=CARPETA_WEB), name="static")
 

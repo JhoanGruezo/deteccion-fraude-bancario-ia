@@ -171,6 +171,10 @@ create table if not exists perfiles_tarjeta (
     actualizado_en timestamptz not null default now(),
     primary key (fuente, id_cuenta)
 );
+-- Alias opaco de la tarjeta (TAR-0001): lo que la interfaz y la API usan para nombrarla.
+-- El número completo nunca sale del servidor, ni siquiera para inyectar una compra.
+alter table perfiles_tarjeta add column if not exists alias text;
+create unique index if not exists perfiles_alias on perfiles_tarjeta (alias);
 
 -- Cada transacción que entra en vivo (por el simulador o por la API), con su score, su
 -- banda y cuánto tardó en decidirse. es_fraude_dataset es la etiqueta del dataset: la
@@ -197,6 +201,12 @@ create table if not exists transacciones_evaluadas (
     es_fraude_dataset integer,
     unique (fuente, id_transaccion)
 );
+-- Una compra de una tarjeta ya bloqueada se rechaza (no pasa al perfil ni al caso): es el
+-- dinero que el bloqueo detuvo, la cifra central del Momento 3.
+alter table transacciones_evaluadas add column if not exists decision text not null default 'aprobada';
+alter table transacciones_evaluadas drop constraint if exists transacciones_evaluadas_decision_check;
+alter table transacciones_evaluadas add constraint transacciones_evaluadas_decision_check
+    check (decision in ('aprobada', 'rechazada_por_bloqueo'));
 create index if not exists evaluadas_tarjeta on transacciones_evaluadas (fuente, id_cuenta, fecha_hora);
 create index if not exists evaluadas_recientes on transacciones_evaluadas (recibida_en desc);
 

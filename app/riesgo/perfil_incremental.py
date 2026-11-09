@@ -190,3 +190,27 @@ def actualizar(estado: EstadoTarjeta, transaccion: dict) -> None:
     # Las próximas compras son posteriores: lo que ya salió de la ventana de esta, sale de todas.
     estado.ventana_24h = [(f, m) for f, m in estado.ventana_24h if f >= fecha - VENTANA_24H] + [(fecha, monto)]
     estado.ultima_fecha, estado.ultima_latitud, estado.ultima_longitud = fecha, latitud, longitud
+
+
+def perfil_resumido(estado: EstadoTarjeta, fecha, cuantos: int = 3) -> dict:
+    """El perfil previo en el formato de `src/perfil_cuenta.perfil_al_momento` (va a casos.perfil_previo).
+
+    Es lo que el agente lee con `obtener_perfil_cuenta`, así que un caso en vivo se ve
+    igual que uno de la semilla.
+    """
+    n = estado.n
+    perfil = {"n_transacciones_previas": n, "sin_historial": n < MINIMO_HISTORIAL}
+    if n == 0:
+        return perfil
+    fecha = _fecha(fecha)
+    promedio = estado.suma / n
+    dias = max((fecha - (estado.primera_fecha or fecha)).total_seconds() / 86400, 1)
+    perfil["monto_promedio"] = round(promedio, 2)
+    perfil["monto_desviacion"] = round(math.sqrt(max(estado.suma_cuadrados / n - promedio ** 2, 0.0)), 2)
+    perfil["transacciones_por_dia"] = round(n / dias, 2)
+    horas = sorted(range(24), key=lambda h: (-estado.conteo_hora[h], h))[:cuantos]
+    perfil["horas_habituales"] = [{"hora": h, "porcentaje": round(100 * estado.conteo_hora[h] / n, 1)}
+                                  for h in horas if estado.conteo_hora[h]]
+    categorias = sorted(estado.conteo_categoria.items(), key=lambda par: (-par[1], par[0]))[:cuantos]
+    perfil["categorias_habituales"] = [{"categoria": c, "porcentaje": round(100 * v / n, 1)} for c, v in categorias]
+    return perfil

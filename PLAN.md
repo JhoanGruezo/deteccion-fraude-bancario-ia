@@ -74,9 +74,13 @@ del resto.
       (`es_fraude_dataset`) se puede escribir pero no leer, y los casos en vivo no la guardan.
       Hay una prueba que falla si una tabla nueva no tiene permisos declarados. La base real
       del M2 migró sola: 16 tablas.
-- [ ] **T2.4** `POST /api/transacciones`: bandas (RF2), apertura del caso en la primera
+- [x] **T2.4** `POST /api/transacciones`: bandas (RF2), apertura del caso en la primera
       marca, suma a un caso abierto de 48 h y subida de banda.
       *Verifica:* pruebas de cada banda y de la subida de media a alta y a crítica.
+      2026-11-08: `app/riesgo/flujo.py`, `app/db/repositorio_en_vivo.py` y
+      `app/api/rutas_en_vivo.py`. La tarjeta se nombra por alias (TAR-0001); una compra de
+      una tarjeta bloqueada se rechaza y cuenta como dinero detenido; reenviar la misma
+      compra no la duplica. 19 pruebas, una con el modelo real.
 - [ ] **T2.5** Semilla del simulador: un tramo nocturno de la partición de prueba con el
       historial de 30 días de esas tarjetas (`scripts/generar_semilla.py`).
 
