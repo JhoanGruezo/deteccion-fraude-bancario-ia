@@ -137,6 +137,13 @@ export const almacen = {
       /* sin almacenamiento: se recordará solo durante esta sesión */
     }
   },
+  borrar(clave) {
+    try {
+      window.localStorage.removeItem(clave);
+    } catch {
+      /* sin almacenamiento: no hay nada que borrar */
+    }
+  },
 };
 
 /**

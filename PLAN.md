@@ -129,22 +129,35 @@ del resto.
       CSRF por cabecera; 5 intentos fallidos bloquean 15 min; mismo mensaje exista o no el
       usuario. Las decisiones quedan firmadas por la sesión e ignoran el nombre que mande el
       cuerpo. 9 pruebas con la autenticación encendida.
-- [ ] **T4.2** Simulador (RF8): reproducción con reloj acelerado, pausa, velocidad,
+- [x] **T4.2** Simulador (RF8): reproducción con reloj acelerado, pausa, velocidad,
       inyección manual y resumen final.
-- [ ] **T4.3** Vistas nuevas: Ingreso, En vivo, Bloqueos, Buzón del titular y Supervisión
+- [x] **T4.3** Vistas nuevas: Ingreso, En vivo, Bloqueos, Buzón del titular y Supervisión
       (RF9).
-- [ ] **T4.4** Bandeja y detalle con los estados, el actor, el aviso y el desbloqueo.
-- [ ] **T4.5** Pulido visual de toda la app (claro y oscuro, estados vacíos, teclado,
+- [x] **T4.4** Bandeja y detalle con los estados, el actor, el aviso y el desbloqueo.
+- [x] **T4.5** Pulido visual de toda la app (claro y oscuro, estados vacíos, teclado,
       ancho de teléfono en el buzón).
+      2026-11-09: 9 módulos JS nuevos (sesión, sondeo, piezas, desbloqueo, en vivo, bloqueos,
+      buzón, supervisión, "qué hizo el sistema"); sin innerHTML ni eval; CSP sin errores;
+      revisado en Chrome en claro y oscuro, con los dos roles, y a 390 px de ancho.
 
 ## Fase 5 · Medición y ataques (15 al 17-nov)
 
-- [ ] **T5.1** `eval/`: casos de triaje con decisión esperada verificada a mano y la
+- [x] **T5.1** `eval/`: casos de triaje con decisión esperada verificada a mano y la
       comparación agente contra regla en la banda alta (prueba de necesidad, §7 del análisis).
-- [ ] **T5.2** Ataques propios por comercio malicioso y por la API (formato del reto 12),
+      2026-11-09: `eval/medir_momento3.py`. Banda alta: el agente bloqueó 3 casos (los 3 con
+      fraude, precisión 1,0) y pidió verificación en 10 (2 con fraude, que la regla bloqueó en la
+      segunda compra). "Bloquear siempre" habría tenido precisión 0,385, con 8 clientes honestos
+      bloqueados.
+- [x] **T5.2** Ataques propios por comercio malicioso y por la API (formato del reto 12),
       con la traza completa y el antes y el después de cada defensa.
-- [ ] **T5.3** Cifras finales de §7 de la SPEC contra la línea base, con fecha
+      2026-11-09: `eval/ataques_momento3.py`: resisten 12 de 12 (`eval/resultados/ataques_momento3_2026-11-09.json`).
+- [x] **T5.3** Cifras finales de §7 de la SPEC contra la línea base, con fecha
       (`docs/decisiones/semana14.md`).
+      2026-11-09: `eval/resultados/momento3_2026-11-09_{base,ia_caida}.json`. A tiempo real, M3
+      detiene el 71,4 % del fraude (M2: 29,3 % de noche sin turno, 34,9 % con cola de 90 min y
+      61,8 % con un analista instantáneo). Con la IA caída, 61,8 %. Bloqueo a 5,7 s de la compra
+      (mediana). LLM: 0,054 USD por la noche completa. La simulación a 3600x distorsiona el dinero:
+      se mide trasladando cada bloqueo a tiempo real (ver el docstring del script).
 - [ ] **T5.4** Auditoría con los agentes `probador-fraude`, `validador-fraude` y
       `jefe-fraude`, y corrección de lo que encuentren.
 

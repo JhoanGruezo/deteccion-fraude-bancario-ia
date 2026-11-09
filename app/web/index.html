@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
-  <title>Riesgo · Analista</title>
+  <title>Riesgo · Centro de fraude</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l9 3.4v6.8c0 5-3.8 9.3-9 10-5.2-.7-9-5-9-10V5.4z' fill='%231f5fbf'/%3E%3Cpath d='M8 12.2l2.8 2.8L16.5 9' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/static/estilos.css">
   <script src="/static/js/tema-inicial.js"></script>
   <script type="module" src="/static/js/principal.js"></script>
 </head>
 <body>
-  <a class="saltar" href="#detalle">Saltar al detalle del caso</a>
+  <a class="saltar" id="saltar" href="#detalle">Saltar al detalle del caso</a>
 
   <svg class="sprite" aria-hidden="true" focusable="false">
     <defs>
@@ -40,197 +40,578 @@
       <symbol id="i-cerrar" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
       <symbol id="i-reloj" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
       <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></symbol>
+      <!-- Momento 3 -->
+      <symbol id="i-persona" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c1.2-3.8 4-5.5 7.5-5.5s6.3 1.7 7.5 5.5"/></symbol>
+      <symbol id="i-regla" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol>
+      <symbol id="i-candado" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></symbol>
+      <symbol id="i-candado-abierto" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 7.6-1.8"/></symbol>
+      <symbol id="i-pulso" viewBox="0 0 24 24"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></symbol>
+      <symbol id="i-telefono" viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></symbol>
+      <symbol id="i-flecha" viewBox="0 0 24 24"><path d="M5 12h13M13 6.5l5.5 5.5-5.5 5.5"/></symbol>
+      <symbol id="i-copiar" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11" height="11" rx="2"/><path d="M15.5 8.5V6a1.5 1.5 0 0 0-1.5-1.5H6A1.5 1.5 0 0 0 4.5 6v8A1.5 1.5 0 0 0 6 15.5h2.5"/></symbol>
+      <symbol id="i-rayo" viewBox="0 0 24 24"><path d="M13 2.5L4.5 13.5h6.5l-1 8 8.5-11h-6.5z"/></symbol>
+      <symbol id="i-filtro" viewBox="0 0 24 24"><path d="M4 5h16l-6.5 8v5.5l-3 1.5v-7z"/></symbol>
+      <symbol id="i-pausa" viewBox="0 0 24 24"><path d="M8.5 5v14M15.5 5v14"/></symbol>
+      <symbol id="i-detener" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5"/></symbol>
+      <symbol id="i-salir" viewBox="0 0 24 24"><path d="M14 4.5h4.5a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5H14M10 16.5L5.5 12 10 7.5M5.5 12H15"/></symbol>
+      <symbol id="i-bandeja" viewBox="0 0 24 24"><path d="M3.5 13.5l2.5-8h12l2.5 8v5a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5z"/><path d="M3.5 13.5h5l1.5 2.5h4l1.5-2.5h5"/></symbol>
+      <symbol id="i-tablero" viewBox="0 0 24 24"><path d="M4 19.5a8 8 0 1 1 16 0"/><path d="M12 19.5l4-6"/><path d="M6.5 15h.01M8 11.2h.01M12 9.5h.01M16 11.2h.01"/></symbol>
     </defs>
   </svg>
 
-  <header class="barra">
-    <div class="marca">
-      <svg class="marca__icono" aria-hidden="true"><use href="#i-escudo"/></svg>
-      <div>
-        <p class="marca__titulo">Riesgo · Analista</p>
-        <p class="marca__sub">Casos marcados por el motor de fraude</p>
-      </div>
-    </div>
-    <ul class="sistema" id="estado-sistema" aria-label="Estado del sistema"></ul>
-    <div class="barra__acciones">
-      <button type="button" class="boton boton--fantasma" id="boton-demo" hidden>
-        <svg class="icono" aria-hidden="true"><use href="#i-ajustes"/></svg><span>Demo</span>
-      </button>
-      <button type="button" class="boton boton--fantasma boton--icono" id="boton-tema" aria-label="Cambiar tema">
-        <svg class="icono icono--sol" aria-hidden="true"><use href="#i-sol"/></svg>
-        <svg class="icono icono--luna" aria-hidden="true"><use href="#i-luna"/></svg>
-      </button>
-    </div>
-  </header>
-
-  <div class="banda banda--global" id="banda-global" role="alert" hidden></div>
-
-  <main class="tablero">
-    <!-- Columna 1: bandeja ---------------------------------------------------------->
-    <section class="columna columna--bandeja" aria-labelledby="titulo-bandeja">
-      <div class="bandeja__cabecera">
-        <h1 class="titulo-columna" id="titulo-bandeja">Bandeja</h1>
-        <span class="bandeja__total" id="bandeja-total" aria-live="polite"></span>
-      </div>
-      <div class="contadores" id="contadores" role="group" aria-label="Filtrar por recomendación"></div>
-      <form class="filtros" id="filtros" role="search" aria-label="Filtros de la bandeja">
-        <label class="campo campo--busqueda">
-          <span class="solo-lector">Buscar</span>
-          <svg class="icono" aria-hidden="true"><use href="#i-buscar"/></svg>
-          <input type="search" id="filtro-q" name="q" placeholder="Caso o últimos 4 de la tarjeta" autocomplete="off" maxlength="100">
-        </label>
-        <div class="filtros__fila">
-          <label class="campo campo--select"><span class="solo-lector">Fuente</span>
-            <select id="filtro-fuente" name="fuente">
-              <option value="">Todas las fuentes</option>
-              <option value="sparkov">Sparkov</option>
-              <option value="sinteticos">Sintéticos</option>
-            </select>
-          </label>
-          <label class="campo campo--select"><span class="solo-lector">Estado</span>
-            <select id="filtro-estado" name="estado">
-              <option value="">Todos los estados</option>
-              <option value="pendiente">Pendientes</option>
-              <option value="bloqueo_confirmado">Bloqueo confirmado</option>
-              <option value="escalado">Escalados</option>
-              <option value="descartado">Descartados</option>
-            </select>
-          </label>
-          <label class="campo campo--select"><span class="solo-lector">Orden</span>
-            <select id="filtro-orden" name="orden">
-              <option value="score">Mayor riesgo primero</option>
-              <option value="fecha">Más recientes primero</option>
-            </select>
-          </label>
+  <!-- ===== Pantalla de ingreso ========================================================== -->
+  <section class="ingreso" id="pantalla-ingreso" hidden aria-labelledby="ingreso-titulo">
+    <button type="button" class="boton boton--fantasma boton--icono ingreso__tema" id="ingreso-tema" aria-label="Cambiar tema">
+      <svg class="icono icono--sol" aria-hidden="true"><use href="#i-sol"/></svg>
+      <svg class="icono icono--luna" aria-hidden="true"><use href="#i-luna"/></svg>
+    </button>
+    <div class="ingreso__tarjeta">
+      <div class="ingreso__marca">
+        <svg class="marca__icono" aria-hidden="true"><use href="#i-escudo"/></svg>
+        <div>
+          <p class="marca__titulo">Riesgo</p>
+          <p class="marca__sub">Centro de monitoreo de fraude</p>
         </div>
+      </div>
+      <h1 class="ingreso__titulo" id="ingreso-titulo">Inicia sesión</h1>
+      <p class="ingreso__texto">Usa tu usuario de analista o de supervisor. Las decisiones y los desbloqueos quedan firmados con él.</p>
+      <p class="ingreso__nota" id="ingreso-nota" role="status" hidden></p>
+      <form class="ingreso__form" id="form-ingreso" novalidate>
+        <label class="campo-vertical">
+          <span>Usuario</span>
+          <input type="text" id="ingreso-usuario" name="usuario" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="60" required>
+        </label>
+        <label class="campo-vertical">
+          <span>Contraseña</span>
+          <input type="password" id="ingreso-clave" name="clave" autocomplete="current-password" maxlength="200" required>
+        </label>
+        <p class="dialogo__error" id="ingreso-error" role="alert" hidden></p>
+        <button type="submit" class="boton boton--primario boton--grande" id="ingreso-boton">Ingresar</button>
       </form>
-      <ol class="lista-casos" id="lista-casos" role="listbox" tabindex="0" aria-label="Casos marcados. Use flecha arriba y abajo para moverse."></ol>
-      <p class="atajos" aria-hidden="true"><kbd>↑</kbd> <kbd>↓</kbd> para moverse entre casos</p>
-    </section>
+      <p class="ingreso__pie">
+        <svg class="icono" aria-hidden="true"><use href="#i-candado"/></svg>
+        Sesión con cookie protegida. Tras 5 intentos fallidos el usuario se bloquea 15 minutos.
+      </p>
+    </div>
+  </section>
 
-    <!-- Columna 2: detalle ------------------------------------------------------------>
-    <section class="columna columna--detalle" id="detalle" tabindex="-1" aria-label="Detalle del caso">
-      <div class="vacio" id="detalle-vacio">
-        <svg class="vacio__icono" aria-hidden="true"><use href="#i-documento"/></svg>
-        <p class="vacio__titulo">Selecciona un caso de la bandeja</p>
-        <p class="vacio__texto">Verás qué pasó, por qué es un riesgo para ese cliente y qué se recomienda bloquear, con la evidencia que lo respalda.</p>
+  <!-- ===== Aplicación =================================================================== -->
+  <div class="aplicacion" id="aplicacion" hidden>
+    <header class="cabecera">
+      <div class="barra">
+        <div class="marca">
+          <svg class="marca__icono" aria-hidden="true"><use href="#i-escudo"/></svg>
+          <div>
+            <p class="marca__titulo">Riesgo</p>
+            <p class="marca__sub">Monitoreo de fraude transaccional</p>
+          </div>
+        </div>
+        <ul class="sistema" id="estado-sistema" aria-label="Estado del sistema"></ul>
+        <div class="usuario" aria-label="Sesión">
+          <span class="usuario__avatar" aria-hidden="true"><svg class="icono"><use href="#i-persona"/></svg></span>
+          <span class="usuario__datos">
+            <span class="usuario__nombre" id="usuario-nombre"></span>
+            <span class="rol" id="usuario-rol"></span>
+          </span>
+        </div>
+        <div class="barra__acciones">
+          <button type="button" class="boton boton--fantasma" id="boton-demo" hidden>
+            <svg class="icono" aria-hidden="true"><use href="#i-ajustes"/></svg><span>Demo</span>
+          </button>
+          <button type="button" class="boton boton--fantasma boton--icono" id="boton-tema" aria-label="Cambiar tema">
+            <svg class="icono icono--sol" aria-hidden="true"><use href="#i-sol"/></svg>
+            <svg class="icono icono--luna" aria-hidden="true"><use href="#i-luna"/></svg>
+          </button>
+          <button type="button" class="boton boton--fantasma" id="boton-salir">
+            <svg class="icono" aria-hidden="true"><use href="#i-salir"/></svg><span class="barra__texto-boton">Salir</span>
+          </button>
+        </div>
+      </div>
+      <nav class="pestanas" aria-label="Secciones">
+        <a class="pestana" data-vista="casos" href="#/casos"><svg class="icono" aria-hidden="true"><use href="#i-bandeja"/></svg><span>Casos</span></a>
+        <a class="pestana" data-vista="en-vivo" href="#/en-vivo"><svg class="icono" aria-hidden="true"><use href="#i-pulso"/></svg><span>En vivo</span></a>
+        <a class="pestana" data-vista="bloqueos" href="#/bloqueos"><svg class="icono" aria-hidden="true"><use href="#i-candado"/></svg><span>Bloqueos</span></a>
+        <a class="pestana" data-vista="buzon" href="#/buzon"><svg class="icono" aria-hidden="true"><use href="#i-telefono"/></svg><span>Buzón del titular</span></a>
+        <a class="pestana" data-vista="supervision" href="#/supervision"><svg class="icono" aria-hidden="true"><use href="#i-tablero"/></svg><span>Supervisión</span></a>
+      </nav>
+    </header>
+
+    <div class="banda banda--global" id="banda-global" role="alert" hidden></div>
+
+    <!-- ===== Vista: Casos (tres columnas) ================================================ -->
+    <main class="tablero" id="vista-casos" hidden>
+      <!-- Columna 1: bandeja ---------------------------------------------------------->
+      <section class="columna columna--bandeja" aria-labelledby="titulo-bandeja">
+        <div class="bandeja__cabecera">
+          <h1 class="titulo-columna" id="titulo-bandeja">Bandeja</h1>
+          <span class="bandeja__total" id="bandeja-total" aria-live="polite"></span>
+          <button type="button" class="boton boton--fantasma boton--icono boton--mini" id="bandeja-actualizar" aria-label="Actualizar la bandeja" title="Actualizar">
+            <svg class="icono" aria-hidden="true"><use href="#i-regenerar"/></svg>
+          </button>
+        </div>
+        <div class="segmento segmento--lleno" id="filtro-origen" role="group" aria-label="Origen de los casos"></div>
+        <div class="contadores" id="contadores" role="group" aria-label="Filtrar por recomendación"></div>
+        <form class="filtros" id="filtros" role="search" aria-label="Filtros de la bandeja">
+          <label class="campo campo--busqueda">
+            <span class="solo-lector">Buscar</span>
+            <svg class="icono" aria-hidden="true"><use href="#i-buscar"/></svg>
+            <input type="search" id="filtro-q" name="q" placeholder="Caso o últimos 4 de la tarjeta" autocomplete="off" maxlength="100">
+          </label>
+          <div class="filtros__fila">
+            <label class="campo campo--select"><span class="solo-lector">Fuente</span>
+              <select id="filtro-fuente" name="fuente">
+                <option value="">Todas las fuentes</option>
+                <option value="sparkov">Sparkov</option>
+                <option value="sinteticos">Sintéticos</option>
+              </select>
+            </label>
+            <label class="campo campo--select"><span class="solo-lector">Estado</span>
+              <select id="filtro-estado" name="estado">
+                <option value="">Todos los estados</option>
+                <option value="pendiente">Pendientes</option>
+                <option value="bloqueado">Bloqueados</option>
+                <option value="en_verificacion">En verificación</option>
+                <option value="desbloqueado">Desbloqueados</option>
+                <option value="bloqueo_confirmado">Bloqueo confirmado</option>
+                <option value="escalado">Escalados</option>
+                <option value="descartado">Descartados</option>
+              </select>
+            </label>
+            <label class="campo campo--select"><span class="solo-lector">Orden</span>
+              <select id="filtro-orden" name="orden">
+                <option value="score">Mayor riesgo primero</option>
+                <option value="recientes">Abiertos más recientemente</option>
+                <option value="fecha">Más recientes por fecha del caso</option>
+              </select>
+            </label>
+          </div>
+        </form>
+        <ol class="lista-casos" id="lista-casos" role="listbox" tabindex="0" aria-label="Casos marcados. Use flecha arriba y abajo para moverse."></ol>
+        <p class="atajos" aria-hidden="true"><kbd>↑</kbd> <kbd>↓</kbd> para moverse entre casos</p>
+      </section>
+
+      <!-- Columna 2: detalle ------------------------------------------------------------>
+      <section class="columna columna--detalle" id="detalle" tabindex="-1" aria-label="Detalle del caso">
+        <div class="vacio" id="detalle-vacio">
+          <svg class="vacio__icono" aria-hidden="true"><use href="#i-documento"/></svg>
+          <p class="vacio__titulo">Selecciona un caso de la bandeja</p>
+          <p class="vacio__texto">Verás qué pasó, por qué es un riesgo para ese cliente y qué se recomienda bloquear, con la evidencia que lo respalda.</p>
+        </div>
+
+        <div class="detalle" id="detalle-contenido" hidden>
+          <div class="banda" id="banda-caso" role="alert" hidden></div>
+
+          <header class="caso" id="caso-cabecera">
+            <div class="caso__fila">
+              <h2 class="caso__id" id="caso-id"></h2>
+              <span class="caso__tarjeta mono" id="caso-tarjeta"></span>
+              <span class="etiqueta" id="caso-fuente"></span>
+              <span class="etiqueta etiqueta--vivo" id="caso-origen" hidden></span>
+              <span class="estado" id="caso-estado"></span>
+              <span id="caso-banda" hidden></span>
+            </div>
+            <div class="veredicto" id="caso-veredicto">
+              <p class="veredicto__nivel" id="caso-nivel"></p>
+              <p class="veredicto__motivo" id="caso-motivo"></p>
+            </div>
+            <dl class="datos-caso" id="caso-datos"></dl>
+          </header>
+
+          <section class="seccion sistema-caso" id="seccion-sistema" aria-labelledby="titulo-sistema" hidden>
+            <div class="seccion__cabecera">
+              <h3 class="seccion__titulo" id="titulo-sistema">Qué hizo el sistema</h3>
+              <p class="seccion__ayuda"></p>
+            </div>
+            <div class="sistema-caso__cuerpo"></div>
+          </section>
+
+          <section class="seccion seccion--explicacion" aria-labelledby="titulo-explicacion">
+            <div class="seccion__cabecera">
+              <h3 class="seccion__titulo" id="titulo-explicacion">Explicación del agente</h3>
+              <span class="origen" id="explicacion-origen" hidden></span>
+              <button type="button" class="boton boton--secundario boton--chico" id="boton-regenerar">
+                <svg class="icono" aria-hidden="true"><use href="#i-regenerar"/></svg><span>Regenerar</span>
+              </button>
+            </div>
+            <p class="estado-vivo" id="explicacion-estado" aria-live="polite"></p>
+            <div class="bloques" id="explicacion-bloques" aria-live="off">
+              <article class="bloque" data-campo="que_paso">
+                <h4 class="bloque__titulo">Qué pasó</h4>
+                <p class="bloque__texto"></p>
+              </article>
+              <article class="bloque" data-campo="por_que_es_riesgo">
+                <h4 class="bloque__titulo">Por qué es riesgo</h4>
+                <p class="bloque__texto"></p>
+                <div class="senales" id="senales-citadas" aria-label="Señales citadas"></div>
+              </article>
+              <article class="bloque bloque--recomendacion" data-campo="recomendacion">
+                <h4 class="bloque__titulo">Recomendación</h4>
+                <p class="bloque__objetivo" id="recomendacion-objetivo"></p>
+                <p class="bloque__texto"></p>
+                <p class="bloque__nota" id="recomendacion-nivel"></p>
+              </article>
+              <article class="bloque" data-campo="lo_que_no_se_sabe">
+                <h4 class="bloque__titulo">Lo que no se sabe</h4>
+                <p class="bloque__texto"></p>
+              </article>
+            </div>
+
+            <div class="propuestas" id="propuestas"></div>
+
+            <div class="decision-manual">
+              <p class="decision-manual__titulo">Decisión del analista</p>
+              <div class="decision-manual__botones">
+                <button type="button" class="boton boton--nivel" data-accion="confirmar_bloqueo">Confirmar bloqueo</button>
+                <button type="button" class="boton boton--secundario" data-accion="escalar">Escalar</button>
+                <button type="button" class="boton boton--secundario" data-accion="descartar">Descartar</button>
+              </div>
+            </div>
+            <ol class="decisiones" id="decisiones" aria-label="Decisiones registradas"></ol>
+          </section>
+
+          <section class="seccion" aria-labelledby="titulo-linea">
+            <div class="seccion__cabecera">
+              <h3 class="seccion__titulo" id="titulo-linea">Línea de tiempo</h3>
+              <p class="seccion__ayuda" id="linea-ayuda"></p>
+            </div>
+            <ol class="linea" id="linea-tiempo"></ol>
+          </section>
+
+          <section class="seccion" aria-labelledby="titulo-razones">
+            <div class="seccion__cabecera">
+              <h3 class="seccion__titulo" id="titulo-razones">Razones del sistema</h3>
+              <p class="seccion__ayuda">Rareza: qué tan inusual es frente a las transacciones normales. Peso: cuánto empujó el score.</p>
+            </div>
+            <div id="razones"></div>
+          </section>
+
+          <section class="seccion" id="perfil-seccion" aria-labelledby="titulo-perfil">
+            <div class="seccion__cabecera">
+              <h3 class="seccion__titulo" id="titulo-perfil">Perfil habitual de la tarjeta</h3>
+              <p class="seccion__ayuda">Calculado solo con transacciones anteriores al caso.</p>
+            </div>
+            <div id="perfil"></div>
+          </section>
+        </div>
+      </section>
+
+      <!-- Columna 3: traza y conversación ------------------------------------------------->
+      <aside class="columna columna--lateral" aria-label="Agente">
+        <section class="panel panel--traza" aria-labelledby="titulo-traza">
+          <div class="panel__cabecera">
+            <h2 class="titulo-columna" id="titulo-traza">Traza de la tarea</h2>
+            <span class="panel__ayuda">en vivo</span>
+          </div>
+          <div class="traza" id="traza">
+            <p class="traza__vacia">Al abrir un caso verás aquí cada paso del agente: herramientas, llamadas al modelo, reintentos y costo.</p>
+          </div>
+        </section>
+
+        <section class="panel panel--conversacion" aria-labelledby="titulo-conversacion">
+          <div class="panel__cabecera">
+            <h2 class="titulo-columna" id="titulo-conversacion">Preguntar al agente</h2>
+            <span class="panel__ayuda" id="conversacion-caso"></span>
+          </div>
+          <div class="conversacion" id="conversacion" aria-live="polite"></div>
+          <form class="pregunta" id="form-pregunta">
+            <label class="solo-lector" for="campo-pregunta">Pregunta sobre el caso abierto</label>
+            <textarea id="campo-pregunta" rows="2" maxlength="500" placeholder="Abre un caso para preguntar" disabled></textarea>
+            <button type="submit" class="boton boton--primario boton--icono" id="boton-preguntar" aria-label="Enviar pregunta" disabled>
+              <svg class="icono" aria-hidden="true"><use href="#i-enviar"/></svg>
+            </button>
+          </form>
+        </section>
+      </aside>
+    </main>
+
+    <!-- ===== Vista: En vivo ============================================================== -->
+    <main class="pagina pagina--en-vivo" id="vista-en-vivo" hidden aria-labelledby="titulo-en-vivo">
+      <header class="pagina__cabecera">
+        <div>
+          <h1 class="pagina__titulo" id="titulo-en-vivo" tabindex="-1">En vivo</h1>
+          <p class="pagina__sub">El simulador reproduce las compras del dataset en el orden en que ocurrieron. Cada una pasa por el motor de riesgo; si abre un caso, el agente hace el triaje y puede bloquear la tarjeta.</p>
+        </div>
+      </header>
+
+      <div class="vivo__arriba">
+        <section class="tarjeta-panel simulador" aria-labelledby="titulo-simulador">
+          <div class="simulador__principal">
+            <div class="simulador__fila">
+              <h2 class="titulo-columna" id="titulo-simulador">Reloj del dataset</h2>
+              <span class="estado-sim" id="sim-estado">—</span>
+            </div>
+            <p class="simulador__reloj" id="sim-reloj">—</p>
+            <p class="simulador__rango" id="sim-rango"></p>
+            <div class="progreso" id="sim-progreso" role="progressbar" aria-label="Avance del simulador" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <span class="progreso__relleno" id="sim-progreso-relleno"></span>
+            </div>
+            <p class="simulador__progreso-texto"><span id="sim-progreso-texto"></span><span id="sim-velocidad-texto"></span></p>
+          </div>
+          <div class="simulador__lado">
+            <div class="simulador__controles" id="sim-controles" hidden>
+              <label class="campo-vertical">
+                <span>Velocidad <em>(segundos del dataset por segundo real)</em></span>
+                <select id="sim-velocidad"></select>
+              </label>
+              <div class="simulador__botones">
+                <button type="button" class="boton boton--primario" id="sim-iniciar" hidden><svg class="icono" aria-hidden="true"><use href="#i-inicio"/></svg><span>Iniciar</span></button>
+                <button type="button" class="boton boton--secundario" id="sim-pausar" hidden><svg class="icono" aria-hidden="true"><use href="#i-pausa"/></svg><span>Pausar</span></button>
+                <button type="button" class="boton boton--primario" id="sim-reanudar" hidden><svg class="icono" aria-hidden="true"><use href="#i-inicio"/></svg><span>Reanudar</span></button>
+                <button type="button" class="boton boton--secundario" id="sim-detener" hidden><svg class="icono" aria-hidden="true"><use href="#i-detener"/></svg><span>Detener</span></button>
+              </div>
+            </div>
+            <p class="nota-rol" id="sim-solo-lectura" hidden>
+              <svg class="icono" aria-hidden="true"><use href="#i-info"/></svg>
+              <span>Solo un supervisor puede iniciar, pausar o cambiar la velocidad del simulador. Tú ves su estado en tiempo real.</span>
+            </p>
+            <div id="sim-ayuda"></div>
+          </div>
+        </section>
+
+        <dl class="cifras-vivo">
+          <div class="cifra-vivo">
+            <dt>Procesadas</dt>
+            <dd class="cifra-vivo__valor" id="vivo-procesadas">—</dd>
+            <dd class="cifra-vivo__nota" id="vivo-repetidas"></dd>
+          </div>
+          <div class="cifra-vivo">
+            <dt>Casos abiertos</dt>
+            <dd class="cifra-vivo__valor" id="vivo-casos">—</dd>
+            <dd class="cifra-vivo__nota">por el motor en este recorrido</dd>
+          </div>
+          <div class="cifra-vivo cifra-vivo--alerta">
+            <dt>Compras rechazadas</dt>
+            <dd class="cifra-vivo__valor" id="vivo-rechazadas">—</dd>
+            <dd class="cifra-vivo__nota">la tarjeta ya estaba bloqueada</dd>
+          </div>
+          <div class="cifra-vivo cifra-vivo--alerta">
+            <dt>Monto detenido</dt>
+            <dd class="cifra-vivo__valor" id="vivo-monto">—</dd>
+            <dd class="cifra-vivo__nota">en compras rechazadas</dd>
+          </div>
+        </dl>
       </div>
 
-      <div class="detalle" id="detalle-contenido" hidden>
-        <div class="banda" id="banda-caso" role="alert" hidden></div>
+      <details class="plegable" id="inyectar">
+        <summary class="plegable__resumen">
+          <svg class="icono plegable__icono" aria-hidden="true"><use href="#i-rayo"/></svg>
+          <span class="plegable__textos">
+            <span class="plegable__titulo">Inyectar una compra</span>
+            <span class="plegable__sub">Manda al motor una transacción hecha a mano, como si llegara del datáfono.</span>
+          </span>
+        </summary>
+        <div class="plegable__cuerpo">
+          <form class="form-inyectar" id="form-inyectar" novalidate>
+            <label class="campo-vertical">
+              <span>Tarjeta (alias)</span>
+              <input type="text" id="inyectar-tarjeta" list="lista-tarjetas" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20" placeholder="TAR-0001" required>
+              <datalist id="lista-tarjetas"></datalist>
+            </label>
+            <label class="campo-vertical">
+              <span>Monto (US$)</span>
+              <input type="number" id="inyectar-monto" min="0.01" max="1000000" step="0.01" inputmode="decimal" placeholder="123.45" required>
+            </label>
+            <label class="campo-vertical">
+              <span>Categoría</span>
+              <select id="inyectar-categoria">
+                <option value="shopping_net">Compras en línea (shopping_net)</option>
+                <option value="shopping_pos">Compras presenciales (shopping_pos)</option>
+                <option value="misc_net">Varios en línea (misc_net)</option>
+                <option value="misc_pos">Varios presencial (misc_pos)</option>
+                <option value="grocery_net">Mercado en línea (grocery_net)</option>
+                <option value="grocery_pos">Mercado presencial (grocery_pos)</option>
+                <option value="gas_transport">Gasolina y transporte (gas_transport)</option>
+                <option value="food_dining">Restaurantes (food_dining)</option>
+                <option value="entertainment">Entretenimiento (entertainment)</option>
+                <option value="health_fitness">Salud y ejercicio (health_fitness)</option>
+                <option value="home">Hogar (home)</option>
+                <option value="kids_pets">Niños y mascotas (kids_pets)</option>
+                <option value="personal_care">Cuidado personal (personal_care)</option>
+                <option value="travel">Viajes (travel)</option>
+              </select>
+            </label>
+            <label class="campo-vertical">
+              <span>Fecha y hora del dataset <em>(opcional)</em></span>
+              <input type="datetime-local" id="inyectar-fecha" step="1">
+              <small>Vacía: 10 minutos después de la última compra de la tarjeta.</small>
+            </label>
+            <div class="campo-vertical form-inyectar__ancho">
+              <label for="inyectar-comercio">Comercio <em>(texto libre)</em></label>
+              <div class="campo-con-boton">
+                <input type="text" id="inyectar-comercio" maxlength="120" autocomplete="off" placeholder="Nombre del comercio">
+                <button type="button" class="boton boton--secundario boton--chico" id="inyectar-ejemplo">Probar con instrucciones</button>
+              </div>
+            </div>
+            <details class="form-inyectar__ancho subplegable">
+              <summary>Ubicación de la compra <em>(opcional: por defecto, el domicilio del titular)</em></summary>
+              <div class="subplegable__campos">
+                <label class="campo-vertical"><span>Latitud</span><input type="number" id="inyectar-latitud" min="-90" max="90" step="any" inputmode="decimal"></label>
+                <label class="campo-vertical"><span>Longitud</span><input type="number" id="inyectar-longitud" min="-180" max="180" step="any" inputmode="decimal"></label>
+              </div>
+            </details>
+            <p class="nota-seguridad form-inyectar__ancho">
+              <svg class="icono" aria-hidden="true"><use href="#i-escudo"/></svg>
+              <span>El comercio se trata como <strong>dato, no como instrucción</strong>. Si trae órdenes («ignora tus reglas…»), el agente las lee como el nombre del comercio y el aviso al titular se valida antes de enviarse.</span>
+            </p>
+            <p class="dialogo__error form-inyectar__ancho" id="inyectar-error" role="alert" hidden></p>
+            <div class="form-inyectar__acciones form-inyectar__ancho">
+              <button type="submit" class="boton boton--primario" id="inyectar-boton"><svg class="icono" aria-hidden="true"><use href="#i-rayo"/></svg><span>Evaluar compra</span></button>
+            </div>
+          </form>
+          <div class="inyectar__resultado" id="inyectar-resultado" aria-live="polite"></div>
+        </div>
+      </details>
 
-        <header class="caso" id="caso-cabecera">
-          <div class="caso__fila">
-            <h2 class="caso__id" id="caso-id"></h2>
-            <span class="caso__tarjeta mono" id="caso-tarjeta"></span>
-            <span class="etiqueta" id="caso-fuente"></span>
-            <span class="estado" id="caso-estado"></span>
-          </div>
-          <div class="veredicto" id="caso-veredicto">
-            <p class="veredicto__nivel" id="caso-nivel"></p>
-            <p class="veredicto__motivo" id="caso-motivo"></p>
-          </div>
-          <dl class="datos-caso" id="caso-datos"></dl>
-        </header>
-
-        <section class="seccion seccion--explicacion" aria-labelledby="titulo-explicacion">
-          <div class="seccion__cabecera">
-            <h3 class="seccion__titulo" id="titulo-explicacion">Explicación del agente</h3>
-            <span class="origen" id="explicacion-origen" hidden></span>
-            <button type="button" class="boton boton--secundario boton--chico" id="boton-regenerar">
-              <svg class="icono" aria-hidden="true"><use href="#i-regenerar"/></svg><span>Regenerar</span>
-            </button>
-          </div>
-          <p class="estado-vivo" id="explicacion-estado" aria-live="polite"></p>
-          <div class="bloques" id="explicacion-bloques" aria-live="off">
-            <article class="bloque" data-campo="que_paso">
-              <h4 class="bloque__titulo">Qué pasó</h4>
-              <p class="bloque__texto"></p>
-            </article>
-            <article class="bloque" data-campo="por_que_es_riesgo">
-              <h4 class="bloque__titulo">Por qué es riesgo</h4>
-              <p class="bloque__texto"></p>
-              <div class="senales" id="senales-citadas" aria-label="Señales citadas"></div>
-            </article>
-            <article class="bloque bloque--recomendacion" data-campo="recomendacion">
-              <h4 class="bloque__titulo">Recomendación</h4>
-              <p class="bloque__objetivo" id="recomendacion-objetivo"></p>
-              <p class="bloque__texto"></p>
-              <p class="bloque__nota" id="recomendacion-nivel"></p>
-            </article>
-            <article class="bloque" data-campo="lo_que_no_se_sabe">
-              <h4 class="bloque__titulo">Lo que no se sabe</h4>
-              <p class="bloque__texto"></p>
-            </article>
-          </div>
-
-          <div class="propuestas" id="propuestas"></div>
-
-          <div class="decision-manual">
-            <p class="decision-manual__titulo">Decisión del analista</p>
-            <div class="decision-manual__botones">
-              <button type="button" class="boton boton--nivel" data-accion="confirmar_bloqueo">Confirmar bloqueo</button>
-              <button type="button" class="boton boton--secundario" data-accion="escalar">Escalar</button>
-              <button type="button" class="boton boton--secundario" data-accion="descartar">Descartar</button>
+      <div class="vivo__columnas">
+        <section class="tarjeta-panel panel-vivo" aria-labelledby="titulo-feed">
+          <div class="panel-vivo__cabecera">
+            <h2 class="titulo-columna" id="titulo-feed">Transacciones</h2>
+            <span class="panel__ayuda" id="feed-total"></span>
+            <div class="panel-vivo__herramientas">
+              <label class="casilla"><input type="checkbox" id="feed-solo-alerta"><span>Solo con alerta</span></label>
+              <button type="button" class="boton boton--fantasma boton--chico" id="feed-pausa" aria-pressed="false">
+                <svg class="icono" aria-hidden="true"><use href="#i-pausa"/></svg><span>Pausar feed</span>
+              </button>
             </div>
           </div>
-          <ol class="decisiones" id="decisiones" aria-label="Decisiones registradas"></ol>
+          <div class="feed__encabezado" aria-hidden="true">
+            <span>Hora</span><span>Tarjeta</span><span>Comercio</span><span class="feed__derecha">Monto</span><span>Score</span><span>Banda</span><span>Caso</span>
+          </div>
+          <ol class="feed" id="feed" aria-label="Transacciones evaluadas, la más reciente primero"></ol>
         </section>
 
-        <section class="seccion" aria-labelledby="titulo-linea">
-          <div class="seccion__cabecera">
-            <h3 class="seccion__titulo" id="titulo-linea">Línea de tiempo</h3>
-            <p class="seccion__ayuda" id="linea-ayuda"></p>
+        <aside class="tarjeta-panel panel-vivo panel-vivo--decisiones" aria-labelledby="titulo-decisiones-vivo">
+          <div class="panel-vivo__cabecera">
+            <h2 class="titulo-columna" id="titulo-decisiones-vivo">Decisiones recientes</h2>
+            <a class="enlace-suave" href="#/bloqueos">Ver bloqueos</a>
           </div>
-          <ol class="linea" id="linea-tiempo"></ol>
+          <ol class="decisiones-vivo" id="decisiones-vivo" aria-label="Bloqueos más recientes"></ol>
+        </aside>
+      </div>
+    </main>
+
+    <!-- ===== Vista: Bloqueos ============================================================= -->
+    <main class="pagina" id="vista-bloqueos" hidden aria-labelledby="titulo-bloqueos">
+      <header class="pagina__cabecera">
+        <div>
+          <h1 class="pagina__titulo" id="titulo-bloqueos" tabindex="-1">Bloqueos</h1>
+          <p class="pagina__sub">Tarjetas y accesos detenidos, quién los bloqueó y en cuánto tiempo. Los activos en los que el titular dice que fue él van primero: son la prioridad de desbloqueo.</p>
+        </div>
+        <div class="pagina__acciones">
+          <div class="segmento" id="filtro-bloqueos" role="group" aria-label="Mostrar bloqueos"></div>
+          <button type="button" class="boton boton--secundario boton--icono" id="bloqueos-actualizar" aria-label="Actualizar la lista" title="Actualizar">
+            <svg class="icono" aria-hidden="true"><use href="#i-regenerar"/></svg>
+          </button>
+        </div>
+      </header>
+      <p class="pagina__total" id="bloqueos-total" aria-live="polite"></p>
+      <ol class="lista-bloqueos" id="lista-bloqueos" aria-label="Bloqueos"></ol>
+    </main>
+
+    <!-- ===== Vista: Buzón del titular ==================================================== -->
+    <main class="pagina pagina--buzon" id="vista-buzon" hidden aria-labelledby="titulo-buzon">
+      <header class="pagina__cabecera">
+        <div>
+          <h1 class="pagina__titulo" id="titulo-buzon" tabindex="-1">Buzón del titular</h1>
+          <p class="pagina__sub">Así ve el cliente los avisos del banco en su teléfono. Responde como si fueras el titular: la respuesta llega a la lista de bloqueos.</p>
+        </div>
+        <div class="pagina__acciones">
+          <label class="campo campo--select"><span class="solo-lector">Filtrar por tarjeta</span>
+            <select id="buzon-filtro"><option value="">Todas las tarjetas</option></select>
+          </label>
+        </div>
+      </header>
+      <div class="telefono-escena">
+        <div class="telefono" role="region" aria-label="Pantalla del teléfono del titular">
+          <div class="telefono__estado" aria-hidden="true">
+            <span id="telefono-hora">9:41</span>
+            <span class="telefono__isla"></span>
+            <span class="telefono__iconos"><span class="telefono__senal"></span><span class="telefono__bateria"></span></span>
+          </div>
+          <div class="telefono__app">
+            <span class="telefono__avatar" aria-hidden="true"><svg class="icono"><use href="#i-escudo"/></svg></span>
+            <div>
+              <p class="telefono__nombre">Tu banco · Seguridad</p>
+              <p class="telefono__sub" id="buzon-resumen"></p>
+            </div>
+          </div>
+          <ol class="chat" id="buzon-chat" aria-label="Mensajes del banco"></ol>
+          <div class="telefono__pie" aria-hidden="true">Responde con los botones de cada mensaje</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ===== Vista: Supervisión ========================================================== -->
+    <main class="pagina" id="vista-supervision" hidden aria-labelledby="titulo-supervision">
+      <header class="pagina__cabecera">
+        <div>
+          <h1 class="pagina__titulo" id="titulo-supervision" tabindex="-1">Supervisión</h1>
+          <p class="pagina__sub">Cuánto actúa el agente por su cuenta, cuánto gasta y qué tan rápido se detiene el fraude.</p>
+        </div>
+      </header>
+      <div class="banda banda--info" id="sup-solo-lectura" hidden>
+        <svg class="icono" aria-hidden="true"><use href="#i-info"/></svg>
+        <div class="banda__texto">
+          <p class="banda__titulo">Modo lectura</p>
+          <p class="banda__detalle" id="sup-solo-lectura-texto">Tu rol es analista: ves los controles y las cifras, pero cambiar la autonomía, el tope o atender alertas es solo para el rol supervisor.</p>
+        </div>
+      </div>
+      <div id="sup-error" hidden></div>
+
+      <div class="sup__controles">
+        <section class="tarjeta-panel control-sup" aria-labelledby="t-autonomia">
+          <div class="control-sup__cabecera">
+            <h2 class="control-sup__titulo" id="t-autonomia">Autonomía del agente</h2>
+            <span class="interruptor__estado" id="sup-autonomia-estado"></span>
+          </div>
+          <button type="button" class="interruptor" id="sup-autonomia" role="switch" aria-checked="false" aria-labelledby="t-autonomia" aria-describedby="sup-autonomia-texto sup-solo-lectura-texto">
+            <span class="interruptor__pista" aria-hidden="true"><span class="interruptor__perilla"></span></span>
+          </button>
+          <p class="control-sup__texto" id="sup-autonomia-texto"></p>
+          <p class="control-sup__meta" id="sup-autonomia-meta"></p>
         </section>
 
-        <section class="seccion" aria-labelledby="titulo-razones">
-          <div class="seccion__cabecera">
-            <h3 class="seccion__titulo" id="titulo-razones">Razones del sistema</h3>
-            <p class="seccion__ayuda">Rareza: qué tan inusual es frente a las transacciones normales. Peso: cuánto empujó el score.</p>
+        <section class="tarjeta-panel control-sup" aria-labelledby="t-tope">
+          <div class="control-sup__cabecera">
+            <h2 class="control-sup__titulo" id="t-tope">Tope de bloqueos autónomos por hora</h2>
           </div>
-          <div id="razones"></div>
+          <p class="control-sup__cifra" id="sup-tope-uso">—</p>
+          <div id="sup-tope-medidor"></div>
+          <form class="form-tope" id="form-tope" novalidate>
+            <label class="campo-vertical">
+              <span>Tope por hora <em>(0 a 500)</em></span>
+              <input type="number" id="sup-tope" min="0" max="500" step="1" inputmode="numeric" aria-describedby="sup-solo-lectura-texto">
+            </label>
+            <button type="submit" class="boton boton--primario" id="sup-tope-guardar">Guardar</button>
+          </form>
+          <p class="dialogo__error" id="sup-tope-error" role="alert" hidden></p>
+          <p class="control-sup__meta" id="sup-tope-meta"></p>
         </section>
 
-        <section class="seccion" id="perfil-seccion" aria-labelledby="titulo-perfil">
-          <div class="seccion__cabecera">
-            <h3 class="seccion__titulo" id="titulo-perfil">Perfil habitual de la tarjeta</h3>
-            <p class="seccion__ayuda">Calculado solo con transacciones anteriores al caso.</p>
+        <section class="tarjeta-panel control-sup" aria-labelledby="t-gasto">
+          <div class="control-sup__cabecera">
+            <h2 class="control-sup__titulo" id="t-gasto">Gasto en IA del día</h2>
           </div>
-          <div id="perfil"></div>
+          <p class="control-sup__cifra" id="sup-gasto-texto">—</p>
+          <div id="sup-gasto-medidor"></div>
+          <p class="control-sup__meta" id="sup-gasto-nota"></p>
         </section>
       </div>
-    </section>
 
-    <!-- Columna 3: traza y conversación ------------------------------------------------->
-    <aside class="columna columna--lateral" aria-label="Agente">
-      <section class="panel panel--traza" aria-labelledby="titulo-traza">
-        <div class="panel__cabecera">
-          <h2 class="titulo-columna" id="titulo-traza">Traza de la tarea</h2>
-          <span class="panel__ayuda">en vivo</span>
-        </div>
-        <div class="traza" id="traza">
-          <p class="traza__vacia">Al abrir un caso verás aquí cada paso del agente: herramientas, llamadas al modelo, reintentos y costo.</p>
-        </div>
+      <section class="sup__seccion" aria-labelledby="t-cifras">
+        <h2 class="titulo-columna" id="t-cifras">Cómo va la operación</h2>
+        <dl class="cifras-sup" id="sup-cifras"></dl>
       </section>
 
-      <section class="panel panel--conversacion" aria-labelledby="titulo-conversacion">
-        <div class="panel__cabecera">
-          <h2 class="titulo-columna" id="titulo-conversacion">Preguntar al agente</h2>
-          <span class="panel__ayuda" id="conversacion-caso"></span>
+      <section class="tarjeta-panel sup__seccion" aria-labelledby="t-alertas">
+        <div class="panel-vivo__cabecera">
+          <h2 class="titulo-columna" id="t-alertas">Alertas pendientes</h2>
+          <span class="panel__ayuda" id="sup-alertas-total"></span>
         </div>
-        <div class="conversacion" id="conversacion" aria-live="polite"></div>
-        <form class="pregunta" id="form-pregunta">
-          <label class="solo-lector" for="campo-pregunta">Pregunta sobre el caso abierto</label>
-          <textarea id="campo-pregunta" rows="2" maxlength="500" placeholder="Abre un caso para preguntar" disabled></textarea>
-          <button type="submit" class="boton boton--primario boton--icono" id="boton-preguntar" aria-label="Enviar pregunta" disabled>
-            <svg class="icono" aria-hidden="true"><use href="#i-enviar"/></svg>
-          </button>
-        </form>
+        <ol class="alertas-sup" id="sup-alertas"></ol>
       </section>
-    </aside>
-  </main>
+    </main>
+  </div>
 
   <!-- Diálogo de confirmación humana (nunca alert/confirm del navegador) -->
   <dialog class="dialogo" id="dialogo-decision" aria-labelledby="dialogo-decision-titulo" aria-describedby="dialogo-decision-texto">
@@ -238,14 +619,10 @@
       <h2 class="dialogo__titulo" id="dialogo-decision-titulo"></h2>
       <p class="dialogo__texto" id="dialogo-decision-texto"></p>
       <label class="campo-vertical">
-        <span>Nombre del analista</span>
-        <input type="text" id="campo-analista" maxlength="80" autocomplete="name" required>
-        <small>Queda registrado con la decisión. Se recuerda en este navegador.</small>
-      </label>
-      <label class="campo-vertical">
         <span>Comentario <em>(opcional)</em></span>
         <textarea id="campo-comentario" rows="3" maxlength="1000"></textarea>
       </label>
+      <p class="firma"><svg class="icono" aria-hidden="true"><use href="#i-persona"/></svg><span>Firmará: <strong id="dialogo-decision-firma"></strong></span></p>
       <p class="dialogo__error" id="dialogo-decision-error" role="alert" hidden></p>
       <div class="dialogo__acciones">
         <button type="button" class="boton boton--secundario" id="dialogo-decision-cancelar">Cancelar</button>
@@ -254,7 +631,38 @@
     </form>
   </dialog>
 
-  <!-- Panel de demo: fallas forzadas, límites y métricas en vivo -->
+  <!-- Diálogo para levantar un bloqueo -->
+  <dialog class="dialogo" id="dialogo-desbloqueo" aria-labelledby="dialogo-desbloqueo-titulo">
+    <form class="dialogo__cuerpo" id="form-desbloqueo" novalidate>
+      <h2 class="dialogo__titulo" id="dialogo-desbloqueo-titulo">Desbloquear</h2>
+      <dl class="resumen-dialogo" id="dialogo-desbloqueo-resumen"></dl>
+      <label class="campo-vertical">
+        <span>Motivo del desbloqueo <em>(mínimo 10 caracteres)</em></span>
+        <textarea id="campo-motivo-desbloqueo" rows="3" maxlength="500" aria-describedby="contador-motivo-desbloqueo" required></textarea>
+        <small class="contador-texto" id="contador-motivo-desbloqueo" aria-live="polite"></small>
+      </label>
+      <p class="firma"><svg class="icono" aria-hidden="true"><use href="#i-persona"/></svg><span>Firmará: <strong id="dialogo-desbloqueo-firma"></strong></span></p>
+      <p class="dialogo__error" id="dialogo-desbloqueo-error" role="alert" hidden></p>
+      <div class="dialogo__acciones">
+        <button type="button" class="boton boton--secundario" id="dialogo-desbloqueo-cancelar">Cancelar</button>
+        <button type="submit" class="boton boton--primario" id="dialogo-desbloqueo-aceptar" disabled>Desbloquear</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Confirmación genérica (apagar la autonomía del agente) -->
+  <dialog class="dialogo" id="dialogo-confirmar" aria-labelledby="dialogo-confirmar-titulo" aria-describedby="dialogo-confirmar-texto">
+    <form class="dialogo__cuerpo" method="dialog">
+      <h2 class="dialogo__titulo" id="dialogo-confirmar-titulo"></h2>
+      <p class="dialogo__texto" id="dialogo-confirmar-texto"></p>
+      <div class="dialogo__acciones">
+        <button type="submit" class="boton boton--secundario" id="dialogo-confirmar-cancelar" value="cancelar">Cancelar</button>
+        <button type="submit" class="boton boton--primario" id="dialogo-confirmar-aceptar" value="aceptar">Aceptar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Panel de demo: fallas forzadas, límites y métricas en vivo (solo supervisor) -->
   <dialog class="dialogo dialogo--ancho" id="dialogo-demo" aria-labelledby="dialogo-demo-titulo">
     <div class="dialogo__cuerpo">
       <div class="dialogo__encabezado">

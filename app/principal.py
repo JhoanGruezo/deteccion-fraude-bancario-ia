@@ -96,7 +96,7 @@ def preparar_base_tolerante() -> dict:
         }
 
 
-def iniciar_flujo_automatico() -> dict | None:
+def iniciar_flujo_automatico(app: FastAPI | None = None) -> dict | None:
     """Engancha el triaje del agente al flujo en vivo y arranca la red de seguridad (SPEC, RF3-RF4).
 
     Si el motor de riesgo no se puede cargar (por ejemplo, falta el modelo en semilla/), la app
@@ -108,7 +108,13 @@ def iniciar_flujo_automatico() -> dict | None:
     except Exception:  # noqa: BLE001
         registro.exception("No se pudo cargar el flujo en vivo; la app sigue sin triaje automático")
         return None
-    despachador = triaje.Despachador()
+    def triar(id_caso):
+        # El triaje respeta la falla que el supervisor fuerza desde el panel de demo: así se
+        # muestra (y se mide) que el bloqueo de los casos críticos no depende de la IA.
+        demo = getattr(getattr(app, "state", None), "demo", None)
+        return triaje.triar_caso(id_caso, falla_forzada=(demo.falla or "") if demo else None)
+
+    despachador = triaje.Despachador(triar=triar)
     flujo.al_cambiar_caso(despachador.al_cambiar_caso)
     red = triaje.RedDeSeguridad()
     red.start()
@@ -216,7 +222,7 @@ def crear_app() -> FastAPI:
     @asynccontextmanager
     async def ciclo_de_vida(app: FastAPI):
         app.state.estado_base = preparar_base_tolerante()
-        app.state.flujo = iniciar_flujo_automatico() if config.FLUJO_AUTOMATICO else None
+        app.state.flujo = iniciar_flujo_automatico(app) if config.FLUJO_AUTOMATICO else None
         yield
         if app.state.flujo:
             app.state.flujo["red"].detener()

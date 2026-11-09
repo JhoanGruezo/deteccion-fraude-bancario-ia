@@ -44,7 +44,7 @@ from datetime import datetime
 CARPETA_EVAL = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, CARPETA_EVAL)
 
-from cliente_sse import (URL_BASE_POR_DEFECTO, ResultadoStream, abrir_stream, obtener_json,  # noqa: E402
+from cliente_sse import (URL_BASE_POR_DEFECTO, iniciar_sesion, ResultadoStream, abrir_stream, obtener_json,  # noqa: E402
                          url_explicacion, url_pregunta)
 
 RUTA_DORADOS = os.path.join(CARPETA_EVAL, "casos_dorados.json")
@@ -463,6 +463,7 @@ def main() -> None:
     analizador.add_argument("--url-base", default=URL_BASE_POR_DEFECTO)
     analizador.add_argument("--solo", help="Ids de casos separados por coma (p. ej. D1,D7) para depurar.")
     argumentos = analizador.parse_args()
+    iniciar_sesion(argumentos.url_base)   # la API exige sesión desde el Momento 3
 
     salud = estado_de_la_app(argumentos.url_base)
     aviso = avisar_modo_plantilla(salud)

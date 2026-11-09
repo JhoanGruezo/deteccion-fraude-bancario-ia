@@ -4,3 +4,4 @@
 *.sql text eol=lf
 *.gz binary
 *.jpg binary
+*.ps1 text eol=crlf

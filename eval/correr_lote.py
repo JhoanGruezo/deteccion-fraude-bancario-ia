@@ -37,7 +37,7 @@ import sys
 CARPETA_EVAL = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, CARPETA_EVAL)
 
-from cliente_sse import URL_BASE_POR_DEFECTO, obtener_json  # noqa: E402
+from cliente_sse import URL_BASE_POR_DEFECTO, iniciar_sesion, obtener_json  # noqa: E402
 from correr_suite import (avisar_modo_plantilla, cargar_dorados, correr_tarea, describir_proveedores,  # noqa: E402
                           estado_de_la_app, evaluar_explicacion, evaluar_pregunta, guardar, marca_de_tiempo,
                           mediana, metricas_de, ms_a_texto, percentil_90, traza_resumida, usd_a_texto)
@@ -221,6 +221,7 @@ def main() -> None:
     analizador = argparse.ArgumentParser(description="Corre el lote de medición y calcula las cuatro cifras.")
     analizador.add_argument("--url-base", default=URL_BASE_POR_DEFECTO)
     argumentos = analizador.parse_args()
+    iniciar_sesion(argumentos.url_base)   # la API exige sesión desde el Momento 3
 
     salud = estado_de_la_app(argumentos.url_base)
     aviso = avisar_modo_plantilla(salud)

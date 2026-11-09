@@ -19,6 +19,8 @@ COPY app/ app/
 # src/: el motor de riesgo fuera de línea; la app reutiliza sus fórmulas (app/riesgo).
 COPY src/ src/
 COPY semilla/ semilla/
+# eval/: la medición del Momento 3 corre dentro del contenedor (junto a la base, que no se publica).
+COPY eval/ eval/
 
 # Usuario sin privilegios: la app no necesita ser root dentro del contenedor.
 RUN useradd --create-home --uid 1000 analista

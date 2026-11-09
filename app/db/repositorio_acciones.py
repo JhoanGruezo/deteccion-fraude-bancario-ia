@@ -252,7 +252,7 @@ def listar_avisos(limite=100):
     """Buzón simulado del titular: los avisos enviados, sin el número de tarjeta."""
     with cursor() as cur:
         cur.execute(
-            """select n.id, n.id_caso, n.tipo, n.canal, n.destinatario, n.cuerpo, n.autor_motivo, n.estado,
+            """select n.id, n.id_caso, n.tipo, n.canal, n.destinatario, n.cuerpo, n.autor_motivo, n.errores_validacion, n.estado,
                       n.respuesta_titular, n.respondida_en, n.creada_en, p.alias
                from notificaciones n join casos c using (id_caso)
                left join perfiles_tarjeta p on p.fuente = c.fuente and p.id_cuenta = c.id_cuenta

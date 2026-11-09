@@ -5,11 +5,16 @@
  * (aria-activedescendant), así un lector de pantalla anuncia cada caso. Con el
  * teclado la apertura del caso espera un instante (la decide principal.js) para no
  * disparar una generación del agente por cada fila que se atraviesa.
+ *
+ * Momento 3: un segmento separa los casos del flujo en vivo de la semilla del M2, los
+ * casos en vivo llevan su chip de banda y el filtro de estado incluye los estados nuevos
+ * (bloqueado, en verificación, desbloqueado).
  */
 
 import { ErrorApi, api } from "./api.js";
 import { desplazarHasta, el, icono, vaciar } from "./dom.js";
 import * as f from "./formato.js";
+import { chipBanda } from "./piezas.js";
 
 const RETARDO_BUSQUEDA_MS = 300;
 
@@ -20,14 +25,45 @@ export function crearBandeja({ alSeleccionar, alError }) {
   const total = $("bandeja-total");
   const formulario = $("filtros");
   const campos = { q: $("filtro-q"), fuente: $("filtro-fuente"), estado: $("filtro-estado"), orden: $("filtro-orden") };
+  const segmentoOrigen = $("filtro-origen");
 
-  const filtros = { fuente: "", nivel: "", estado: "", q: "", orden: "score" };
+  const filtros = { fuente: "", nivel: "", estado: "", q: "", orden: "score", origen: "" };
   let casos = [];
   let seleccionado = null;
   let controlador = null;
   let temporizador = null;
 
-  const hayFiltros = () => Boolean(filtros.fuente || filtros.nivel || filtros.estado || filtros.q);
+  const hayFiltros = () => Boolean(filtros.fuente || filtros.nivel || filtros.estado || filtros.q || filtros.origen);
+
+  const ORIGENES = [
+    { valor: "", etiqueta: "Todos" },
+    { valor: "en_vivo", etiqueta: "En vivo" },
+    { valor: "semilla", etiqueta: "Semilla M2" },
+  ];
+
+  function pintarOrigen() {
+    vaciar(segmentoOrigen).append(
+      ...ORIGENES.map((o) =>
+        el("button", {
+          type: "button",
+          clase: "segmento__opcion",
+          "aria-pressed": String(filtros.origen === o.valor),
+          texto: o.etiqueta,
+          onClick: () => {
+            if (filtros.origen === o.valor) return;
+            filtros.origen = o.valor;
+            // En vivo interesa lo último que pasó: se ordena por apertura al elegirlo.
+            if (o.valor === "en_vivo" && filtros.orden === "score") {
+              filtros.orden = "recientes";
+              campos.orden.value = "recientes";
+            }
+            pintarOrigen();
+            cargar();
+          },
+        }),
+      ),
+    );
+  }
 
   function pintarContadores(datos) {
     const porNivel = datos?.por_nivel || {};
@@ -84,7 +120,13 @@ export function crearBandeja({ alSeleccionar, alError }) {
       el(
         "span",
         { clase: "fila__pie" },
-        el("span", { clase: `estado${estado.cerrado ? " estado--cerrado" : ""}`, texto: estado.etiqueta }),
+        el(
+          "span",
+          { clase: "fila__estados" },
+          el("span", { clase: `estado${estado.cerrado ? " estado--cerrado" : ""}${caso.estado === "bloqueado" ? " estado--activo" : ""}`, texto: estado.etiqueta }),
+          caso.banda ? chipBanda(caso.banda) : null,
+          caso.origen === "en_vivo" ? el("span", { clase: "etiqueta etiqueta--vivo", texto: "En vivo" }) : null,
+        ),
         caso.tiene_explicacion ? el("span", { clase: "fila__explicada" }, icono("check"), "Explicación lista") : null,
       ),
     );
@@ -95,8 +137,17 @@ export function crearBandeja({ alSeleccionar, alError }) {
     vaciar(lista);
     if (!casos.length) {
       lista.removeAttribute("aria-activedescendant");
+      const soloEnVivo = filtros.origen === "en_vivo" && !filtros.fuente && !filtros.nivel && !filtros.estado && !filtros.q;
       lista.append(
-        hayFiltros()
+        soloEnVivo
+          ? el(
+              "li",
+              { clase: "lista-vacia" },
+              el("strong", { texto: "Aún no hay casos en vivo." }),
+              "Se abren solos cuando el motor marca una compra del simulador o una inyectada a mano. ",
+              el("a", { href: "#/en-vivo", texto: "Ir a En vivo" }),
+            )
+          : hayFiltros()
           ? el(
               "li",
               { clase: "lista-vacia" },
@@ -151,7 +202,8 @@ export function crearBandeja({ alSeleccionar, alError }) {
   }
 
   function limpiarFiltros() {
-    Object.assign(filtros, { fuente: "", nivel: "", estado: "", q: "" });
+    Object.assign(filtros, { fuente: "", nivel: "", estado: "", q: "", origen: "" });
+    pintarOrigen();
     campos.q.value = "";
     campos.fuente.value = "";
     campos.estado.value = "";
@@ -195,6 +247,8 @@ export function crearBandeja({ alSeleccionar, alError }) {
   });
 
   formulario.addEventListener("submit", (evento) => evento.preventDefault());
+  pintarOrigen();
+  $("bandeja-actualizar")?.addEventListener("click", () => cargar());
   for (const nombre of ["fuente", "estado", "orden"]) {
     campos[nombre].addEventListener("change", () => {
       filtros[nombre] = campos[nombre].value;

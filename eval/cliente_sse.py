@@ -35,6 +35,40 @@ import urllib.request
 from dataclasses import asdict, dataclass, field
 
 URL_BASE_POR_DEFECTO = "http://localhost:8000"
+
+# --- Sesión (Momento 3): la API exige inicio de sesión y token CSRF ---------------------------
+# Un solo "abridor" con cookies para todo el proceso: la cookie de sesión viaja sola en cada
+# petición (también en el stream SSE) y el token CSRF se manda en las que escriben.
+import http.cookiejar  # noqa: E402
+import os  # noqa: E402
+
+_cookies = http.cookiejar.CookieJar()
+_abridor = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(_cookies))
+_csrf: dict[str, str] = {}
+
+
+def iniciar_sesion(base: str, usuario: str | None = None, clave: str | None = None) -> dict:
+    """Inicia sesión (usuario y clave, o EVAL_USUARIO / EVAL_CLAVE del entorno)."""
+    usuario = usuario or os.environ.get("EVAL_USUARIO")
+    clave = clave or os.environ.get("EVAL_CLAVE")
+    if not usuario or not clave:
+        raise SystemExit("La API exige inicio de sesión: defina EVAL_USUARIO y EVAL_CLAVE (usuario supervisor o "
+                         "analista; las claves las muestra run.sh o "
+                         "`docker compose exec app python -m app.db.migrar --restablecer-claves`).")
+    datos = enviar_json(f"{base}/api/sesion/ingresar", {"usuario": usuario, "clave": clave})
+    _csrf["token"] = datos["csrf"]
+    return datos["usuario"]
+
+
+def enviar_json(url: str, cuerpo: dict | None = None, timeout_s: float = 30.0) -> dict:
+    """POST con JSON y el token CSRF de la sesión."""
+    cabeceras = {"Accept": "application/json", "Content-Type": "application/json"}
+    if _csrf.get("token"):
+        cabeceras["X-CSRF-Token"] = _csrf["token"]
+    datos = json.dumps(cuerpo or {}).encode("utf-8")
+    peticion = urllib.request.Request(url, data=datos, headers=cabeceras, method="POST")
+    with _abridor.open(peticion, timeout=timeout_s) as respuesta:
+        return json.loads(respuesta.read().decode("utf-8"))
 # Una tarea con tres reintentos y conmutación tarda menos de un minuto; dos minutos
 # separan "lento" de "colgado" sin cortar una tarea legítima.
 TIMEOUT_POR_DEFECTO_S = 180.0
@@ -92,7 +126,7 @@ def url_pregunta(base: str, id_caso: str, pregunta: str, falla: str | None = Non
 def obtener_json(url: str, timeout_s: float = 30.0) -> dict:
     """GET que devuelve JSON (para /api/salud, /api/casos/{id}, etc.)."""
     peticion = urllib.request.Request(url, headers={"Accept": "application/json"})
-    with urllib.request.urlopen(peticion, timeout=timeout_s) as respuesta:
+    with _abridor.open(peticion, timeout=timeout_s) as respuesta:
         return json.loads(respuesta.read().decode("utf-8"))
 
 
@@ -112,7 +146,7 @@ def abrir_stream(url: str, timeout_s: float = TIMEOUT_POR_DEFECTO_S) -> Resultad
     peticion = urllib.request.Request(url, headers={"Accept": "text/event-stream", "Cache-Control": "no-cache"})
     inicio = time.perf_counter()
     try:
-        with urllib.request.urlopen(peticion, timeout=timeout_s) as respuesta:
+        with _abridor.open(peticion, timeout=timeout_s) as respuesta:
             resultado.estado_http = respuesta.status
             tipo_actual, datos_actuales = None, []
             while True:
@@ -192,6 +226,7 @@ def main() -> None:
     analizador.add_argument("--falla", choices=["429", "timeout", "json", "todo"], help="Falla forzada para esta petición.")
     analizador.add_argument("--url-base", default=URL_BASE_POR_DEFECTO)
     argumentos = analizador.parse_args()
+    iniciar_sesion(argumentos.url_base)   # la API exige sesión desde el Momento 3
 
     if argumentos.pregunta:
         url = url_pregunta(argumentos.url_base, argumentos.id_caso, argumentos.pregunta, argumentos.falla)

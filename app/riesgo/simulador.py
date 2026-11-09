@@ -155,6 +155,8 @@ class Simulador:
         del inicio_dataset
 
     def resumen(self) -> dict:
+        if self._datos is None and self.disponible():
+            self._cargar()            # así la vista muestra el tramo y el total antes de iniciar
         datos = self._datos or {}
         resumen_semilla = datos.get("resumen", {})
         total = resumen_semilla.get("transacciones") or len(datos.get("transacciones", []))

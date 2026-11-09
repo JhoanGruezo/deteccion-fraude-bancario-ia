@@ -12,10 +12,12 @@ import { api } from "./api.js";
 import { avisar, el, icono, pintarBanda, vaciar } from "./dom.js";
 import { crearExplicacion } from "./explicacion.js";
 import * as f from "./formato.js";
+import { chipBanda } from "./piezas.js";
+import { pintarSistemaCaso } from "./sistema_caso.js";
 
 const ESTADO_TRAS_ACCION = { confirmar_bloqueo: "bloqueo_confirmado", descartar: "descartado", escalar: "escalado" };
 
-export function crearDetalle({ trazas, conversacion, dialogo, alCambio }) {
+export function crearDetalle({ trazas, conversacion, dialogo, desbloqueo, alCambio }) {
   const $ = (id) => document.getElementById(id);
   const vacio = $("detalle-vacio");
   const contenido = $("detalle-contenido");
@@ -52,6 +54,14 @@ export function crearDetalle({ trazas, conversacion, dialogo, alCambio }) {
     const nodoEstado = $("caso-estado");
     nodoEstado.textContent = estado.etiqueta;
     nodoEstado.className = `estado${estado.cerrado ? " estado--cerrado" : ""}`;
+    // Casos del flujo en vivo (Momento 3): banda de riesgo y origen junto al estado.
+    const nodoBanda = $("caso-banda");
+    vaciar(nodoBanda);
+    if (caso.banda) nodoBanda.append(chipBanda(caso.banda));
+    nodoBanda.hidden = !caso.banda;
+    const nodoOrigen = $("caso-origen");
+    nodoOrigen.textContent = caso.origen ? f.ORIGENES[caso.origen] || caso.origen : "";
+    nodoOrigen.hidden = !caso.origen;
     $("caso-nivel").textContent = `Recomendación: ${nivel.etiqueta}`;
     $("caso-motivo").textContent = caso.motivo_recomendacion || "";
     const n = (caso.transacciones || []).length;
@@ -245,6 +255,21 @@ export function crearDetalle({ trazas, conversacion, dialogo, alCambio }) {
     );
   }
 
+  // ----- Qué hizo el sistema (Momento 3) ---------------------------------------------------
+  async function alDesbloquear(bloqueo) {
+    if (!desbloqueo) return;
+    const resultado = await desbloqueo.abrir(bloqueo);
+    if (resultado) {
+      avisar(`Bloqueo levantado · firmado por ${resultado.firmado_por || "tu usuario"}`);
+      await refrescar();
+      alCambio?.();
+    }
+  }
+
+  function pintarSistema(datos) {
+    pintarSistemaCaso($("seccion-sistema"), datos, { alDesbloquear });
+  }
+
   // ----- Propuestas y decisiones -----------------------------------------------------------
   function objetivoDe(accion) {
     if (accion !== "confirmar_bloqueo") return "";
@@ -361,6 +386,7 @@ export function crearDetalle({ trazas, conversacion, dialogo, alCambio }) {
       caso = { ...caso, ...datos.caso };
       propuestas = datos.propuestas || [];
       pintarCabecera();
+      pintarSistema({ ...datos, caso });
       pintarPropuestas();
       pintarDecisiones(datos.decisiones);
       explicacion.actualizarGuardada(datos.explicacion);
@@ -377,6 +403,7 @@ export function crearDetalle({ trazas, conversacion, dialogo, alCambio }) {
     explicacion.detener();
     vacio.hidden = true;
     contenido.hidden = false;
+    $("seccion-sistema").hidden = true;
     contenido.classList.add("detalle--cargando");
     contenido.setAttribute("aria-busy", "true");
     pintarBanda(banda, null);
@@ -407,6 +434,7 @@ export function crearDetalle({ trazas, conversacion, dialogo, alCambio }) {
     caso = datos.caso;
     propuestas = datos.propuestas || [];
     pintarCabecera();
+    pintarSistema(datos);
     pintarRazones();
     pintarPerfil();
     pintarPropuestas();
@@ -423,6 +451,7 @@ export function crearDetalle({ trazas, conversacion, dialogo, alCambio }) {
 
   return {
     abrir,
+    refrescar,
     agregarPropuesta,
     get idActual() {
       return caso?.id_caso || null;
