@@ -142,6 +142,38 @@ def _cargar_historial(cur, ruta):
     return filas
 
 
+ARCHIVO_SIMULADOR = "simulador_sparkov.json.gz"
+ARCHIVO_HISTORIAL_SIMULADOR = "historial_simulador.csv.gz"
+
+
+def _cargar_simulador(cur, carpeta):
+    """Perfiles de las tarjetas del simulador y sus 30 días de historial (scripts/generar_semilla_simulador.py).
+
+    El historial se carga por una tabla temporal porque algunas compras ya están en la
+    semilla del M2 (las de sus casos): se insertan solo las que faltan.
+    """
+    ruta = os.path.join(carpeta, ARCHIVO_SIMULADOR)
+    if not os.path.exists(ruta):
+        return "ausente"
+    with gzip.open(ruta, "rt", encoding="utf-8") as archivo:
+        semilla = json.load(archivo)
+    cur.executemany(
+        "insert into perfiles_tarjeta (fuente, id_cuenta, alias, estado) values (%s, %s, %s, %s) on conflict do nothing",
+        [(semilla["resumen"]["fuente"], p["id_cuenta"], p["alias"], _json(p["estado"])) for p in semilla["perfiles"]],
+    )
+    ruta_historial = os.path.join(carpeta, ARCHIVO_HISTORIAL_SIMULADOR)
+    if os.path.exists(ruta_historial):
+        cur.execute("create temp table historial_entrante (like historial including defaults) on commit drop")
+        with gzip.open(ruta_historial, "rt", encoding="utf-8", newline="") as archivo:
+            lector = csv.DictReader(archivo)
+            with cur.copy(f"copy historial_entrante ({', '.join(COLUMNAS_HISTORIAL)}) from stdin") as copia:
+                for fila in lector:
+                    copia.write_row([fila[columna] or None for columna in COLUMNAS_HISTORIAL])
+        cur.execute("insert into historial select * from historial_entrante on conflict do nothing")
+    registro.info("Semilla del simulador cargada: %d tarjetas.", len(semilla["perfiles"]))
+    return "cargada"
+
+
 def preparar_base(carpeta_semilla=None):
     """Espera a Postgres, aplica el esquema y, si casos está vacía, carga la semilla.
 
@@ -180,6 +212,11 @@ def preparar_base(carpeta_semilla=None):
                 _cargar_historial(cur, os.path.join(carpeta, "historial.csv.gz"))
                 resultado["semilla"] = "cargada"
 
+        # Semilla del simulador en vivo (opcional): perfiles de tarjeta e historial reciente.
+        cur.execute("select count(*) as n from perfiles_tarjeta")
+        if cur.fetchone()["n"] == 0:
+            resultado["simulador"] = _cargar_simulador(cur, carpeta)
+
         cur.execute(
             """
             select (select count(*) from casos) as casos,
@@ -207,9 +244,43 @@ def preparar_base(carpeta_semilla=None):
     return resultado
 
 
+def reiniciar_en_vivo(carpeta_semilla=None):
+    """Borra todo lo que generó el flujo en vivo y vuelve a cargar los perfiles del simulador.
+
+    Para repetir la demo desde cero. Usa el usuario dueño de la base a propósito: el rol de
+    la app no puede borrar nada, y este comando no está expuesto por HTTP; lo corre quien
+    opera el contenedor:  docker compose exec app python -m app.db.migrar --reiniciar-en-vivo
+    Los casos, decisiones y explicaciones de la semilla del Momento 2 no se tocan.
+    """
+    carpeta = carpeta_semilla or config.CARPETA_SEMILLA
+    with psycopg.connect(config.DATABASE_URL, connect_timeout=5) as administracion,             administracion.cursor(row_factory=dict_row) as cur:
+        cur.execute("select pg_advisory_xact_lock(%s)", (CANDADO_MIGRACION,))
+        vivos = "(select id_caso from casos where origen = 'en_vivo')"
+        tareas = f"(select tarea_id from tareas_agente where id_caso in {vivos})"
+        borrados = {}
+        for tabla, condicion in [
+            ("notificaciones", f"id_caso in {vivos}"), ("bloqueos", f"id_caso in {vivos}"),
+            ("alertas", "true"), ("transacciones_evaluadas", "true"),
+            ("decisiones", f"id_caso in {vivos}"), ("propuestas_decision", f"id_caso in {vivos}"),
+            ("explicaciones", f"id_caso in {vivos}"), ("trazas", f"tarea_id in {tareas}"),
+            ("tareas_agente", f"id_caso in {vivos}"), ("transacciones_caso", f"id_caso in {vivos}"),
+            ("casos", "origen = 'en_vivo'"), ("historial", "origen = 'en_vivo'"), ("perfiles_tarjeta", "true"),
+        ]:
+            cur.execute(f"delete from {tabla} where {condicion}")
+            borrados[tabla] = cur.rowcount
+        cur.execute("alter sequence casos_en_vivo_seq restart")
+        cur.execute("update ajustes_sistema set valor = 'true', actualizado_por = 'reinicio' where clave = 'autonomia_agente'")
+        borrados["simulador"] = _cargar_simulador(cur, carpeta)
+    registro.info("Flujo en vivo reiniciado: %s", borrados)
+    return borrados
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+    if "--reiniciar-en-vivo" in sys.argv:
+        print(json.dumps(reiniciar_en_vivo(), ensure_ascii=False))
+        return
     try:
         resultado = preparar_base()
     except BaseNoDisponible:

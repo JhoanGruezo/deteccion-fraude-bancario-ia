@@ -81,8 +81,13 @@ del resto.
       `app/api/rutas_en_vivo.py`. La tarjeta se nombra por alias (TAR-0001); una compra de
       una tarjeta bloqueada se rechaza y cuenta como dinero detenido; reenviar la misma
       compra no la duplica. 19 pruebas, una con el modelo real.
-- [ ] **T2.5** Semilla del simulador: un tramo nocturno de la partición de prueba con el
+- [x] **T2.5** Semilla del simulador: un tramo nocturno de la partición de prueba con el
       historial de 30 días de esas tarjetas (`scripts/generar_semilla.py`).
+      2026-11-08: `scripts/generar_semilla_simulador.py`. Ventana del 19-jul-2020 20:00 de
+      36 h (partición de prueba): 5.810 compras, 875 tarjetas, 54 fraudulentas y 28.367 USD.
+      Perfiles construidos con 1,36 millones de compras previas. Se carga sola al migrar.
+      Para repetir la demo: `docker compose exec app python -m app.db.migrar --reiniciar-en-vivo`
+      (usa el usuario dueño y no está expuesto por HTTP).
 
 ## Fase 3 · Agente de triaje, red de seguridad y avisos (12 al 14-nov)
 

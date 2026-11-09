@@ -154,8 +154,9 @@ def agregar_transaccion_al_caso(cur, id_caso, t):
 
 def guardar_en_historial(cur, fuente, id_cuenta, t):
     cur.execute(
-        """insert into historial (fuente, id_cuenta, id_transaccion, fecha_hora, monto, categoria, comercio, ubicacion)
-           values (%s, %s, %s, %s, %s, %s, %s, %s) on conflict do nothing""",
+        """insert into historial (fuente, id_cuenta, id_transaccion, fecha_hora, monto, categoria, comercio, ubicacion,
+                                 origen)
+           values (%s, %s, %s, %s, %s, %s, %s, %s, 'en_vivo') on conflict do nothing""",
         (fuente, id_cuenta, t["id_transaccion"], t["fecha_hora"], t["monto"], t.get("categoria"),
          t.get("comercio"), t.get("ubicacion")),
     )

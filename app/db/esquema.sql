@@ -171,6 +171,10 @@ create table if not exists perfiles_tarjeta (
     actualizado_en timestamptz not null default now(),
     primary key (fuente, id_cuenta)
 );
+-- Historial: las compras que entran en vivo se marcan para poder reiniciar la demo sin
+-- tocar las de la semilla (python -m app.db.migrar --reiniciar-en-vivo).
+alter table historial add column if not exists origen text not null default 'semilla';
+
 -- Alias opaco de la tarjeta (TAR-0001): lo que la interfaz y la API usan para nombrarla.
 -- El número completo nunca sale del servidor, ni siquiera para inyectar una compra.
 alter table perfiles_tarjeta add column if not exists alias text;

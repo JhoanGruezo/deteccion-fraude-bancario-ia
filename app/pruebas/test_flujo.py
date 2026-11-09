@@ -210,3 +210,18 @@ def test_feed_y_tarjetas_sin_numero_completo(cliente):
     assert feed and tarjetas
     assert "4000123412343001" not in str(feed) + str(tarjetas)
     assert any(t["alias"] == "TAR-3001" and t["tarjeta_enmascarada"].endswith("3001") for t in tarjetas)
+
+
+def test_reiniciar_en_vivo_borra_lo_generado_y_conserva_la_semilla(cliente):
+    from app.db import migrar
+    evaluar(compra("1020", 0, score=0.99))
+    antes_semilla = {fila[0] for fila in como_dueno("select id_transaccion from historial where origen = 'semilla'")}
+    borrados = migrar.reiniciar_en_vivo()
+    assert borrados["casos"] > 0 and borrados["transacciones_evaluadas"] > 0
+    assert como_dueno("select count(*) from casos where origen = 'en_vivo'")[0][0] == 0
+    assert como_dueno("select count(*) from historial where origen = 'en_vivo'")[0][0] == 0
+    # Ninguna fila de la semilla se pierde (el reinicio además recarga el historial del simulador).
+    despues_semilla = {fila[0] for fila in como_dueno("select id_transaccion from historial where origen = 'semilla'")}
+    assert antes_semilla <= despues_semilla
+    # La numeración de casos vuelve a empezar.
+    assert evaluar(compra("1021", 0, score=0.99))["id_caso"] == "VIV-000001"

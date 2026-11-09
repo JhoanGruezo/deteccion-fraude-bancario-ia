@@ -434,3 +434,15 @@ def test_la_app_escribe_la_etiqueta_en_vivo_pero_no_la_lee(base_cargada):
     with psycopg.connect(config.DATABASE_URL) as dueno:
         assert dueno.execute("select es_fraude_dataset from transacciones_evaluadas "
                              "where id_transaccion = 'prueba-etiqueta'").fetchone()[0] == 1
+
+
+def test_la_migracion_carga_la_semilla_del_simulador(base_cargada):
+    import gzip
+    with gzip.open(os.path.join(CARPETA_SEMILLA, "simulador_sparkov.json.gz"), "rt", encoding="utf-8") as archivo:
+        semilla_simulador = json.load(archivo)
+    assert base_cargada["simulador"] == "cargada"
+    with psycopg.connect(config.DATABASE_URL) as dueno:
+        n, alias_minimo = dueno.execute("select count(*), min(alias) from perfiles_tarjeta").fetchone()
+    assert n == len(semilla_simulador["perfiles"]) and alias_minimo == "TAR-0001"
+    # Volver a migrar no duplica perfiles.
+    assert migrar.preparar_base().get("simulador") is None
