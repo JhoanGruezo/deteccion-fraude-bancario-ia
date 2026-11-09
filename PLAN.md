@@ -168,8 +168,8 @@ del resto.
 
 - [x] **T6.1** `docs/seguridad.md`, `docs/gobernanza.md`, `docs/respuesta_auditoria.md`,
       `docs/decisiones.md`, README y guía de estudio actualizados, con los dos integrantes.
-      2026-11-08: todos escritos. Además, `docs/presentaciones/guion-momento3.md` (6 min) y
-      `docs/presentaciones/prueba-tercero.md`.
+      2026-11-08: todos escritos. Además, el guion de 6 minutos (fuera del repositorio, es del equipo)
+      y `docs/presentaciones/prueba-tercero.md`.
 - [~] **T6.2** Prueba de clon limpio sin `.env` y con solo la llave de Gemini; prueba con
       alguien ajeno al equipo, documentada.
       2026-11-08: clon limpio hecho (ZIP en carpeta vacía; run.ps1 y run.sh; sin .env; solo

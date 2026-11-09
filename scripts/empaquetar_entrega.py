@@ -50,6 +50,8 @@ JOBLIB_PERMITIDOS = {"semilla/modelo_riesgo_sparkov.joblib"}
 # Archivos locales que nunca entran, aunque estén dentro de una carpeta permitida: la copia de
 # trabajo de la lista de verificación de Jeison tiene llaves (la versión del repositorio no).
 ARCHIVOS_EXCLUIDOS = {"docs/prueba-companero-jeison.txt"}
+# Los guiones de la presentación son del equipo: no van al repositorio ni a la entrega.
+PREFIJOS_EXCLUIDOS = ("docs/presentaciones/guion-",)
 
 CARPETAS_EXCLUIDAS = {"__pycache__", ".pytest_cache", ".venv", "venv", ".git", "node_modules", "datos", ".claude"}
 EXTENSIONES_EXCLUIDAS = {".pyc", ".pyo", ".joblib", ".csv"}
@@ -82,7 +84,7 @@ def archivos_a_empaquetar() -> list[str]:
             subcarpetas[:] = sorted(s for s in subcarpetas if s not in CARPETAS_EXCLUIDAS)
             for archivo in sorted(archivos):
                 relativa = os.path.relpath(os.path.join(actual, archivo), RAIZ).replace(os.sep, "/")
-                if relativa in ARCHIVOS_EXCLUIDOS:
+                if relativa in ARCHIVOS_EXCLUIDOS or relativa.startswith(PREFIJOS_EXCLUIDOS):
                     continue
                 if os.path.splitext(archivo)[1].lower() in EXTENSIONES_EXCLUIDAS and relativa not in JOBLIB_PERMITIDOS:
                     continue

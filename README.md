@@ -280,7 +280,7 @@ scripts/                  generar_semilla.py, elegir_casos_dorados.py, empaqueta
 docs/img/                 captura de la app y gráficas generadas
 requisitos/, diseno/, validacion/   requisitos, diseño y validación de cada componente
 docs/guia-del-proyecto.md guía general con diagramas de arquitectura y flujo
-docs/presentaciones/      pitch del 9 de octubre y guiones
+docs/presentaciones/      pitch del 9 de octubre y protocolo de la prueba con un tercero
 decisiones.md             bitácora histórica de decisiones (la consolidada está en docs/)
 plan-construccion.md      plan y checklist por sesión de planeación
 CLAUDE.md                 convenciones de código del proyecto

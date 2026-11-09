@@ -17,3 +17,6 @@ __pycache__/
 # Variantes locales del .env (auditoría B7); la plantilla sí va al repositorio.
 .env.*
 !.env.example
+
+# Guiones de la presentación: son del equipo, no van al repositorio ni al ZIP.
+docs/presentaciones/guion-*.md
