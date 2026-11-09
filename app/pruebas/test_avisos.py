@@ -76,3 +76,7 @@ def test_el_correo_solo_sale_a_la_lista_blanca(monkeypatch):
     assert con_lista["canal"] == "correo"
     con_lista["_correo"] = "otro@atacante.com"                    # aunque alguien cambie el destino...
     assert avisos.enviar(con_lista)[0] == "retenida"             # ...no sale fuera de la lista
+
+
+def test_la_plantilla_nombra_la_categoria_en_espanol():
+    assert "(tienda en línea)" in avisos.motivo_de_plantilla(CASO) and "shopping_net" not in avisos.motivo_de_plantilla(CASO)

@@ -151,3 +151,35 @@ def test_el_titular_responde_desde_el_buzon_y_salir_cierra_la_sesion(app_con_ses
         assert http.get("/api/supervision").status_code == 200
         http.post("/api/sesion/salir", headers={"X-CSRF-Token": csrf})
         assert http.get("/api/casos").status_code == 401
+
+
+# --- Hallazgos de la auditoría del 2026-10-31 cerrados en el Momento 3 ---------------------------
+
+
+def test_auditoria_b1_byte_nul_responde_422_y_no_500(app_con_sesion):
+    with cliente(app_con_sesion) as http:
+        ingresar(http, "analista")
+        assert http.get("/api/casos/%00").status_code == 422
+        assert http.get("/api/casos?q=%00").status_code == 422
+
+
+def test_auditoria_b2_comodines_de_la_busqueda_se_escapan(app_con_sesion):
+    with cliente(app_con_sesion) as http:
+        ingresar(http, "analista")
+        assert http.get("/api/casos?q=%25").json()["casos"] == []      # "%" ya no devuelve todo
+        assert http.get("/api/casos?q=_").json()["casos"] == []
+
+
+def test_auditoria_b3_y_b6_sin_documentacion_publica_y_con_tope_de_cuerpo(app_con_sesion):
+    with cliente(app_con_sesion) as http:
+        assert http.get("/docs").status_code == 404 and http.get("/openapi.json").status_code == 404
+        csrf = ingresar(http, "analista")
+        grande = http.post("/api/transacciones", content=b"{" + b" " * (70 * 1024) + b"}",
+                           headers={"X-CSRF-Token": csrf, "Content-Type": "application/json"})
+        assert grande.status_code == 413
+
+
+def test_auditoria_m3_solo_el_supervisor_fuerza_fallas_en_su_stream(app_con_sesion):
+    with cliente(app_con_sesion) as http:
+        ingresar(http, "analista")
+        assert http.get("/api/casos/VIV-000001/explicacion/stream?falla=todo").status_code == 403

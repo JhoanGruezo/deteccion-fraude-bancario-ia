@@ -18,7 +18,7 @@ from pydantic import BaseModel
 from app import config
 from app.api.rutas_casos import caso_o_404, repositorio, validar_analista
 from app.api.rutas_sistema import falla_vigente
-from app.api.sesion import firma_de
+from app.api.sesion import firma_de, usuario_de
 from app.api.sse import depurar_para_interfaz, respuesta_sse, transmitir
 
 router = APIRouter(prefix="/api", tags=["agente"])
@@ -39,6 +39,11 @@ def _falla_para_tarea(request: Request, falla: str | None) -> str | None:
     de abrir el stream, porque después el navegador no podría leer el 422.
     """
     pedido = (falla or "").strip()
+    usuario = usuario_de(request)
+    if pedido and config.AUTENTICACION and (usuario is None or usuario["rol"] != "supervisor"):
+        # Auditoría del 2026-10-31 (M3 de seguridad-app): cualquiera podía forzar fallas en su
+        # propio stream y ensuciar las métricas. Ahora es una herramienta de demo del supervisor.
+        raise HTTPException(403, "Forzar fallas es solo para el rol supervisor.")
     if pedido and config.PERMITIR_FALLAS_DESDE_UI:
         if pedido not in config.FALLAS_VALIDAS:
             raise HTTPException(422, f"Falla desconocida «{pedido}».")

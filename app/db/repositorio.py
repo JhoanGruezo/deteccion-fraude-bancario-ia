@@ -145,15 +145,18 @@ def listar_casos(fuente=None, nivel=None, estado=None, busqueda=None, orden="sco
         parametros["origen"] = origen
     if busqueda and busqueda.strip():
         texto = busqueda.strip()
-        parametros["patron_caso"] = f"%{texto}%"
+        # Los comodines de LIKE que escriba el usuario (%, _ y la barra) se escapan: "%" ya no
+        # devuelve todos los casos (auditoría del 2026-10-31, B2).
+        escapado = texto.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        parametros["patron_caso"] = f"%{escapado}%"
         if len(texto) == 4 and texto.isdigit():
             # Misma regla que enmascarar_tarjeta: ids cortos (sintéticos) rellenos con ceros.
             # lpad con greatest(...) porque lpad a secas TRUNCA los textos más largos que 4.
-            condiciones.append("(c.id_caso ilike %(patron_caso)s or "
+            condiciones.append("(c.id_caso ilike %(patron_caso)s escape '\\' or "
                                "right(lpad(c.id_cuenta, greatest(length(c.id_cuenta), 4), '0'), 4) = %(ultimos4)s)")
             parametros["ultimos4"] = texto
         else:
-            condiciones.append("c.id_caso ilike %(patron_caso)s")
+            condiciones.append("c.id_caso ilike %(patron_caso)s escape '\\'")
     donde = ("where " + " and ".join(condiciones)) if condiciones else ""
     # El orden se elige de una lista cerrada: nunca se interpola texto del usuario en el SQL.
     ordenar = {"fecha": "c.inicio_ventana desc, c.id_caso",

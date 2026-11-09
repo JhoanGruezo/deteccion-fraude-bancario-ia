@@ -103,6 +103,17 @@ def validar_motivo(motivo: str | None, caso: dict) -> list[str]:
     return errores
 
 
+# Las categorías de Sparkov son códigos internos ("shopping_net"); al titular se le escriben en
+# español (auditoría del 2026-10-31, M1: la jerga llegaba a lo que lee una persona).
+CATEGORIAS_ES = {
+    "entertainment": "entretenimiento", "food_dining": "restaurantes", "gas_transport": "gasolina y transporte",
+    "grocery_net": "mercado en línea", "grocery_pos": "supermercado", "health_fitness": "salud y deporte",
+    "home": "hogar", "kids_pets": "niños y mascotas", "misc_net": "compras varias en línea",
+    "misc_pos": "compras varias en tienda", "personal_care": "cuidado personal",
+    "shopping_net": "tienda en línea", "shopping_pos": "tienda física", "travel": "viajes",
+}
+
+
 def motivo_de_plantilla(caso: dict) -> str:
     """Motivo armado por código con la compra más riesgosa del caso (respaldo del agente)."""
     transacciones = caso.get("transacciones") or []
@@ -111,7 +122,7 @@ def motivo_de_plantilla(caso: dict) -> str:
     principal = max(transacciones, key=lambda t: float(t["score"]))
     monto = f"{float(principal['monto']):,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
     cuando = str(principal["fecha_hora"]).replace("T", " ")[:16]
-    lugar = principal.get("categoria") or "un comercio"
+    lugar = CATEGORIAS_ES.get(principal.get("categoria"), principal.get("categoria")) or "un comercio"
     extra = f" y {len(transacciones) - 1} compra(s) más en poco tiempo" if len(transacciones) > 1 else ""
     return f"una compra de {monto} USD ({lugar}) el {cuando}{extra}, muy distinta de su forma habitual de comprar."
 

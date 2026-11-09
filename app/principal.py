@@ -233,6 +233,9 @@ def crear_app() -> FastAPI:
         description="Bandeja de casos, explicación del agente por SSE y decisiones con confirmación humana.",
         version="1.0.0",
         lifespan=ciclo_de_vida,
+        docs_url="/docs" if config.DOCS_API else None,
+        redoc_url="/redoc" if config.DOCS_API else None,
+        openapi_url="/openapi.json" if config.DOCS_API else None,
     )
     # Valores antes del arranque: la salud funciona incluso si la app se usa sin lifespan.
     app.state.estado_base = {"preparada": False, "mensaje": None}
@@ -244,6 +247,7 @@ def crear_app() -> FastAPI:
     # las cabeceras, y el límite frena la fuerza bruta antes de tocar la base.
     sesion.instalar(app)
     limites.instalar(app)
+    limites.instalar_saneamiento(app)
     # Se instala después del límite para que también el 429 lleve las cabeceras.
     _instalar_cabeceras_seguridad(app)
     app.include_router(rutas_casos.router)

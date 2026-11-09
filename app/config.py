@@ -133,5 +133,11 @@ COOKIE_SEGURA = _booleano("COOKIE_SEGURA", False)
 ANALISTA_CLAVE = _texto("ANALISTA_CLAVE")
 SUPERVISOR_CLAVE = _texto("SUPERVISOR_CLAVE")
 
+# Documentación automática de la API (/docs, /redoc, /openapi.json): apagada por defecto, porque
+# le entrega el mapa de la API a cualquiera (auditoría del 2026-10-31, B3).
+DOCS_API = _booleano("DOCS_API", False)
+# Tamaño máximo del cuerpo de una petición (auditoría B6).
+MAXIMO_CUERPO_BYTES = _entero("MAXIMO_CUERPO_BYTES", 64 * 1024)
+
 # --- Servidor -----------------------------------------------------------------------
 PUERTO = _entero("PUERTO", 8000)

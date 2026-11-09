@@ -113,3 +113,23 @@ def instalar(app, limitador: LimitadorDePeticiones | None = None):
                     status_code=429, headers={"Retry-After": str(segundos)},
                 )
         return await siguiente(request)
+
+
+def instalar_saneamiento(app):
+    """Rechaza antes de llegar a las rutas dos entradas que hacían daño (auditoría del 2026-10-31).
+
+    - Un byte NUL (`%00`) en la ruta o en la consulta producía un 500 desde Postgres (B1): ahora
+      es un 422 en español.
+    - Un cuerpo enorme se leía y se parseaba entero (B6): ahora se corta por `Content-Length`.
+    """
+    from urllib.parse import unquote
+
+    @app.middleware("http")
+    async def sanear(request: Request, siguiente):
+        crudo = unquote(request.url.path) + unquote(request.url.query or "")
+        if chr(0) in crudo:
+            return JSONResponse({"error": "La solicitud contiene caracteres no válidos."}, status_code=422)
+        largo = request.headers.get("content-length")
+        if largo and largo.isdigit() and int(largo) > config.MAXIMO_CUERPO_BYTES:
+            return JSONResponse({"error": "La solicitud es demasiado grande."}, status_code=413)
+        return await siguiente(request)
