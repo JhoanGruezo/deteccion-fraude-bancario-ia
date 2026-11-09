@@ -1,4 +1,4 @@
-"""Arma el ZIP de la entrega del Momento 2 y se niega a cerrarlo si lleva una llave.
+"""Arma el ZIP de la entrega (Momento 3) y se niega a cerrarlo si lleva una llave.
 
 Por qué existe: la página de la entrega dice que un ZIP que no arranca es nota cero y
 que jamás puede llevar llaves reales; además prohíbe carpetas pesadas (.venv/, .git/,
@@ -38,11 +38,18 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CARPETA_EN_ZIP = "fraude-bancario"
 
 CARPETAS_PERMITIDAS = ["app", "src", "scripts", "semilla", "eval", "docs", "requisitos", "diseno", "validacion"]
-ARCHIVOS_PERMITIDOS = ["README.md", "docker-compose.yml", "run.sh", ".env.example", ".dockerignore",
-                       "decisiones.md", "CLAUDE.md"]
+ARCHIVOS_PERMITIDOS = ["README.md", "docker-compose.yml", "run.sh", "run.ps1", ".env.example", ".dockerignore",
+                       ".gitattributes", "decisiones.md", "CLAUDE.md", "PLAN.md", "plan-construccion.md"]
 # Lo que es obligatorio según la página de la entrega: si falta, el ZIP no se arma.
-OBLIGATORIOS = ["README.md", "docker-compose.yml", "run.sh", ".env.example", "docs/decisiones.md",
-                "eval/casos_dorados.json", "app/Dockerfile", "semilla/casos_sparkov.json"]
+OBLIGATORIOS = ["README.md", "docker-compose.yml", "run.sh", "run.ps1", ".env.example", "docs/decisiones.md",
+                "eval/casos_dorados.json", "app/Dockerfile", "app/restricciones.txt", "semilla/casos_sparkov.json",
+                "semilla/modelo_riesgo_sparkov.joblib", "semilla/simulador_sparkov.json.gz",
+                "docs/SPEC.md", "docs/seguridad.md", "docs/gobernanza.md", "docs/respuesta_auditoria.md"]
+# El único .joblib que entra: el modelo con el que la app puntúa en vivo (sin él no arranca el flujo).
+JOBLIB_PERMITIDOS = {"semilla/modelo_riesgo_sparkov.joblib"}
+# Archivos locales que nunca entran, aunque estén dentro de una carpeta permitida: la copia de
+# trabajo de la lista de verificación de Jeison tiene llaves (la versión del repositorio no).
+ARCHIVOS_EXCLUIDOS = {"docs/prueba-companero-jeison.txt"}
 
 CARPETAS_EXCLUIDAS = {"__pycache__", ".pytest_cache", ".venv", "venv", ".git", "node_modules", "datos", ".claude"}
 EXTENSIONES_EXCLUIDAS = {".pyc", ".pyo", ".joblib", ".csv"}
@@ -74,11 +81,14 @@ def archivos_a_empaquetar() -> list[str]:
         for actual, subcarpetas, archivos in os.walk(base):
             subcarpetas[:] = sorted(s for s in subcarpetas if s not in CARPETAS_EXCLUIDAS)
             for archivo in sorted(archivos):
-                if os.path.splitext(archivo)[1].lower() in EXTENSIONES_EXCLUIDAS:
+                relativa = os.path.relpath(os.path.join(actual, archivo), RAIZ).replace(os.sep, "/")
+                if relativa in ARCHIVOS_EXCLUIDOS:
+                    continue
+                if os.path.splitext(archivo)[1].lower() in EXTENSIONES_EXCLUIDAS and relativa not in JOBLIB_PERMITIDOS:
                     continue
                 if archivo == ".env" or (archivo.startswith(".env.") and archivo != ".env.example"):
                     continue
-                rutas.append(os.path.relpath(os.path.join(actual, archivo), RAIZ).replace(os.sep, "/"))
+                rutas.append(relativa)
     return rutas
 
 
@@ -154,7 +164,7 @@ def main() -> None:
           f"(patrones: {', '.join(PATRONES_LLAVE)}). .env.example sin valores de llave.")
 
     os.makedirs(argumentos.salida, exist_ok=True)
-    destino = os.path.join(argumentos.salida, f"entrega_momento2_{date.today().isoformat()}.zip")
+    destino = os.path.join(argumentos.salida, f"entrega_momento3_{date.today().isoformat()}.zip")
     escribir_zip(rutas, destino)
 
     tamano_mb = os.path.getsize(destino) / 1_000_000
