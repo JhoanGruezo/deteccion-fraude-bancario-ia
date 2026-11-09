@@ -18,6 +18,7 @@ from pydantic import BaseModel
 from app import config
 from app.api.rutas_casos import caso_o_404, repositorio, validar_analista
 from app.api.rutas_sistema import falla_vigente
+from app.api.sesion import firma_de
 from app.api.sse import depurar_para_interfaz, respuesta_sse, transmitir
 
 router = APIRouter(prefix="/api", tags=["agente"])
@@ -98,14 +99,14 @@ class CuerpoResolucion(BaseModel):
 MENSAJE_YA_RESUELTA = "Esta propuesta ya fue resuelta. Recarga el caso para ver la decisión vigente."
 
 
-def _resolver(propuesta_id: int, confirmar: bool, cuerpo: CuerpoResolucion):
+def _resolver(propuesta_id: int, confirmar: bool, cuerpo: CuerpoResolucion, request: Request):
     """Resuelve una propuesta con la confirmación explícita del analista.
 
     El repositorio avisa con excepciones propias: `PropuestaNoEncontrada` (es un
     `LookupError`) → 404 y `PropuestaYaResuelta` → 409. Se aceptan también `None` y
     `ValueError` por si esa capa cambia, para no convertir un conflicto en un 500.
     """
-    analista, comentario = validar_analista(cuerpo.analista, cuerpo.comentario)
+    analista, comentario = validar_analista(firma_de(request) or cuerpo.analista, cuerpo.comentario)
     repo = repositorio()
     ya_resuelta = tuple(c for c in (getattr(repo, "PropuestaYaResuelta", None), ValueError) if isinstance(c, type))
     try:
@@ -122,10 +123,10 @@ def _resolver(propuesta_id: int, confirmar: bool, cuerpo: CuerpoResolucion):
 
 
 @router.post("/propuestas/{propuesta_id}/confirmar")
-def confirmar_propuesta(propuesta_id: int, cuerpo: CuerpoResolucion):
-    return _resolver(propuesta_id, True, cuerpo)
+def confirmar_propuesta(propuesta_id: int, cuerpo: CuerpoResolucion, request: Request):
+    return _resolver(propuesta_id, True, cuerpo, request)
 
 
 @router.post("/propuestas/{propuesta_id}/rechazar")
-def rechazar_propuesta(propuesta_id: int, cuerpo: CuerpoResolucion):
-    return _resolver(propuesta_id, False, cuerpo)
+def rechazar_propuesta(propuesta_id: int, cuerpo: CuerpoResolucion, request: Request):
+    return _resolver(propuesta_id, False, cuerpo, request)

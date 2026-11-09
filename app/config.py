@@ -122,5 +122,16 @@ SMTP_REMITENTE = _texto("SMTP_REMITENTE", "")
 NOMBRE_BANCO = _texto("NOMBRE_BANCO", "Banco Demo")
 TELEFONO_OFICIAL_BANCO = _texto("TELEFONO_OFICIAL_BANCO", "601 000 0000")
 
+# --- Sesión y roles (SPEC, RF7) --------------------------------------------------------
+# Apagarla solo sirve para las pruebas unitarias de rutas con dobles (app/pruebas/conftest.py).
+AUTENTICACION = _booleano("AUTENTICACION", True)
+HORAS_SESION = _decimal("HORAS_SESION", 8.0)          # un turno
+# true solo detrás de HTTPS; en localhost (http) la cookie Secure no se enviaría.
+COOKIE_SEGURA = _booleano("COOKIE_SEGURA", False)
+# Contraseñas iniciales de los usuarios "analista" y "supervisor". Vacías = se generan al azar en
+# el primer arranque y se imprimen una sola vez en el registro del contenedor.
+ANALISTA_CLAVE = _texto("ANALISTA_CLAVE")
+SUPERVISOR_CLAVE = _texto("SUPERVISOR_CLAVE")
+
 # --- Servidor -----------------------------------------------------------------------
 PUERTO = _entero("PUERTO", 8000)

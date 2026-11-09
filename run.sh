@@ -64,4 +64,11 @@ done
 
 echo
 echo "Vista del analista: $URL"
+# Primer arranque: la app genera las contraseñas de "analista" y "supervisor" y las deja una sola
+# vez en su registro. Se muestran aquí para no tener que buscarlas.
+CREDENCIALES=$(docker compose logs app 2>/dev/null | grep -A2 "CREDENCIALES DE LA APP" | tail -n 2 | sed 's/^[^|]*| *//')
+if [ -n "$CREDENCIALES" ]; then
+    echo "Usuarios de la app (guárdelos; para restablecerlos: docker compose exec app python -m app.db.migrar --restablecer-claves):"
+    echo "$CREDENCIALES"
+fi
 echo "Para detener:        docker compose down"

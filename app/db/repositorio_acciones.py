@@ -209,3 +209,77 @@ def ahora_de_la_base() -> datetime:
     with cursor() as cur:
         cur.execute("select now() as ahora")
         return cur.fetchone()["ahora"]
+
+
+# --- Consultas de las vistas Bloqueos, Buzón y Supervisión ---------------------------------------
+
+
+def listar_bloqueos(estado=None, limite=200):
+    """Bloqueos con su caso, el aviso enviado y la respuesta del titular (más reciente primero).
+
+    "fui_yo" sube primero: es el cliente esperando que le devuelvan su tarjeta (SPEC, RF5).
+    """
+    with cursor() as cur:
+        cur.execute(
+            """select b.id, b.id_caso, b.id_cuenta, b.tipo, b.actor, b.usuario, b.banda, b.motivo, b.estado,
+                      b.creado_en, b.segundos_hasta_bloqueo, b.levantado_por, b.motivo_desbloqueo, b.levantado_en,
+                      p.alias, c.score_maximo, c.nivel_recomendacion,
+                      n.cuerpo as aviso, n.autor_motivo, n.respuesta_titular, n.respondida_en
+               from bloqueos b
+               join casos c using (id_caso)
+               left join perfiles_tarjeta p on p.fuente = b.fuente and p.id_cuenta = b.id_cuenta
+               left join lateral (select cuerpo, autor_motivo, respuesta_titular, respondida_en from notificaciones
+                                  where bloqueo_id = b.id order by id limit 1) n on true
+               where (%(estado)s::text is null or b.estado = %(estado)s)
+               order by (b.estado = 'activo' and n.respuesta_titular = 'fui_yo') desc nulls last, b.creado_en desc
+               limit %(limite)s""",
+            {"estado": estado, "limite": limite})
+        filas = _filas(cur.fetchall())
+    for fila in filas:
+        fila["tarjeta_enmascarada"] = enmascarar_tarjeta(fila.pop("id_cuenta"))
+    return filas
+
+
+def listar_avisos(limite=100):
+    """Buzón simulado del titular: los avisos enviados, sin el número de tarjeta."""
+    with cursor() as cur:
+        cur.execute(
+            """select n.id, n.id_caso, n.tipo, n.canal, n.destinatario, n.cuerpo, n.autor_motivo, n.estado,
+                      n.respuesta_titular, n.respondida_en, n.creada_en, p.alias
+               from notificaciones n join casos c using (id_caso)
+               left join perfiles_tarjeta p on p.fuente = c.fuente and p.id_cuenta = c.id_cuenta
+               order by n.creada_en desc limit %s""", (limite,))
+        return _filas(cur.fetchall())
+
+
+def atender_alerta(alerta_id, usuario):
+    with cursor() as cur:
+        cur.execute("""update alertas set atendida_por = %s, atendida_en = now()
+                       where id = %s and atendida_en is null returning id""", (usuario, alerta_id))
+        return cur.fetchone() is not None
+
+
+def resumen_supervision():
+    """Lo que el supervisor necesita ver de un vistazo, calculado en la base."""
+    with cursor() as cur:
+        cur.execute(
+            """select
+                 (select count(*) from bloqueos where actor = 'agente' and creado_en > now() - interval '1 hour') as bloqueos_agente_hora,
+                 (select count(*) from bloqueos where estado = 'activo') as bloqueos_activos,
+                 (select count(*) from bloqueos b where estado = 'activo' and exists (
+                      select 1 from notificaciones n where n.bloqueo_id = b.id and n.respuesta_titular = 'fui_yo')) as esperan_desbloqueo,
+                 (select count(*) from casos where origen = 'en_vivo' and estado in ('pendiente', 'en_verificacion')) as casos_en_cola,
+                 (select count(*) from transacciones_evaluadas) as transacciones_evaluadas,
+                 (select coalesce(sum(monto), 0) from transacciones_evaluadas where decision = 'rechazada_por_bloqueo') as monto_detenido,
+                 (select count(*) from transacciones_evaluadas where decision = 'rechazada_por_bloqueo') as compras_detenidas,
+                 (select percentile_cont(0.5) within group (order by segundos_hasta_bloqueo) from bloqueos) as mediana_s_hasta_bloqueo,
+                 (select max(segundos_hasta_bloqueo) from bloqueos) as maximo_s_hasta_bloqueo,
+                 (select count(*) from bloqueos where actor = 'agente') as bloqueos_por_agente,
+                 (select count(*) from bloqueos where actor = 'regla') as bloqueos_por_regla,
+                 (select percentile_cont(0.5) within group (order by extract(epoch from levantado_en - creado_en))
+                    from bloqueos where estado = 'levantado') as mediana_s_hasta_desbloqueo,
+                 (select percentile_cont(0.5) within group (order by latencia_total_ms) from transacciones_evaluadas) as mediana_ms_decision,
+                 (select percentile_cont(0.99) within group (order by latencia_total_ms) from transacciones_evaluadas) as p99_ms_decision""")
+        cifras = _fila(cur.fetchone())
+    return {k: (float(v) if isinstance(v, (int, float)) and k.startswith(("mediana", "maximo", "p99", "monto")) else v)
+            for k, v in cifras.items()}

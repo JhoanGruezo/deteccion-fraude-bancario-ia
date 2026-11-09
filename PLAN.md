@@ -115,13 +115,20 @@ del resto.
       2026-11-08: `app/riesgo/avisos.py` y 19 pruebas, incluidos 4 motivos maliciosos que
       llegan por el triaje: ninguno sale hacia el titular y el bloqueo igual protege. El
       correo real queda listo pero apagado (lista blanca vacía = no sale nada).
-- [ ] **T3.4** Desbloqueo humano (RF6) con motivo y medición del tiempo; interruptor de
+- [x] **T3.4** Desbloqueo humano (RF6) con motivo y medición del tiempo; interruptor de
       autonomía y tope por hora en `ajustes_sistema`.
+      2026-11-09: `app/api/rutas_operacion.py` (bloqueos, desbloqueo con motivo firmado por la
+      sesión, buzón del titular, supervisión, ajustes y alertas).
 
 ## Fase 4 · Sesión y frontend (13 al 16-nov)
 
-- [ ] **T4.1** Inicio de sesión, roles y CSRF (RF7), con credenciales generadas si no
+- [x] **T4.1** Inicio de sesión, roles y CSRF (RF7), con credenciales generadas si no
       vienen en `.env`. *Verifica:* 401 y 403 en todas las rutas que escriben.
+      2026-11-09: `app/api/sesion.py` y `app/db/repositorio_usuarios.py`. Contraseñas con
+      scrypt; la sesión se guarda solo como hash SHA-256; cookie HttpOnly y SameSite=Strict;
+      CSRF por cabecera; 5 intentos fallidos bloquean 15 min; mismo mensaje exista o no el
+      usuario. Las decisiones quedan firmadas por la sesión e ignoran el nombre que mande el
+      cuerpo. 9 pruebas con la autenticación encendida.
 - [ ] **T4.2** Simulador (RF8): reproducción con reloj acelerado, pausa, velocidad,
       inyección manual y resumen final.
 - [ ] **T4.3** Vistas nuevas: Ingreso, En vivo, Bloqueos, Buzón del titular y Supervisión

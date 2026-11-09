@@ -28,7 +28,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app import config
-from app.api import limites, rutas_agente, rutas_casos, rutas_en_vivo, rutas_sistema
+from app.api import limites, rutas_agente, rutas_casos, rutas_en_vivo, rutas_operacion, rutas_sistema, sesion
 
 CARPETA_WEB = os.path.join(os.path.dirname(os.path.abspath(__file__)), "web")
 
@@ -233,6 +233,10 @@ def crear_app() -> FastAPI:
     app.state.demo = rutas_sistema.EstadoDemo(config.FALLA_FORZADA)
 
     _instalar_manejadores(app)
+    # Orden de los middlewares (el último instalado es el más externo): cabeceras de
+    # seguridad → límite de peticiones → sesión → la ruta. Así un 429 o un 401 también llevan
+    # las cabeceras, y el límite frena la fuerza bruta antes de tocar la base.
+    sesion.instalar(app)
     limites.instalar(app)
     # Se instala después del límite para que también el 429 lleve las cabeceras.
     _instalar_cabeceras_seguridad(app)
@@ -240,6 +244,10 @@ def crear_app() -> FastAPI:
     app.include_router(rutas_agente.router)
     app.include_router(rutas_sistema.router)
     app.include_router(rutas_en_vivo.router)
+    app.include_router(sesion.router)
+    app.include_router(rutas_operacion.router)
+    if not config.AUTENTICACION:
+        registro.warning("AUTENTICACIÓN APAGADA: solo para pruebas. Cualquiera puede usar la API.")
 
     app.mount("/static", EstaticosSinCacheVieja(directory=CARPETA_WEB), name="static")
 

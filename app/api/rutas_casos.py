@@ -11,16 +11,18 @@ repositorio usa psycopg síncrono. Un solo modelo mental, sin `async` mezclado.
 
 import importlib
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Request
 from pydantic import BaseModel
 
+from app.api.sesion import firma_de
 from app.api.sse import depurar_para_interfaz
 
 router = APIRouter(prefix="/api", tags=["casos"])
 
 FUENTES = {"sparkov", "sinteticos"}
 NIVELES = {"bloquear_tarjeta", "bloquear_acceso_cuenta", "verificar_cliente"}
-ESTADOS = {"pendiente", "bloqueo_confirmado", "descartado", "escalado"}
+ESTADOS = {"pendiente", "bloqueo_confirmado", "descartado", "escalado",       # Momento 2
+           "bloqueado", "en_verificacion", "desbloqueado"}                     # Momento 3
 ORDENES = {"score", "fecha"}
 ACCIONES = {"confirmar_bloqueo", "descartar", "escalar"}
 LARGO_MAXIMO_ANALISTA = 80
@@ -160,11 +162,15 @@ def obtener_historial(id_caso: str, dias: int = Query(30, ge=1, le=365), limite:
 
 
 @router.post("/casos/{id_caso}/decisiones")
-def registrar_decision(id_caso: str, cuerpo: CuerpoDecision):
-    """Decisión manual: el analista no necesita que el agente proponga para decidir."""
+def registrar_decision(id_caso: str, cuerpo: CuerpoDecision, request: Request):
+    """Decisión manual: el analista no necesita que el agente proponga para decidir.
+
+    Con sesión (Momento 3) la firma es el usuario autenticado; el campo "analista" del cuerpo
+    se ignora, para que nadie firme con el nombre de otro.
+    """
     if cuerpo.accion not in ACCIONES:
         raise HTTPException(422, "Elige una acción válida: confirmar bloqueo, descartar o escalar.")
-    analista, comentario = validar_analista(cuerpo.analista, cuerpo.comentario)
+    analista, comentario = validar_analista(firma_de(request) or cuerpo.analista, cuerpo.comentario)
     caso_o_404(id_caso)
     try:
         decision = repositorio().registrar_decision(id_caso, cuerpo.accion, analista, comentario)

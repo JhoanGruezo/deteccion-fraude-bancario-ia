@@ -29,6 +29,8 @@ import os
 import sys
 import time
 
+import secrets
+
 import psycopg
 from psycopg.rows import dict_row
 
@@ -142,6 +144,39 @@ def _cargar_historial(cur, ruta):
     return filas
 
 
+USUARIOS_INICIALES = (("analista", "Analista de turno", "analista"), ("supervisor", "Supervisor de fraude", "supervisor"))
+
+
+def _crear_usuarios_iniciales(cur, forzar=False):
+    """Crea (o con forzar, restablece) los usuarios analista y supervisor. Devuelve las claves nuevas.
+
+    La contraseña sale de ANALISTA_CLAVE / SUPERVISOR_CLAVE si están en .env; si no, se genera al
+    azar. Nunca se escribe en un archivo: solo en el registro del contenedor, una vez.
+    """
+    from app.db.repositorio_usuarios import derivar_clave   # import diferido: scrypt no hace falta antes
+    cur.execute("select count(*) as n from usuarios")
+    if cur.fetchone()["n"] and not forzar:
+        return {}
+    claves = {}
+    for usuario, nombre, rol in USUARIOS_INICIALES:
+        clave = getattr(config, f"{usuario.upper()}_CLAVE") or secrets.token_urlsafe(9)
+        cur.execute("""insert into usuarios (usuario, nombre, rol, hash_clave) values (%s, %s, %s, %s)
+                       on conflict (usuario) do update set hash_clave = excluded.hash_clave, activo = true""",
+                    (usuario, nombre, rol, derivar_clave(clave)))
+        claves[usuario] = clave
+    cur.execute("update sesiones set cerrada = true")      # las sesiones viejas dejan de valer
+    return claves
+
+
+def _anunciar_claves(claves):
+    if not claves:
+        return
+    lineas = "\n".join(f"    {usuario:<11} {clave}" for usuario, clave in claves.items())
+    registro.warning("CREDENCIALES DE LA APP (se muestran una sola vez; guárdelas):\n%s\n"
+                     "    Para restablecerlas: docker compose exec app python -m app.db.migrar --restablecer-claves",
+                     lineas)
+
+
 ARCHIVO_SIMULADOR = "simulador_sparkov.json.gz"
 ARCHIVO_HISTORIAL_SIMULADOR = "historial_simulador.csv.gz"
 
@@ -212,6 +247,8 @@ def preparar_base(carpeta_semilla=None):
                 _cargar_historial(cur, os.path.join(carpeta, "historial.csv.gz"))
                 resultado["semilla"] = "cargada"
 
+        claves_nuevas = _crear_usuarios_iniciales(cur)
+
         # Semilla del simulador en vivo (opcional): perfiles de tarjeta e historial reciente.
         cur.execute("select count(*) as n from perfiles_tarjeta")
         if cur.fetchone()["n"] == 0:
@@ -225,6 +262,9 @@ def preparar_base(carpeta_semilla=None):
             """
         )
         resultado.update(cur.fetchone())
+
+    _anunciar_claves(claves_nuevas)
+    resultado["usuarios_creados"] = sorted(claves_nuevas)
 
     # Roles de mínimo privilegio: desde aquí la app deja de usar al dueño de la base.
     resultado_roles = roles.aplicar_roles(config.DATABASE_URL)
@@ -278,6 +318,12 @@ def reiniciar_en_vivo(carpeta_semilla=None):
 def main():
     sys.stdout.reconfigure(encoding="utf-8")
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+    if "--restablecer-claves" in sys.argv:
+        with psycopg.connect(config.DATABASE_URL, connect_timeout=5) as administracion,                 administracion.cursor(row_factory=dict_row) as cur:
+            claves = _crear_usuarios_iniciales(cur, forzar=True)
+        for usuario, clave in claves.items():
+            print(f"{usuario:<11} {clave}")
+        return
     if "--reiniciar-en-vivo" in sys.argv:
         print(json.dumps(reiniciar_en_vivo(), ensure_ascii=False))
         return
