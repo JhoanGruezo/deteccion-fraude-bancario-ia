@@ -6,7 +6,7 @@ barrera la pone Postgres:
 
 | Rol | Qué puede | Qué no puede |
 |---|---|---|
-| `<base>_app` (la API) | Leer casos, transacciones e historial; escribir tareas, trazas, explicaciones, propuestas y decisiones; cambiar el `estado` de un caso | Leer la etiqueta del dataset; borrar filas; cambiar el esquema; tocar la semilla |
+| `<base>_app` (la API) | Leer casos, transacciones e historial; escribir tareas, trazas, explicaciones, propuestas, decisiones, bloqueos, avisos, sesiones y transacciones en vivo; cambiar columnas puntuales (estado de un caso, desbloqueo) | Leer la etiqueta del dataset; borrar filas; cambiar el esquema; cambiar usuarios; reescribir montos o scores guardados |
 | `<base>_agente` (herramientas del LLM) | Leer casos (sin la etiqueta), transacciones, historial y explicaciones | Escribir cualquier cosa |
 
 El dueño de la base (`DATABASE_URL`, el usuario del compose) solo se usa para migrar y
@@ -19,8 +19,8 @@ Decisiones:
 - **Nombres por base** (`fraude_app`, `fraude_pruebas_app`): los roles de Postgres son
   de todo el servidor, y así las pruebas, que crean su propia base, no le cambian la
   contraseña a la app que está corriendo.
-- **Permisos de columna en `casos`**: se concede SELECT columna por columna, todas
-  menos `fraude_confirmado_dataset`. La lista se lee del catálogo en cada arranque, así
+- **Permisos de columna**: en `casos` y `transacciones_evaluadas` se concede SELECT
+  columna por columna, todas menos las de la etiqueta (`COLUMNAS_ETIQUETA`). La lista se lee del catálogo en cada arranque, así
   que una columna nueva queda visible sin tocar este archivo, y la etiqueta nunca.
 - **Revocar todo y volver a conceder** en cada arranque: si un permiso sobraba, desaparece.
 
@@ -39,21 +39,39 @@ from app import config
 
 registro = logging.getLogger("app.db.roles")
 
-COLUMNA_ETIQUETA = "fraude_confirmado_dataset"
+# Columnas con la etiqueta del dataset (la "respuesta correcta"): ningún rol de la app
+# las puede leer. Solo eval/ las lee, con el usuario dueño.
+COLUMNAS_ETIQUETA = {"fraude_confirmado_dataset", "es_fraude_dataset"}
 TODAS = "*"
 SIN_ETIQUETA = "sin_etiqueta"
 
 # tabla → {privilegio: TODAS | SIN_ETIQUETA | [columnas]}
 PERMISOS = {
     "app": {
-        "casos": {"select": SIN_ETIQUETA, "update": ["estado"]},
-        "transacciones_caso": {"select": TODAS},
-        "historial": {"select": TODAS},
+        # Momento 2
+        "casos": {"select": SIN_ETIQUETA, "insert": SIN_ETIQUETA,
+                  "update": ["estado", "banda", "banda_desde", "score_maximo", "tipos_fraude",
+                             "transacciones_sobre_umbral_bloqueo", "nivel_recomendacion",
+                             "motivo_recomendacion", "senal_principal"]},
+        "transacciones_caso": {"select": TODAS, "insert": TODAS},
+        "historial": {"select": TODAS, "insert": TODAS},
         "tareas_agente": {"select": TODAS, "insert": TODAS, "update": TODAS},
         "trazas": {"select": TODAS, "insert": TODAS},
         "explicaciones": {"select": TODAS, "insert": TODAS},
         "propuestas_decision": {"select": TODAS, "insert": TODAS, "update": TODAS},
         "decisiones": {"select": TODAS, "insert": TODAS},
+        # Momento 3. La etiqueta de transacciones_evaluadas se puede ESCRIBIR (la trae el
+        # simulador, para medir) pero no leer.
+        "perfiles_tarjeta": {"select": TODAS, "insert": TODAS, "update": TODAS},
+        "transacciones_evaluadas": {"select": SIN_ETIQUETA, "insert": TODAS},
+        "bloqueos": {"select": TODAS, "insert": TODAS,
+                     "update": ["estado", "levantado_por", "motivo_desbloqueo", "levantado_en"]},
+        "notificaciones": {"select": TODAS, "insert": TODAS,
+                           "update": ["estado", "detalle_envio", "enviada_en", "respuesta_titular", "respondida_en"]},
+        "usuarios": {"select": TODAS},
+        "sesiones": {"select": TODAS, "insert": TODAS, "update": ["cerrada"]},
+        "ajustes_sistema": {"select": TODAS, "update": ["valor", "actualizado_por", "actualizado_en"]},
+        "alertas": {"select": TODAS, "insert": TODAS, "update": ["atendida_por", "atendida_en"]},
     },
     "agente": {
         "casos": {"select": SIN_ETIQUETA},
@@ -85,7 +103,7 @@ def _conceder(cur, privilegio: str, tabla: str, columnas, rol_bd: str):
             sql.SQL(privilegio), sql.Identifier(tabla), sql.Identifier(rol_bd))
     else:
         if columnas == SIN_ETIQUETA:
-            columnas = [c for c in _columnas(cur, tabla) if c != COLUMNA_ETIQUETA]
+            columnas = [c for c in _columnas(cur, tabla) if c not in COLUMNAS_ETIQUETA]
         sentencia = sql.SQL("grant {} ({}) on table {} to {}").format(
             sql.SQL(privilegio), sql.SQL(", ").join(map(sql.Identifier, columnas)),
             sql.Identifier(tabla), sql.Identifier(rol_bd))

@@ -67,9 +67,13 @@ del resto.
       transacciones: 0 cambios de banda, 2 con diferencia > 0,001 por redondeo del motor
       fuera de línea (no de la app). Puntuar: mediana 1,8 ms, p99 2,7 ms; con señales,
       15,8 ms y 19,9 ms.
-- [ ] **T2.3** Esquema: `transacciones_evaluadas`, `bloqueos`, `notificaciones`,
+- [x] **T2.3** Esquema: `transacciones_evaluadas`, `bloqueos`, `notificaciones`,
       `usuarios`, `sesiones`, `ajustes_sistema`; columnas y estados nuevos en `casos` y
       `tareas_agente` (migración idempotente, también sobre una base del M2).
+      2026-11-08: 8 tablas nuevas y permisos por columna para cada rol. La etiqueta en vivo
+      (`es_fraude_dataset`) se puede escribir pero no leer, y los casos en vivo no la guardan.
+      Hay una prueba que falla si una tabla nueva no tiene permisos declarados. La base real
+      del M2 migró sola: 16 tablas.
 - [ ] **T2.4** `POST /api/transacciones`: bandas (RF2), apertura del caso en la primera
       marca, suma a un caso abierto de 48 h y subida de banda.
       *Verifica:* pruebas de cada banda y de la subida de media a alta y a crítica.

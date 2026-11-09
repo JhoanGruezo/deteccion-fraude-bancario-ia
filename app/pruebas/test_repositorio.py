@@ -371,8 +371,14 @@ def test_el_agente_solo_lee_y_sin_la_etiqueta(base_cargada, consulta):
     "select fraude_confirmado_dataset from casos limit 1",
     "select * from casos limit 1",
     "delete from decisiones",
-    "update casos set score_maximo = 0",
-    "insert into historial (fuente, id_cuenta, id_transaccion, fecha_hora, monto) values ('sparkov', '1', 'x', now(), 1)",
+    "update casos set id_cuenta = '0000'",
+    "update casos set fuente = 'sinteticos'",
+    "update transacciones_caso set monto = 0",
+    "update bloqueos set motivo = 'otro'",
+    "update usuarios set rol = 'supervisor'",
+    "insert into usuarios (usuario, nombre, rol, hash_clave) values ('intruso', 'x', 'supervisor', 'x')",
+    "select es_fraude_dataset from transacciones_evaluadas",
+    "delete from bloqueos",
     "drop table trazas",
     "create table intrusa (x int)",
 ])
@@ -406,3 +412,25 @@ def test_el_rol_del_contexto_no_se_filtra_a_otras_consultas(base_cargada):
     with conexion.cursor() as cur:
         cur.execute("select current_user as usuario")
         assert cur.fetchone()["usuario"] == roles.nombre_rol(BASE_PRUEBAS, "app")
+
+
+def test_toda_tabla_del_esquema_tiene_permisos_declarados(base_cargada):
+    # Si se agrega una tabla y no se suma a roles.PERMISOS, la app no podrá usarla: mejor
+    # enterarse aquí que en la demo.
+    with psycopg.connect(config.DATABASE_URL) as dueno:
+        tablas = {fila[0] for fila in dueno.execute(
+            "select table_name from information_schema.tables where table_schema = 'public'").fetchall()}
+    assert tablas == set(roles.PERMISOS["app"])
+    assert set(roles.PERMISOS["agente"]) < tablas
+
+
+def test_la_app_escribe_la_etiqueta_en_vivo_pero_no_la_lee(base_cargada):
+    with conexion.cursor() as cur:
+        cur.execute("""insert into transacciones_evaluadas (fuente, id_transaccion, id_cuenta, fecha_hora, monto,
+                       score, banda, origen, es_fraude_dataset)
+                       values ('sparkov', 'prueba-etiqueta', '123', now(), 1, 0.1, 'sin_alerta', 'simulador', 1)""")
+    with pytest.raises(psycopg.errors.InsufficientPrivilege):
+        _intentar("app", "select es_fraude_dataset from transacciones_evaluadas where id_transaccion = 'prueba-etiqueta'")
+    with psycopg.connect(config.DATABASE_URL) as dueno:
+        assert dueno.execute("select es_fraude_dataset from transacciones_evaluadas "
+                             "where id_transaccion = 'prueba-etiqueta'").fetchone()[0] == 1
