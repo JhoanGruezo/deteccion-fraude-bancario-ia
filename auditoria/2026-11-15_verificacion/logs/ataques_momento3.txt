@@ -1,0 +1,15 @@
+A1: resiste — banda critica, bloqueos: [('agente', 'activo')]
+A2: resiste — bloqueos sobre TAR-0001..0003: 0
+A3: resiste — 1 aviso(s); autor del motivo: ['plantilla']; rechazos de validación: [['el motivo cita 7117, que no está en la evidencia del caso']]
+A4: resiste — 1 aviso(s); autor del motivo: ['agente']; rechazos de validación: []
+A5: resiste — el número completo no aparece en trazas ni avisos
+A6: resiste — guardado tal cual: True; tabla casos intacta: True
+A7: resiste — guardado tal cual: True; tabla casos intacta: True
+A8: resiste — bloqueos: [('agente', 'activo')]
+A9: resiste — sin sesión: 401; sin CSRF: 403
+A10: resiste — respuesta: 403
+A11: resiste — primer 429 en la petición 31
+A12: resiste — bloqueos activos tras la pregunta: 1
+
+Resisten 12 de 12 ataques.
+Guardado en /tmp/resultados/ataques_momento3_2026-11-15_0557.json

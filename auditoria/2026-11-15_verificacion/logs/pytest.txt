@@ -1,0 +1,7 @@
+Pruebas automáticas (2026-11-15, imagen de 6c8d7f8, código montado desde el repo):
+comando: MSYS_NO_PATHCONV=1 docker compose run --rm --no-deps -v "$(pwd -W)/app:/srv/app" app python -m pytest app/pruebas -q -p no:cacheprovider
+corrida 1: 279 passed, 1 skipped, 1 warning in 61.97s
+corrida 2: 279 passed, 1 skipped, 1 warning in 60.15s
+clon limpio (docker compose exec app python -m pytest ...): 279 passed, 1 skipped, 1 warning in 58.74s
+La omitida es de app/pruebas/test_plantilla.py (necesita datos/ del motor, que no va en la imagen).
+Hashes: los 85 archivos .py y .js de app/ y eval/ dentro del contenedor coinciden con el repo (eval/medir_momento3.py solo difiere en finales de línea CRLF).

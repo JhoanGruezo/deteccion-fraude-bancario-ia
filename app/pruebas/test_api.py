@@ -565,6 +565,9 @@ def test_el_limite_es_por_sesion_y_un_abusador_no_frena_a_los_demas(cliente):
             cliente.cookies.set("sesion", f"inventada-{i}")
             estados.append(cliente.get("/api/casos").status_code)
         assert 429 in estados
+        # Sin cookie (el ingreso de otra persona) tiene su propio cupo: no lo agotan las sesiones.
+        cliente.cookies.clear()
+        assert cliente.get("/api/casos").status_code == 200
     finally:
         cliente.cookies.clear()
 

@@ -264,7 +264,7 @@ medio llegar; `explicacion.js` pinta los bloques y enlaza cada cifra a su eviden
 15. Si el profesor señala `parsearJsonParcial`, ¿qué dice?
 
 Si alguna no le sale, vuelva a la ficha correspondiente y anote la duda en
-`docs/verificacion-jeison.md` (sección "Dudas sobre el código") para resolverla juntos.
+una nota compartida del equipo para resolverla juntos.
 
 ---
 

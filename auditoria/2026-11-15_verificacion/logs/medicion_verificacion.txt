@@ -1,0 +1,113 @@
+1. Reiniciando los datos en vivo…
+2. Reproduciendo la noche a 3600x (falla forzada: ninguna; reloj detenido durante cada triaje: sí)…
+  simulador: corriendo      0/5810  reloj None  simulador: corriendo     34/5810  reloj 2020-07-19 20:11:40  simulador: corriendo     34/5810  reloj 2020-07-19 20:11:40  simulador: corriendo     34/5810  reloj 2020-07-19 20:11:40  simulador: corriendo     34/5810  reloj 2020-07-19 20:11:40  simulador: corriendo    261/5810  reloj 2020-07-19 21:30:40  simulador: corriendo    352/5810  reloj 2020-07-19 22:00:56  simulador: corriendo    352/5810  reloj 2020-07-19 22:00:56  simulador: corriendo    358/5810  reloj 2020-07-19 22:02:40  simulador: corriendo    367/5810  reloj 2020-07-19 22:05:33  simulador: corriendo    367/5810  reloj 2020-07-19 22:05:33  simulador: corriendo    402/5810  reloj 2020-07-19 22:15:59  simulador: corriendo    402/5810  reloj 2020-07-19 22:15:59  simulador: corriendo    402/5810  reloj 2020-07-19 22:15:59  simulador: corriendo    407/5810  reloj 2020-07-19 22:17:40  simulador: corriendo    407/5810  reloj 2020-07-19 22:17:40  simulador: corriendo    457/5810  reloj 2020-07-19 22:32:39  simulador: corriendo    457/5810  reloj 2020-07-19 22:32:39  simulador: corriendo    480/5810  reloj 2020-07-19 22:38:32  simulador: corriendo    480/5810  reloj 2020-07-19 22:38:32  simulador: corriendo    547/5810  reloj 2020-07-19 23:03:01  simulador: corriendo    556/5810  reloj 2020-07-19 23:04:21  simulador: corriendo    556/5810  reloj 2020-07-19 23:04:21  simulador: corriendo    697/5810  reloj 2020-07-20 00:00:52  simulador: corriendo    697/5810  reloj 2020-07-20 00:00:52  simulador: corriendo    697/5810  reloj 2020-07-20 00:00:52  simulador: corriendo    819/5810  reloj 2020-07-20 00:54:11  simulador: corriendo    908/5810  reloj 2020-07-20 01:36:36  simulador: corriendo    908/5810  reloj 2020-07-20 01:36:36  simulador: corriendo    908/5810  reloj 2020-07-20 01:36:36  simulador: corriendo    985/5810  reloj 2020-07-20 02:17:24  simulador: corriendo    985/5810  reloj 2020-07-20 02:17:24  simulador: corriendo    985/5810  reloj 2020-07-20 02:17:24  simulador: corriendo   1081/5810  reloj 2020-07-20 03:00:24  simulador: corriendo   1337/5810  reloj 2020-07-20 05:00:04  simulador: corriendo   1437/5810  reloj 2020-07-20 05:57:14  simulador: corriendo   1437/5810  reloj 2020-07-20 05:57:14  simulador: corriendo   1437/5810  reloj 2020-07-20 05:57:14  simulador: corriendo   1569/5810  reloj 2020-07-20 06:55:07  simulador: corriendo   1569/5810  reloj 2020-07-20 06:55:07  simulador: corriendo   1569/5810  reloj 2020-07-20 06:55:07  simulador: corriendo   1823/5810  reloj 2020-07-20 08:42:31  simulador: corriendo   2056/5810  reloj 2020-07-20 10:42:41  simulador: corriendo   2349/5810  reloj 2020-07-20 12:30:53  simulador: corriendo   2349/5810  reloj 2020-07-20 12:30:53  simulador: corriendo   2349/5810  reloj 2020-07-20 12:30:53  simulador: corriendo   2349/5810  reloj 2020-07-20 12:30:53  simulador: corriendo   2373/5810  reloj 2020-07-20 12:39:09  simulador: corriendo   2373/5810  reloj 2020-07-20 12:39:09  simulador: corriendo   2542/5810  reloj 2020-07-20 13:35:16  simulador: corriendo   2929/5810  reloj 2020-07-20 15:20:08  simulador: corriendo   2941/5810  reloj 2020-07-20 15:21:56  simulador: corriendo   2941/5810  reloj 2020-07-20 15:21:56  simulador: corriendo   3154/5810  reloj 2020-07-20 16:22:48  simulador: corriendo   3534/5810  reloj 2020-07-20 18:08:42  simulador: corriendo   3922/5810  reloj 2020-07-20 19:54:01  simulador: corriendo   4313/5810  reloj 2020-07-20 21:49:04  simulador: corriendo   4405/5810  reloj 2020-07-20 22:14:53  simulador: corriendo   4405/5810  reloj 2020-07-20 22:14:53  simulador: corriendo   4511/5810  reloj 2020-07-20 22:45:52  simulador: corriendo   4511/5810  reloj 2020-07-20 22:45:52  simulador: corriendo   4511/5810  reloj 2020-07-20 22:45:52  simulador: corriendo   4547/5810  reloj 2020-07-20 22:53:37  simulador: corriendo   4547/5810  reloj 2020-07-20 22:53:37  simulador: corriendo   4602/5810  reloj 2020-07-20 23:10:36  simulador: corriendo   4602/5810  reloj 2020-07-20 23:10:36  simulador: corriendo   4602/5810  reloj 2020-07-20 23:10:36  simulador: corriendo   4698/5810  reloj 2020-07-20 23:43:48  simulador: corriendo   4698/5810  reloj 2020-07-20 23:43:48  simulador: corriendo   4698/5810  reloj 2020-07-20 23:43:48  simulador: corriendo   4698/5810  reloj 2020-07-20 23:43:48  simulador: corriendo   4918/5810  reloj 2020-07-21 01:21:55  simulador: corriendo   5138/5810  reloj 2020-07-21 03:01:31  simulador: corriendo   5138/5810  reloj 2020-07-21 03:01:31  simulador: corriendo   5138/5810  reloj 2020-07-21 03:01:31  simulador: corriendo   5158/5810  reloj 2020-07-21 03:13:44  simulador: corriendo   5158/5810  reloj 2020-07-21 03:13:44  simulador: corriendo   5236/5810  reloj 2020-07-21 03:44:46  simulador: corriendo   5522/5810  reloj 2020-07-21 05:44:54  simulador: corriendo   5763/5810  reloj 2020-07-21 07:44:00  simulador: terminado   5810/5810  reloj 2020-07-21 07:59:55
+  esperando: 0 triajes en curso, 0 críticos sin bloqueo     esperando: 0 triajes en curso, 0 críticos sin bloqueo     esperando: 0 triajes en curso, 0 críticos sin bloqueo     esperando: 0 triajes en curso, 0 críticos sin bloqueo   3. Listo en 168 s. Calculando cifras…
+{
+  "nombre": "verificacion",
+  "falla_forzada": null,
+  "velocidad": 3600,
+  "reloj_detenido_durante_triajes": true,
+  "modelo_llm": "claude-haiku-5-5",
+  "fecha": "2026-11-15 06:02",
+  "transacciones": 5810,
+  "compras_fraudulentas": 54,
+  "tarjetas_con_fraude": 9,
+  "decision_ms": {
+    "puntuacion_mediana": 2.167,
+    "puntuacion_p99": 4.164,
+    "camino_completo_mediana": 3.784,
+    "camino_completo_p99": 17.805
+  },
+  "casos_por_banda": {
+    "media": 3,
+    "alta": 16,
+    "critica": 2
+  },
+  "bloqueos_por_actor": {
+    "agente": 15
+  },
+  "segundos_hasta_bloqueo": {
+    "mediana": 3.764,
+    "p95": 29.354,
+    "maximo": 78.767
+  },
+  "dinero_usd_a_tiempo_real": {
+    "fraude_total": 28367.23,
+    "m3_fraude_que_pasa": 6061.34,
+    "m3_porcentaje_detenido": 78.6,
+    "m2_analista_al_instante_fraude_que_pasa": 10844.38,
+    "m2_cola_90_min_fraude_que_pasa": 18458.41,
+    "m2_noche_sin_turno_fraude_que_pasa": 20050.73,
+    "m2_analista_al_instante_porcentaje_detenido": 61.8,
+    "m2_cola_90_min_porcentaje_detenido": 34.9,
+    "m2_noche_sin_turno_porcentaje_detenido": 29.3,
+    "segundos_reales_desde_la_compra_hasta_el_bloqueo": {
+      "mediana": 3.574,
+      "maximo": 7.114
+    },
+    "compras_fraudulentas_que_pasan_por_tarjeta_robada": {
+      "mediana": 1,
+      "maximo": 3
+    }
+  },
+  "artefacto_simulacion_acelerada": {
+    "nota": "a 3600x cada segundo real son 1 h del dataset: el triaje (~5 s) deja pasar horas de compras. No es una cifra del sistema; se deja para mostrar por qué se mide a tiempo real.",
+    "fraude_que_paso_medido": 6061.34,
+    "compras_legitimas_rechazadas_usd": 4926.18,
+    "compras_fraudulentas_aprobadas_por_tarjeta_robada_mediana": 1
+  },
+  "bloqueos_por_tarjeta": {
+    "bloqueadas": 15,
+    "con_fraude": 9,
+    "precision": 0.6,
+    "recall": 1.0,
+    "falsos_por_1000_compras": 1.03
+  },
+  "prueba_de_necesidad_banda_alta": {
+    "triajes_en_banda_alta": 18,
+    "con_fraude": 9,
+    "detalle_[con_fraude,sin_fraude]": {
+      "agente_bloquea": [
+        7,
+        6
+      ],
+      "agente_verifica": [
+        2,
+        3
+      ],
+      "agente_deja": [
+        0,
+        0
+      ],
+      "otra": [
+        0,
+        0
+      ]
+    },
+    "agente_precision_al_bloquear": 0.538,
+    "agente_recall_al_bloquear": 0.778,
+    "regla_siempre_bloquear_precision": 0.5
+  },
+  "llm": {
+    "triajes": 23,
+    "costo_total_usd": 0.0519,
+    "costo_por_triaje_usd": 0.00226,
+    "costo_por_1000_compras_usd": 0.0089,
+    "latencia_triaje_ms_mediana": 4915.0,
+    "motivo_fin": {
+      "completada": 23
+    },
+    "proveedor": {
+      "claude": 23
+    },
+    "con_reintento_o_conmutacion": 0
+  },
+  "avisos": {
+    "total": 23,
+    "motivo_del_agente": 22,
+    "motivo_de_plantilla": 1,
+    "rechazados_por_validacion": 1
+  }
+}
+
+Guardado en /tmp/resultados/momento3_2026-11-15_0602_verificacion.json

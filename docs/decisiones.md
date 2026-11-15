@@ -30,7 +30,8 @@ existe cuando el analista la confirma con su nombre.
 bloquear deja al ladrón comprando. Desde el Momento 3 cada compra se puntúa al llegar, el caso
 se abre con la primera compra marcada y un agente de triaje bloquea la tarjeta de mayor riesgo
 y avisa al titular en segundos; si no lo hace en un caso crítico, lo hace la regla. El analista
-ya no confirma bloqueos: decide los **desbloqueos**, con sesión y motivo. El modo explicación y
+ya no tiene que confirmar los bloqueos (puede bloquear a mano con "confirmar bloqueo"); lo que
+decide siempre una persona son los **desbloqueos**, con sesión y motivo. El modo explicación y
 el de preguntas de esta sección siguen igual, ahora como ayuda para decidir el desbloqueo.
 
 ## 2. Frontera de la IA
@@ -80,8 +81,8 @@ de cada tarjeta con caso, y la app los carga en Postgres al arrancar.
 | ¿Buscamos identificadores exactos? | Sí: el id del caso, que se resuelve con una consulta por llave primaria |
 | ¿Son prosa abierta que cambia? | No: son números, fechas, categorías y comercios |
 
-**Estrategia elegida: consulta directa por tool calling.** El agente tiene seis
-herramientas. Cinco consultan la base a través de `app/db/repositorio.py` (la única
+**Estrategia elegida: consulta directa por tool calling.** En el Momento 2 el agente tenía seis
+herramientas (en el Momento 3 son diez: las cuatro acciones del triaje, §6). Cinco consultan la base a través de `app/db/repositorio.py` (la única
 puerta a la base): `obtener_caso`, `obtener_perfil_cuenta`,
 `obtener_historial_reciente`, `obtener_score_y_umbrales` y `registrar_decision`. La
 sexta, `declarar_fuera_de_alcance`, no lee ni escribe nada: es la señal estructurada

@@ -1,0 +1,53 @@
+## (c) autonomia apagada por el supervisor; analista intenta apagarla (403)
+{"error":"Esta acción es solo para el rol supervisor."}
+[HTTP 403]
+{"clave":"autonomia_agente","valor":false}
+[HTTP 200]
+{"repetida":false,"id":64031,"id_transaccion":"4def7349fb5548b59fa8482e0d31a5f6","decision":"aprobada","score":0.914307,"banda":"sin_alerta","viaje_imposible":false,"id_caso":null,"evento":null,"latencia_total_ms":8.523,"latencia_puntuacion_ms":2.572,"tarjeta":"TAR-0007"}
+[HTTP 200]
+{"repetida":false,"id":64032,"id_transaccion":"adcd5fd2a84747d0b8c1351f34167767","decision":"aprobada","score":0.988238,"banda":"alta","viaje_imposible":false,"id_caso":"VIV-000006","evento":"caso_abierto","latencia_total_ms":25.367,"latencia_puntuacion_ms":2.741,"tarjeta":"TAR-0007"}
+[HTTP 200]
+{'id_caso': 'VIV-000005', 'banda': 'critica', 'estado': 'bloqueado', 'score_maximo': 0.998904}
+{'id_caso': 'VIV-000002', 'banda': 'alta', 'estado': 'bloqueado', 'score_maximo': 0.9984}
+{'id_caso': 'VIV-000003', 'banda': 'alta', 'estado': 'bloqueado', 'score_maximo': 0.9943}
+{'id_caso': 'VIV-000006', 'banda': 'alta', 'estado': 'pendiente', 'score_maximo': 0.988238}
+{'id_caso': 'VIV-000004', 'banda': 'alta', 'estado': 'bloqueado', 'score_maximo': 0.978921}
+{'id_caso': 'VIV-000001', 'banda': 'media', 'estado': 'bloqueado', 'score_maximo': 0.954623}
+## (d) descartar VIV-000006 (en vivo, sin bloqueo) sin comentario -> esperado 422
+{"error":"Para descartar un caso en vivo escribe por qué (al menos 10 caracteres): descartar apaga la red de seguridad de ese caso y queda en la auditoría."}
+[HTTP 422]
+## descartar con comentario corto 'ok' -> 422
+{"error":"Para descartar un caso en vivo escribe por qué (al menos 10 caracteres): descartar apaga la red de seguridad de ese caso y queda en la auditoría."}
+[HTTP 422]
+## descartar con 10 espacios+punto -> 422
+{"error":"Para descartar un caso en vivo escribe por qué (al menos 10 caracteres): descartar apaga la red de seguridad de ese caso y queda en la auditoría."}
+[HTTP 422]
+## sin CSRF -> 403
+{"error":"La solicitud no trae el token de seguridad de tu sesión. Recarga la página."}
+[HTTP 403]
+## sin sesion -> 401
+{"error":"Inicia sesión para continuar."}
+[HTTP 401]
+## (c) confirmar_bloqueo -> esperado bloqueo real firmado por el analista
+{"decision":{"id":3,"id_caso":"VIV-000006","accion":"confirmar_bloqueo","analista":"Analista de turno (analista)","comentario":null,"propuesta_id":null,"creada_en":"2026-11-15T05:50:16.672307+00:00","estado_caso":"bloqueo_confirmado"},"bloqueo":"bloqueada"}
+[HTTP 200]
+{'id_caso': 'VIV-000006', 'banda': 'alta', 'estado': 'bloqueado', 'score_maximo': 0.988238, 'nivel_recomendacion': 'bloquear_tarjeta', 'motivo_recomendacion': 'Bloqueada por un analista; el desbloqueo lo decide una persona con sesión iniciada.'}
+  bloqueos : [{"id": 155, "tipo": "tarjeta", "actor": "analista", "usuario": "Analista de turno (analista)", "banda": "alta", "motivo": "Bloqueo confirmado por un analista desde el detalle del caso.", "estado": "activo", "creado_en": "2026-11-15T05:50:16.680547+00:00", "segundos_hasta_bloqueo": 20.098324, "levantado_por": null, "motivo_desbloqueo": null, "levantado_en": null}]
+  avisos : [{"id": 296, "tipo": "bloqueo", "canal": "simulado", "destinatario": "Titular de la tarjeta •••• 2291", "cuerpo": "Banco Demo: por su seguridad bloqueamos temporalmente su tarjeta terminada en 2291. Motivo: Una compra de 1.850,00 USD (tienda en línea) el 2020-07-20 03:12, muy distinta de su forma habitual de comprar. Si no reconoce esta compra, no tiene que hacer nada más: su dinero está protegido. Si fue usted, respóndanos en la app o llame a la línea oficial 601 000 0000 para desbloquearla. Nunca le pediremos claves ni le enviaremos enlaces.", "autor_motivo": "plantilla", "errores_validacion": [], "estado": "enviada", "respuesta_titular": null, "respondida_en": null, "creada_en": "2026-11-15T05:50:16.683875+00:00"}]
+  decisiones : [{"id": 3, "id_caso": "VIV-000006", "accion": "confirmar_bloqueo", "analista": "Analista de turno (analista)", "comentario": null, "propuesta_id": null, "creada_en": "2026-11-15T05:50:16.672307+00:00"}]
+  claves: ['caso', 'explicacion', 'propuestas', 'decisiones', 'ultima_tarea', 'bloqueos', 'avisos', 'ultimo_triaje']
+## compra siguiente TAR-0007 -> esperado rechazada
+{"repetida":false,"id":64033,"id_transaccion":"a02daa28ea0c4e0db9c4a355432d9965","decision":"rechazada_por_bloqueo","score":0.982647,"banda":"sin_alerta","viaje_imposible":false,"id_caso":"VIV-000006","evento":null,"latencia_total_ms":19.109,"latencia_puntuacion_ms":2.763,"tarjeta":"TAR-0007"}
+[HTTP 200]
+## confirmar_bloqueo otra vez (ya bloqueada) y escalar sobre caso bloqueado
+{"decision":{"id":4,"id_caso":"VIV-000006","accion":"confirmar_bloqueo","analista":"Analista de turno (analista)","comentario":null,"propuesta_id":null,"creada_en":"2026-11-15T05:50:17.508357+00:00","estado_caso":"bloqueo_confirmado"},"bloqueo":"ya_bloqueada"}
+[HTTP 200]
+{"decision":{"id":5,"id_caso":"VIV-000006","accion":"escalar","analista":"Analista de turno (analista)","comentario":null,"propuesta_id":null,"creada_en":"2026-11-15T05:50:17.770276+00:00","estado_caso":"escalado"},"bloqueo":null}
+[HTTP 200]
+{'id_caso': 'VIV-000006', 'banda': 'alta', 'estado': 'escalado', 'score_maximo': 0.988238, 'nivel_recomendacion': 'bloquear_tarjeta', 'motivo_recomendacion': 'Bloqueada por un analista; el desbloqueo lo decide una persona con sesión iniciada.'}
+## descartar ahora (bloqueo activo, estado escalado) -> 409
+{"error":"La tarjeta de este caso está bloqueada: para devolvérsela al cliente usa «Desbloquear» en la vista Bloqueos, con su motivo. Descartar no levanta el bloqueo."}
+[HTTP 409]
+## caso semilla M2: confirmar_bloqueo no bloquea nada
+{"decision":{"id":6,"id_caso":"SIN-000018","accion":"descartar","analista":"Analista de turno (analista)","comentario":null,"propuesta_id":null,"creada_en":"2026-11-15T05:50:18.886524+00:00","estado_caso":"descartado"},"bloqueo":null}
+[HTTP 200]

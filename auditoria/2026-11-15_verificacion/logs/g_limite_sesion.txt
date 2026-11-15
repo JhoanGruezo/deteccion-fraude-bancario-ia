@@ -1,0 +1,15 @@
+## (g) 35 escrituras seguidas con la sesion del analista (limite 30/min por sesion)
+409 409 409 409 409 409 409 409 409 409 409 409 409 409 409 409 409 409 409 409 409 409 409 409 409 409 409 409 409 409 429 429 429 429 429 
+## inmediatamente: escritura con la sesion del SUPERVISOR (otra sesion; esperado 409 de negocio, no 429)
+{"error":"Ese aviso ya tiene respuesta o no existe."}
+[HTTP 409]
+## inmediatamente: INGRESO nuevo sin cookie desde la misma IP (otro navegador)
+HTTP/1.1 429 Too Many Requests
+retry-after: 51
+## lectura sin cookie (GET /api/salud)
+200
+## mensaje del 429 al analista
+{"error":"Demasiadas acciones seguidas. Intenta de nuevo en 51 s.","categoria":"escritura","reintentar_en_s":51}
+[HTTP 429]
+## rotando cookies inventadas: 40 escrituras, cada una con cookie distinta (401 esperado; cuentan contra la IP x5=150)
+401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 401 

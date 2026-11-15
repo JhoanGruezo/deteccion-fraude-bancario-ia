@@ -1,0 +1,24 @@
+## (b) 'no_fui_yo' al aviso 290 (verificacion, VIV-000001, TAR-0002)
+{"id_caso":"VIV-000001","respuesta":"no_fui_yo","bloqueo":"bloqueada"}
+[HTTP 200]
+{'id_caso': 'VIV-000001', 'banda': 'media', 'estado': 'bloqueado', 'score_maximo': 0.954623, 'nivel_recomendacion': 'bloquear_tarjeta', 'motivo_recomendacion': 'Bloqueada por la regla del sistema; el desbloqueo lo decide una persona con sesión iniciada.'}
+  bloqueos : [{"id": 154, "tipo": "tarjeta", "actor": "regla", "usuario": null, "banda": "media", "motivo": "El titular respondió en el aviso que no reconoce la compra.", "estado": "activo", "creado_en": "2026-11-15T05:49:45.139148+00:00", "segundos_hasta_bloqueo": 176.495963, "levantado_por": null, "motivo_desbloqueo": null, "levantado_en": null}]
+  avisos : [{"id": 290, "tipo": "verificacion", "canal": "simulado", "destinatario": "Titular de la tarjeta •••• 9255", "cuerpo": "Banco Demo: detectamos una compra inusual con su tarjeta terminada en 9255. Registramos una compra de 2.200,00 en Tienda Electro (compras en línea) el 20/07/2020 a las 03:10, que es muy superior a su gasto habitual promedio de 72,86. ¿Reconoce esta compra? ¿Fue usted? Respóndanos en la app o llame a la línea oficial 601 000 0000. Nunca le pediremos claves ni le enviaremos enlaces.", "autor_motivo": "agente", "errores_validacion": [], "estado": "enviada", "respuesta_titular": "no_fui_yo", "respondida_en": "2026-11-15T05:49:45.130100+00:00", "creada_en": "2026-11-15T05:46:53.522595+00:00"}, {"id": 295, "tipo": "bloqueo", "canal": "simulado", "destinatario": "Titular de la tarjeta •••• 9255", "cuerpo": "Banco Demo: por su seguridad bloqueamos temporalmente su tarjeta terminada en 9255. Motivo: Una compra de 2.200,00 USD (tienda en línea) el 2020-07-20 03:10, muy distinta de su forma habitual de comprar. Si no reconoce esta compra, no tiene que hacer nada más: su dinero está protegido. Si fue usted, respóndanos en la app o llame a la línea oficial 601 000 0000 para desbloquearla. Nunca le pediremos claves ni le enviaremos enlaces.", "autor_motivo": "plantilla", "errores_validacion": [], "estado": "enviada", "respuesta_titular": null, "respondida_en": null, "creada_en": "2026-11-15T05:49:45.142345+00:00"}]
+  claves: ['caso', 'explicacion', 'propuestas', 'decisiones', 'ultima_tarea', 'bloqueos', 'avisos', 'ultimo_triaje']
+## siguiente compra en TAR-0002 (esperado rechazada_por_bloqueo)
+{"repetida":false,"id":64030,"id_transaccion":"bf56c225a7ff4848a3b08e1db4fa57b6","decision":"rechazada_por_bloqueo","score":0.994713,"banda":"sin_alerta","viaje_imposible":false,"id_caso":"VIV-000001","evento":null,"latencia_total_ms":18.797,"latencia_puntuacion_ms":2.688,"tarjeta":"TAR-0002"}
+[HTTP 200]
+## responder de nuevo el mismo aviso (esperado 409)
+{"error":"Ese aviso ya tiene respuesta o no existe."}
+[HTTP 409]
+## respuesta invalida (422) y aviso inexistente (409)
+{"error":"La respuesta debe ser «fui_yo» o «no_fui_yo»."}
+[HTTP 422]
+{"error":"Ese aviso ya tiene respuesta o no existe."}
+[HTTP 409]
+## 'no_fui_yo' sobre aviso de bloqueo 291 (ya bloqueada: esperado ya_bloqueada, sin segundo bloqueo)
+{"id_caso":"VIV-000002","respuesta":"no_fui_yo","bloqueo":"ya_bloqueada"}
+[HTTP 200]
+## (d) descartar caso bloqueado VIV-000002 con comentario (esperado 409)
+{"error":"La tarjeta de este caso está bloqueada: para devolvérsela al cliente usa «Desbloquear» en la vista Bloqueos, con su motivo. Descartar no levanta el bloqueo."}
+[HTTP 409]

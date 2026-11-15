@@ -1,0 +1,35 @@
+## autonomia APAGADA + critica (TAR-0008, 3 compras seguidas): esperado bloqueo por la regla
+{"repetida":false,"id":64034,"id_transaccion":"ebc9e852cc3043b2ab465538155a914f","decision":"aprobada","score":0.944234,"banda":"sin_alerta","viaje_imposible":false,"id_caso":null,"evento":null,"latencia_total_ms":6.279,"latencia_
+{"repetida":false,"id":64035,"id_transaccion":"6421f7e953e0427f9cb84e87557ad8eb","decision":"aprobada","score":0.999014,"banda":"alta","viaje_imposible":false,"id_caso":"VIV-000007","evento":"caso_abierto","latencia_total_ms":21.6
+{"repetida":false,"id":64036,"id_transaccion":"511f2dda511843829a3a2d4b12404887","decision":"aprobada","score":0.999014,"banda":"critica","viaje_imposible":false,"id_caso":"VIV-000007","evento":"subio_de_banda","latencia_total_ms"
+{'id_caso': 'VIV-000007', 'banda': 'critica', 'estado': 'bloqueado', 'score_maximo': 0.999014, 'nivel_recomendacion': 'bloquear_tarjeta', 'motivo_recomendacion': 'Bloqueada por la regla del sistema; el desbloqueo lo decide una persona con sesión iniciada.'}
+  bloqueos : [{"id": 156, "tipo": "tarjeta", "actor": "regla", "usuario": null, "banda": "critica", "motivo": "Regla: caso crítico con la autonomía del agente apagada.", "estado": "activo", "creado_en": "2026-11-15T05:50:40.907858+00:00", "segundos_hasta_bloqueo": 0.335427, "levantado_por": null, "motivo_desbloqueo": null, "levantado_en": null}]
+  avisos : [{"id": 297, "tipo": "bloqueo", "canal": "simulado", "destinatario": "Titular de la tarjeta •••• 1150", "cuerpo": "Banco Demo: por su seguridad bloqueamos temporalmente su tarjeta terminada en 1150. Motivo: Una compra de 1.850,00 USD (tienda en línea) el 2020-07-20 03:12 y 1 compra(s) más en poco tiempo, muy distinta de su forma habitual de comprar. Si no reconoce esta compra, no tiene que hacer nada más: su dinero está protegido. Si fue usted, respóndanos en la app o llame a la línea oficial 601 000 0000 para desbloquearla. Nunca le pediremos claves ni le enviaremos enlaces.", "autor_motivo": "plantilla", "errores_validacion": [], "estado": "enviada", "respuesta_tit
+  claves: ['caso', 'explicacion', 'propuestas', 'decisiones', 'ultima_tarea', 'bloqueos', 'avisos', 'ultimo_triaje']
+## autonomia ENCENDIDA de nuevo; falla forzada 'todo' (IA caida)
+{"clave":"autonomia_agente","valor":true}
+[HTTP 200]
+{"error":"Esta acción es solo para el rol supervisor."}
+[HTTP 403]
+{"falla_forzada":"todo"}
+[HTTP 200]
+## IA caida + una compra alta (TAR-0009 x2 por si la primera no marca)
+{"repetida":false,"id":64037,"id_transaccion":"ae12e95bf4f74e399d1fd661e7604dfd","decision":"aprobada","score":0.760285,"banda":"sin_alerta","viaje_imposible":false,"id_caso":null,"evento":null,"latencia_total_ms":5.775,"latencia_
+{'id_caso': 'VIV-000007', 'banda': 'critica', 'estado': 'bloqueado', 'score_maximo': 0.999014}
+{'id_caso': 'VIV-000005', 'banda': 'critica', 'estado': 'bloqueado', 'score_maximo': 0.998904}
+{'id_caso': 'VIV-000002', 'banda': 'alta', 'estado': 'bloqueado', 'score_maximo': 0.9984}
+{'id_caso': 'VIV-000003', 'banda': 'alta', 'estado': 'bloqueado', 'score_maximo': 0.9943}
+{'id_caso': 'VIV-000006', 'banda': 'alta', 'estado': 'escalado', 'score_maximo': 0.988238}
+{'id_caso': 'VIV-000004', 'banda': 'alta', 'estado': 'bloqueado', 'score_maximo': 0.978921}
+{'id_caso': 'VIV-000001', 'banda': 'media', 'estado': 'bloqueado', 'score_maximo': 0.954623}
+{"repetida":false,"id":64038,"id_transaccion":"04c5e3f3d35c4ac9acc12b3ab14e6038","decision":"aprobada","score":0.9984,"banda":"alta","viaje_imposible":false,"id_caso":"VIV-000008","evento":"caso_abierto","latencia_total_ms":21.395
+{'id_caso': 'VIV-000008', 'banda': 'alta', 'estado': 'en_verificacion', 'score_maximo': 0.9984, 'nivel_recomendacion': 'verificar_cliente', 'motivo_recomendacion': 'Una sola transacción supera el umbral de bloqueo (score 1,00): una compra aislada se confirma con el cliente antes de bloquear.'}
+  avisos : [{"id": 298, "tipo": "verificacion", "canal": "simulado", "destinatario": "Titular de la tarjeta •••• 2893", "cuerpo": "Banco Demo: detectamos una compra inusual con su tarjeta terminada en 2893. Una compra de 1.850,00 USD (tienda en línea) el 2020-07-20 03:12, muy distinta de su forma habitual de comprar. ¿Fue usted? Respóndanos en la app o llame a la línea oficial 601 000 0000. Nunca le pediremos claves ni le enviaremos enlaces.", "autor_motivo": "plantilla", "errores_validacion": [], "estado": "enviada", "respuesta_titular": null, "respondida_en": null, "creada_en": "2026-11-15T05:51:40.835893+00:00"}]
+  claves: ['caso', 'explicacion', 'propuestas', 'decisiones', 'ultima_tarea', 'bloqueos', 'avisos', 'ultimo_triaje']
+{"falla_forzada":null}
+[HTTP 200]
+falla_forzada= ''
+## fui_yo sobre el aviso de verificacion de la regla: no debe bloquear ni desbloquear
+{"id_caso":"VIV-000008","respuesta":"fui_yo","bloqueo":null}
+[HTTP 200]
+{'id_caso': 'VIV-000008', 'banda': 'alta', 'estado': 'en_verificacion', 'score_maximo': 0.9984, 'nivel_recomendacion': 'verificar_cliente', 'motivo_recomendacion': 'Una sola transacción supera el umbral de bloqueo (score 1,00): una compra aislada se confirma con el cliente antes de bloquear.'}

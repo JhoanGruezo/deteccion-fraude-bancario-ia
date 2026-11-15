@@ -1,0 +1,47 @@
+## desbloquear sin motivo (422), con motivo (200), repetido (409)
+{"error":"Escribe por qué desbloqueas (al menos 10 caracteres): queda en la auditoría del caso."}
+[HTTP 422]
+{"desbloqueo":{"id":151,"id_caso":"VIV-000003","segundos_bloqueada":250.222809},"firmado_por":"Analista de turno (analista)"}
+[HTTP 200]
+{"error":"Ese bloqueo ya no está activo (otro analista lo levantó o no existe)."}
+[HTTP 409]
+{'id_caso': 'VIV-000003', 'banda': 'alta', 'estado': 'desbloqueado', 'score_maximo': 0.9943, 'nivel_recomendacion': 'bloquear_tarjeta', 'motivo_recomendacion': 'Bloqueada por el agente de triaje; el desbloqueo lo decide una persona con sesión iniciada.'}
+## compra tras desbloqueo en TAR-0004 (esperado: aprobada; caso nuevo si marca)
+{"repetida":false,"id":64039,"id_transaccion":"c5a50fed0d8a4ce5a84b0ce94094752f","decision":"aprobada","score":0.032129,"banda":"sin_alerta","viaje_imposible":false,"id_caso":null,"evento":null,"laten
+## 'no_fui_yo' al aviso 292 del caso ya desbloqueado (esperado: se vuelve a bloquear, A1 reabrir)
+{"id_caso":"VIV-000003","respuesta":"no_fui_yo","bloqueo":"bloqueada"}
+[HTTP 200]
+{'id_caso': 'VIV-000003', 'banda': 'alta', 'estado': 'bloqueado', 'score_maximo': 0.9943, 'nivel_recomendacion': 'bloquear_tarjeta', 'motivo_recomendacion': 'Bloqueada por la regla del sistema; el desbloqueo lo decide una persona con sesión iniciada.'}
+  bloqueos : [{"id": 151, "tipo": "tarjeta", "actor": "agente", "usuario": null, "banda": "alta", "motivo": "Detuvimos una compra de 900,00 el 20/07/2020 a las 3 h en un comercio de compras en línea. Es muy rara para usted: su promedio de compras es de 85,14.", "estado": "levantado", "creado_en": "2026-11-15T05:48:11.644831+00:00", "segundos_hasta_bloqueo": 4.173234, "levantado_por": "Analista de turno (analista)", "motivo_desbloqueo": "El titular llamo a la linea oficial y confirmo la compra", "levantado_en": "2026-11-15T05:52:21.867640+00:00"}, {"id": 157, "tipo": "tarjeta", "actor": "regla", "usuario": null, "banda": "alta", "motivo": "El titular respondió en el aviso que no reconoce la compra.", "estado": "activo", "creado_en": "2026-11-15T05:52:22.971493+00:00", "segundos_hasta_bloqueo": 255.499896, "levantado_por": null, "motivo_desbloqueo": null, "levantado_en": null}]
+  avisos : [{"id": 292, "tipo": "bloqueo", "canal": "simulado", "destinatario": "Titular de la tarjeta •••• 9178", "cuerpo": "Banco Demo: por su seguridad bloqueamos temporalmente su tarjeta terminada en 9178. Motivo: Detuvimos una compra de 900,00 el 20/07/2020 a las 3 h en un comercio de compras en línea. Es muy rara para usted: su promedio de compras es de 85,14. Si no reconoce esta compra, no tiene que hacer nada más: su dinero está protegido. Si fue usted, respóndanos en la app o llame a la línea oficial 601 000 0000 para desbloquearla. Nunca le pediremos claves ni le enviaremos enlaces.", "autor_motivo": "agente", "errores_validacion": [], "estado": "enviada", "respuesta_titular": "no_fui_yo", "respondida_en": "2026-11-15T05:52:22.967234+00:00", "creada_en": "2026-11-15T05:48:11.650613+00:00"}, {"id": 299, "tipo": "bloqueo", "canal": "simulado", "destinatario": "Titula
+  claves: ['caso', 'explicacion', 'propuestas', 'decisiones', 'ultima_tarea', 'bloqueos', 'avisos', 'ultimo_triaje']
+{"repetida":false,"id":64040,"id_transaccion":"bb38c050e7844be297db62be14b3eab6","decision":"rechazada_por_bloqueo","score":0.025768,"banda":"sin_alerta","viaje_imposible":false,"id_caso":"VIV-000003"
+## (f) rol: analista controla simulador (403), ajustes tope (403)
+{"error":"Esta acción es solo para el rol supervisor."}
+[HTTP 403]
+{"error":"Esta acción es solo para el rol supervisor."}
+[HTTP 403]
+## (f) cookie inventada (401) y CSRF de otra sesion (403)
+{"error":"Inicia sesión para continuar."}
+[HTTP 401]
+{"error":"La solicitud no trae el token de seguridad de tu sesión. Recarga la página."}
+[HTTP 403]
+## (f) origen cruzado: Origin ajeno con cookie pero sin token
+{"error":"La solicitud no trae el token de seguridad de tu sesión. Recarga la página."}
+[HTTP 403]
+## (f) id de caso con inyeccion SQL y NUL
+{"error":"Caso no encontrado"}
+[HTTP 404]
+{"error":"La solicitud contiene caracteres no válidos."}
+[HTTP 422]
+## (f) ajuste desconocido / valor fuera de rango (supervisor)
+{"error":"Valor no válido para ese ajuste (autonomía: true/false; tope: entero de 0 a 500)."}
+[HTTP 422]
+{"error":"Ajuste desconocido. Opciones: autonomia_agente, tope_bloqueos_autonomos_por_hora."}
+[HTTP 422]
+## (f) el numero completo de tarjeta no sale por la API
+9476868411807474
+9664083542789474
+(arriba: coincidencias de 13-19 digitos seguidos. Revisadas: NO son tarjetas, son los decimales de umbral_verificacion=0.9476868411807474 y umbral_bloqueo del caso. El numero de tarjeta solo sale enmascarado.)
+## (f) etiqueta del dataset no sale
+(vacio = bien)

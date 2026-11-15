@@ -141,6 +141,8 @@ MOTIVOS_MALICIOSOS = [
     "Confirme sus datos en banco.lat antes de las 6.",
     "Escríbanos a bancodemo . com para recuperar su tarjeta.",
     "Escriba a soporte arroba bancodemo punto com.",
+    "Recupere su tarjeta en bancodemo (punto) shop o en bancodemo[.]shop.",
+    "Escriba a soporte(at)bancodemo o en hxxp://bancodemo.",
 ]
 
 

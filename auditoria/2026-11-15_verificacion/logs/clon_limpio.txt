@@ -1,0 +1,19 @@
+ingreso: {'usuario': 'supervisor', 'nombre': 'Supervisor de fraude', 'rol': 'supervisor'}
+## clon: iniciar simulador a 3600x sin llaves
+{"estado":"corriendo","velocidad":3600,"velocidades":[60,120,300,600,1800,3600],"esperar_triajes":false,"indice":0,"total":5810,"reloj_dataset":null,"inicio_dataset":"2020-07-19 20:00:00","fin_dataset":"2020-07-21 08:00:00","disponible":true,"procesadas":0,"repetidas":0,"rechazadas":0,"monto_rechaza
+
+corriendo 837 5810 8 13
+corriendo 1529 5810 11 17
+corriendo 2215 5810 12 20
+corriendo 3122 5810 15 23
+corriendo 4028 5810 15 25
+corriendo 4812 5810 19 45
+corriendo 5616 5810 21 57
+terminado 5810 5810 21 58
+{"bloqueos_agente_hora": 0, "bloqueos_activos": 10, "esperan_desbloqueo": 0, "casos_en_cola": 11, "transacciones_evaluadas": 5810, "monto_detenido": 21180.93, "compras_detenidas": 58, "mediana_s_hasta_bloqueo": 0.436507, "maximo_s_hasta_bloqueo": 24.686553, "bloqueos_por_agente": 0, "bloqueos_por_regla": 10, "mediana_s_hasta_desbloqueo": null, "mediana_ms_decision": 4.362, "p99_ms_decision": 17.895929999999982}
+alertas 10
+{('critica', 'bloqueado'): 10, ('alta', 'en_verificacion'): 8, ('media', 'en_verificacion'): 3}
+Counter({('regla', 'critica', 'activo'): 10})
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+279 passed, 1 skipped, 1 warning in 58.74s

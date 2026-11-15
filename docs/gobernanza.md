@@ -32,6 +32,7 @@ datos, no cierra cuentas.
 
 El titular de la tarjeta participa: responde "fui yo" o "no fui yo". "Fui yo" no desbloquea solo
 (quien tiene el teléfono podría ser el ladrón): sube el caso al primer lugar de la cola de desbloqueo.
+"No fui yo" bloquea la tarjeta si todavía no estaba bloqueada: el titular sabe más que cualquier score.
 
 ## 3. ¿Qué queda registrado, dónde y cuánto tiempo?
 

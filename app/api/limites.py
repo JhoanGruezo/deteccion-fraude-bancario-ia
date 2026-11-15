@@ -118,7 +118,9 @@ def instalar(app, limitador: LimitadorDePeticiones | None = None):
                 if espera is None:
                     espera = limitador.registrar("ip:" + ip, categoria, factor=FACTOR_IP)
             else:
-                espera = limitador.registrar("ip:" + ip, categoria)
+                # Sin cookie (por ejemplo, el ingreso): cupo propio, separado del de las sesiones de
+                # esa IP, para que un usuario que agotó su margen no impida que otro inicie sesión.
+                espera = limitador.registrar("anonimo:" + ip, categoria)
             if espera is not None:
                 segundos = max(1, math.ceil(espera))
                 return JSONResponse(

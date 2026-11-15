@@ -41,10 +41,12 @@ TERMINACIONES = ("com|co|net|org|io|xyz|info|biz|app|link|site|online|me|ly|lat|
                  "club|page|web|ws|cc|tv|pro|vip|live|click|bank|banco")
 PATRONES_PROHIBIDOS = {
     "un enlace o dominio": re.compile(
-        r"(https?\s*:\s*/|www\s*\.|\b[\w-]*[a-z][\w-]*\.[a-z]{2,}\b"
-        # "banco . com" (espacio ANTES del punto: "…a las 05:57. Es" es un fin de frase, no un dominio)
-        rf"|\b[\w-]+(?:\s+\.\s*|\s*\bpunto\b\s*|\s*\bdot\b\s*)(?:{TERMINACIONES})\b)", re.I),
-    "un correo": re.compile(r"[\w.+-]+@[\w-]+|\barroba\b", re.I),
+        r"(h[tx]{2}ps?\s*:\s*/|www\s*[.\[(]|\b[\w-]*[a-z][\w-]*\.[a-z]{2,}\b"
+        # "banco . com" (espacio ANTES del punto: "…a las 05:57. Es" es un fin de frase, no un dominio),
+        # "banco punto com", "banco (punto) shop", "banco[.]shop"
+        rf"|\b[\w-]+(?:\s+\.\s*|\s*\bpunto\b\s*|\s*\bdot\b\s*|\s*[(\[]\s*(?:\.|punto|dot)\s*[)\]]\s*)"
+        rf"(?:{TERMINACIONES})\b)", re.I),
+    "un correo": re.compile(r"[\w.+-]+@[\w-]+|@\w|\barroba\b|[(\[]\s*(?:at|arroba)\s*[)\]]", re.I),
     "una petición de claves o códigos": re.compile(r"\b(clave|contraseña|contrasena|pin|c[oó]digo|token|otp)\b", re.I),
 }
 # Fechas en los formatos que usa un modelo: 2020-07-20, 20/07/2020, "20 de julio de 2020".

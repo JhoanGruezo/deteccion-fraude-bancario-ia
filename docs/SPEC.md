@@ -134,8 +134,9 @@ modelo, despliegue en la nube.
 - **Canales:** `simulado` por defecto (buzón dentro de la app). Opcionalmente `correo`
   por SMTP, y solo a direcciones de la lista blanca `CORREOS_PERMITIDOS`. Si falta la
   lista o la dirección no está en ella, no sale nada y queda registrado.
-- El titular responde en el buzón con "fui yo" o "no fui yo". "No fui yo" marca el
-  bloqueo como confirmado por el titular. "Fui yo" pone el caso primero en la cola de
+- El titular responde en el buzón con "fui yo" o "no fui yo". "No fui yo" bloquea la
+  tarjeta si todavía no lo estaba (aunque el caso se hubiera descartado o desbloqueado) y, si
+  ya lo estaba, queda como confirmado por el titular. "Fui yo" pone el caso primero en la cola de
   desbloqueo. Ninguna de las dos respuestas desbloquea sola.
 
 ### RF6. Desbloqueo humano

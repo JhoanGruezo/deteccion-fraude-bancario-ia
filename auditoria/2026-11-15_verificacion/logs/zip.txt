@@ -1,0 +1,25 @@
+BÃºsqueda de llaves: 0 coincidencias en 195 archivos (patrones: Google (AIzaâ€¦), Google OAuth/Vertex (AQ.Abâ€¦), Anthropic (sk-ant-â€¦), Groq (gsk_â€¦), GenÃ©rica (apikey_â€¦)). .env.example sin valores de llave.
+Contenido (sin comprimir): (raÃ­z) 0.11 MB, app 0.90 MB, diseno 0.07 MB, docs 0.94 MB, eval 1.66 MB, requisitos 0.02 MB, scripts 0.07 MB, semilla 14.86 MB, src 0.06 MB, validacion 0.06 MB
+ZIP escrito: C:/Users/Jhoan/AppData/Local/Temp/claude/b3f7846d8f8bead5/39649491-73ed-479e-9412-4797394f9a25/scratchpad/verif/zip\entrega_momento3_2026-11-15.zip
+TamaÃ±o final: 10.20 MB Â· 195 archivos Â· run.sh con permiso 0755.
+archivos: 195
+raiz: ['fraude-bancario']
+sospechosos por nombre: []
+archivos con llaves o contraseñas de la app: []
+README.md True
+docs/decisiones.md True
+run.ps1 True
+run.sh True
+semilla/modelo_riesgo_sparkov.joblib True
+app/Dockerfile True
+eval/casos_dorados.json True
+docs/presentaciones/prueba-tercero.md True
+run.sh con CRLF: False
+['.dockerignore', '.env.example', '.gitattributes', 'CLAUDE.md', 'PLAN.md', 'README.md', 'decisiones.md', 'docker-compose.yml', 'plan-construccion.md', 'run.ps1', 'run.sh']
+README.md -> referencias que no están en el ZIP: []
+docs/decisiones.md -> referencias que no están en el ZIP: ['auditoria/2026-11-14_m3/motor-medicion.md']
+docs/seguridad.md -> referencias que no están en el ZIP: []
+docs/respuesta_auditoria.md -> referencias que no están en el ZIP: ['auditoria/2026-10-31_demo/seguridad-app.md', 'docs/prueba-companero-jeison.txt']
+docs/SPEC.md -> referencias que no están en el ZIP: []
+docs/gobernanza.md -> referencias que no están en el ZIP: []
+docs/guia-de-estudio.md -> referencias que no están en el ZIP: ['docs/verificacion-jeison.md']
