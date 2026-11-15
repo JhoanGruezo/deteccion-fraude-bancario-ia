@@ -649,8 +649,18 @@ tr.destello td, .mov.destello, .destello { background: var(--resaltado) !importa
 .dato__etiqueta { font-size: var(--t-xs); color: var(--tinta-2); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
 .dato__valor { font-size: var(--t-xl); font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.2; }
 .dato__nota { font-size: var(--t-xs); color: var(--tinta-2); }
-.distribucion { display: flex; flex-direction: column; gap: 6px; grid-column: span 1; }
-.distribucion__fila { display: grid; grid-template-columns: minmax(0, 1fr) 70px 3.4rem; gap: var(--e2); align-items: center; font-size: var(--t-s); }
+/* Cada distribución ocupa todo el ancho del perfil: en una celda de 170 px el nombre, la barra y
+   el porcentaje quedaban pegados ("Gasolina y transporte" partía en dos líneas sobre la barra). */
+.distribucion { display: flex; flex-direction: column; gap: 8px; grid-column: 1 / -1; }
+.distribucion__fila {
+  display: grid; grid-template-columns: minmax(7rem, 15rem) minmax(80px, 1fr) 3.6rem;
+  column-gap: var(--e4, 16px); align-items: center; font-size: var(--t-s);
+}
+.distribucion__fila span:first-child { overflow-wrap: anywhere; }
+@media (max-width: 480px) {
+  .distribucion__fila { grid-template-columns: minmax(0, 1fr) 3.6rem; row-gap: 4px; }
+  .distribucion__fila .medidor__pista { grid-column: 1 / -1; grid-row: 2; }
+}
 .distribucion__fila span:last-child { text-align: right; font-variant-numeric: tabular-nums; color: var(--tinta-2); }
 .aviso-suave { padding: var(--e3); border-radius: var(--radio-s); background: var(--superficie-2); border: 1px dashed var(--borde-fuerte); color: var(--tinta-2); font-size: var(--t-s); }
 

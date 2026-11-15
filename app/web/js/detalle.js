@@ -218,6 +218,9 @@ export function crearDetalle({ trazas, conversacion, dialogo, desbloqueo, alCamb
   // ----- Perfil --------------------------------------------------------------------------
   function distribucion(titulo, items, etiqueta) {
     if (!items?.length) return null;
+    // La barra se escala contra el valor más alto de la lista (con 5-15 % las barras se veían vacías);
+    // el número de la derecha sigue siendo el porcentaje real.
+    const maximo = Math.max(...items.map((i) => i.porcentaje || 0)) || 1;
     return el(
       "div",
       { clase: "dato distribucion" },
@@ -227,7 +230,7 @@ export function crearDetalle({ trazas, conversacion, dialogo, desbloqueo, alCamb
           "div",
           { clase: "distribucion__fila" },
           el("span", { texto: etiqueta(item) }),
-          el("span", { clase: "medidor__pista", "aria-hidden": "true" }, el("span", { clase: "medidor__relleno", estilo: { "--valor": `${Math.min(100, item.porcentaje || 0)}%` } })),
+          el("span", { clase: "medidor__pista", "aria-hidden": "true" }, el("span", { clase: "medidor__relleno", estilo: { "--valor": `${Math.min(100, ((item.porcentaje || 0) / maximo) * 100)}%` } })),
           el("span", { texto: f.porcentaje(item.porcentaje) }),
         ),
       ),
