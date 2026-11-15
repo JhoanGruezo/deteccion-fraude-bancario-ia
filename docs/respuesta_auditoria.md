@@ -87,5 +87,6 @@ condiciones. Respondida el 2026-11-15:
 | Límite por IP compartido detrás de Docker | **Lo arreglamos** | Cupo por sesión y por IP (`test_el_limite_es_por_sesion_y_un_abusador_no_frena_a_los_demas`) |
 | `run.ps1` abortaba en PowerShell 5.1 | **Lo arreglamos** | Probado en Windows PowerShell 5.1 el 2026-11-15 |
 | Documentos del M2 (`decisiones.md`, `comandos-demo.md`) | **Lo arreglamos** | `docs/decisiones.md` §1, §2, §6, §11, §13 y §14 |
-| Casos dorados sin firmar, prueba con un tercero, llaves sin rotar | **Pendiente del equipo** | Antes del 19-nov |
+| Casos dorados sin firmar y llaves sin rotar | **Pendiente del equipo** | Antes del 19-nov |
+| Prueba con un tercero | **Decisión del equipo** | La persona ajena al equipo es el profesor, que clona y prueba la app el 20-nov |
 

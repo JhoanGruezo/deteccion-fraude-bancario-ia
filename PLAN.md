@@ -177,8 +177,9 @@ del resto.
 - [~] **T6.2** Prueba de clon limpio sin `.env` y con solo la llave de Gemini; prueba con
       alguien ajeno al equipo, documentada.
       2026-11-08: clon limpio hecho (ZIP en carpeta vacía; run.ps1 y run.sh; sin .env; solo
-      Gemini). **Falta (equipo):** la prueba con un tercero, con la hoja de `prueba-tercero.md`,
-      y probarlo en el equipo de Jeison.
+      Gemini). Jeison lo probó en su equipo sin problemas. La prueba con
+      alguien ajeno al equipo la hace el profesor el 20-nov al clonar el repositorio (decisión del
+      equipo del 2026-11-15); `prueba-tercero.md` queda como protocolo de referencia.
 - [~] **T6.3** Rotar las llaves expuestas durante el desarrollo; ZIP, push a `main` y
       subida al aula virtual antes del jueves 19-nov a las 23:59.
       2026-11-08: ZIP listo (`python scripts/empaquetar_entrega.py`: 10,2 MB, 196 archivos, 0

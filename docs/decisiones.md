@@ -287,7 +287,10 @@ con la suite en 7 de 8. Mostró tres problemas, y cada uno se corrigió:
 
 ## 10. Prueba del compañero
 
-PENDIENTE (equipo): hacer la prueba con un estudiante ajeno al equipo, que reciba solo
+**Momento 3 (2026-11-15).** La persona ajena al equipo que usa la app es el profesor: el 20-nov clona el repositorio y la prueba sin ayuda del equipo, y el 21-nov la ataca en la presentación (decisión del equipo, 2026-11-15).
+El protocolo de abajo era el del Momento 2 y sirve de referencia.
+
+Protocolo del Momento 2: hacer la prueba con un estudiante ajeno al equipo, que reciba solo
 el ZIP y el README y siga las instrucciones sin ayuda, con el desarrollador en silencio.
 Las tres tareas del diseño (`diseno/vista-analista.md`):
 
@@ -438,7 +441,8 @@ porque son controles de seguridad.
 
 - La suite de casos dorados sigue **sin verificación humana** (`verificado_por` vacío).
 - Rotar las llaves de IA usadas en el desarrollo (las rota el equipo en las consolas).
-- La prueba con alguien ajeno al equipo (protocolo en `docs/presentaciones/prueba-tercero.md`).
+- La prueba con alguien ajeno al equipo la hace el profesor el 20-nov al clonar el repositorio
+  (decisión del equipo; protocolo de referencia en `docs/presentaciones/prueba-tercero.md`).
 
 ## 14. Auditoría del 2026-11-14 y lo que se corrigió
 

@@ -1,5 +1,8 @@
 # Prueba con una persona ajena al equipo
 
+> **Cómo quedó (2026-11-15).** La persona ajena al equipo que usa la app es el profesor: el 20-nov clona el repositorio y la prueba sin ayuda del equipo, y el 21-nov la ataca en la presentación (decisión del equipo, 2026-11-15). Esta hoja queda como el protocolo que sigue el equipo
+> si alguien más prueba la app, y como guía de las tareas que el profesor puede intentar.
+
 La rúbrica del Momento 3 pide que **alguien que no es del equipo** use la app sin que le expliquen
 cómo. Esta hoja es para hacer esa prueba antes del 19-nov y dejarla registrada. Tarda unos 15 minutos.
 
