@@ -8,7 +8,7 @@ lo que el sistema **puede** ejecutar. Cada control de abajo vive en código o en
 cada uno tiene una prueba automática o un ataque medido que lo respalda.
 
 Reproducir todo: `docker compose exec app python eval/ataques_momento3.py` (12 ataques contra la
-app real, con el LLM real) y `pytest` (279 pruebas, ver `README.md`).
+app real, con el LLM real) y `pytest` (281 pruebas, ver `README.md`).
 
 ---
 

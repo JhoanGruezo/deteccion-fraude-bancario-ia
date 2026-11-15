@@ -87,6 +87,7 @@ condiciones. Respondida el 2026-11-15:
 | Límite por IP compartido detrás de Docker | **Lo arreglamos** | Cupo por sesión y por IP (`test_el_limite_es_por_sesion_y_un_abusador_no_frena_a_los_demas`) |
 | `run.ps1` abortaba en PowerShell 5.1 | **Lo arreglamos** | Probado en Windows PowerShell 5.1 el 2026-11-15 |
 | Documentos del M2 (`decisiones.md`, `comandos-demo.md`) | **Lo arreglamos** | `docs/decisiones.md` §1, §2, §6, §11, §13 y §14 |
-| Casos dorados sin firmar y llaves sin rotar | **Pendiente del equipo** | Antes del 19-nov |
+| Casos dorados sin firmar | **Lo arreglamos** | Los 8 casos firmados el 2026-11-15, cada uno con cómo se verificó (`eval/casos_dorados.json`) |
+| Llaves sin rotar | **Lo arreglamos** | Llaves nuevas de Claude y Gemini desde el 2026-11-15, solo en `.env` (fuera de git y del ZIP); las viejas se revocan en las consolas de cada proveedor |
 | Prueba con un tercero | **Decisión del equipo** | La persona ajena al equipo es el profesor, que clona y prueba la app el 20-nov |
 

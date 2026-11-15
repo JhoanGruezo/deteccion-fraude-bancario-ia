@@ -3,6 +3,13 @@
 Proyecto del curso Ingeniería de Aplicaciones con IA (Momento 3). Equipo: **Jhoan David
 Gruezo Gutiérrez** y **Jeison Nazarit**.
 
+> **¿Viene a revisar el proyecto?** Empiece por **[GUIA-PROFESOR.md](GUIA-PROFESOR.md)**. Tiene la
+> instalación en tres pasos, la lista de verificación con el resultado esperado de cada comando y
+> la demo en el navegador, en unos 15 minutos. Sirve igual para una persona o para un asistente de IA.
+>
+> Versión corta: con Docker Desktop abierto, `docker compose up --build -d`, abrir
+> http://localhost:8000 y entrar como `supervisor`. Las llaves de IA son opcionales.
+
 Cada compra se puntúa al llegar con un modelo de ML (HistGradientBoosting sobre el perfil
 previo de cada tarjeta, ~2 ms). Si es sospechosa, se abre un caso y un **agente LLM hace el
 triaje en segundos, sin esperar a un analista**: lee la evidencia con sus herramientas y, si el
@@ -25,7 +32,7 @@ medidas el 2026-11-15; detalle, método e intervalos en
 
 La regla del Momento 2 (esperar al analista) detenía el 29 a 35 % en la práctica. El agente suma 14
 puntos de fraude detenido a cambio de 4 bloqueos de clientes honestos más en la noche; cada uno se
-levanta con una llamada. **Seguridad:** 12 de 12 ataques resistidos y 279 pruebas automáticas.
+levanta con una llamada. **Seguridad:** 12 de 12 ataques resistidos y 281 pruebas automáticas.
 Las cifras que se publicaron antes del 2026-11-15 (71,4 %) se retiraron: el agente veía compras
 posteriores durante la medición ([§14](docs/decisiones.md#14-auditoría-del-2026-11-14-y-lo-que-se-corrigió)).
 
@@ -33,6 +40,7 @@ posteriores durante la medición ([§14](docs/decisiones.md#14-auditoría-del-20
 
 | Documento | Para qué |
 |---|---|
+| [Guía para revisar el proyecto](GUIA-PROFESOR.md) | Instalar, verificar y probar en 15 minutos, con el resultado esperado de cada paso |
 | [Análisis: cómo se actúa ante el fraude](docs/analisis-respuesta-fraude.md) | Por qué bloquear en minutos y no en horas, con datos, capacidad de los analistas y norma colombiana |
 | [Especificación del Momento 3](docs/SPEC.md) | Qué se construyó, con qué criterios de aceptación y qué se renegoció desde el inicio |
 | [Seguridad](docs/seguridad.md) | Tríada letal, defensas por capa, 12 ataques propios y el antes y el después |
@@ -42,7 +50,7 @@ posteriores durante la medición ([§14](docs/decisiones.md#14-auditoría-del-20
 | [Guía del proyecto](docs/guia-del-proyecto.md) y [guía de estudio](docs/guia-de-estudio.md) | Arquitectura con diagramas y recorrido del código para la sustentación |
 | [Plan del Momento 3](PLAN.md) | Tareas, fechas y qué quedó de cada una |
 | [Requisitos](requisitos/), [diseño](diseno/), [validación](validacion/), [evaluación](eval/) | El método de trabajo por componente y las mediciones con fecha |
-| [Presentaciones](docs/presentaciones/) | Guion de la demo y protocolo de la prueba con un tercero |
+| [Presentaciones](docs/presentaciones/) | Comandos de la demo y protocolo de la prueba con un tercero |
 
 ## 1. Prerrequisitos
 
@@ -228,8 +236,9 @@ scripts lo avisan y miden solo la plantilla.
 
 - `eval/casos_dorados.json`: los casos y sus hechos esperados. Se regeneran con
   `python scripts/elegir_casos_dorados.py` (necesita la app arriba); el campo
-  `verificado_por` lo llena el equipo después de revisar cada caso a mano, y mientras
-  haya casos sin firmar la suite se reporta como "pendiente de verificación humana".
+  `verificado_por` lo llena el equipo después de revisar cada caso a mano (los 8 están
+  firmados desde el 2026-11-15, cada uno con cómo se verificó); si se regeneran, vuelven a
+  quedar sin firma y la suite se reporta como "pendiente de verificación humana".
 - `eval/cliente_sse.py`: abre un stream como el navegador y muestra eventos y tiempos;
   sirve para depurar un caso: `python eval/cliente_sse.py SPK-000093 --regenerar --falla 429`.
 
@@ -262,6 +271,8 @@ docker compose down -v && docker compose up --build -d   # recarga la base con l
 
 ```
 README.md                 este contrato de arranque
+GUIA-PROFESOR.md          guía para revisar: instalación, lista de verificación y demo
+AGENTS.md                 instrucciones cortas para un asistente de IA que venga a probar el proyecto
 docker-compose.yml        servicios db (Postgres 16) y app (FastAPI)
 run.sh, run.ps1           arranque en un comando (macOS/Linux/Git Bash y Windows)
 PLAN.md                   plan del Momento 3 con lo que quedó de cada tarea
@@ -286,7 +297,7 @@ scripts/                  generar_semilla.py, elegir_casos_dorados.py, empaqueta
 docs/img/                 captura de la app y gráficas generadas
 requisitos/, diseno/, validacion/   requisitos, diseño y validación de cada componente
 docs/guia-del-proyecto.md guía general con diagramas de arquitectura y flujo
-docs/presentaciones/      pitch del 9 de octubre y protocolo de la prueba con un tercero
+docs/presentaciones/      comandos de la demo, pitch del 9 de octubre y protocolo de la prueba con un tercero
 decisiones.md             bitácora histórica de decisiones (la consolidada está en docs/)
 plan-construccion.md      plan y checklist por sesión de planeación
 CLAUDE.md                 convenciones de código del proyecto

@@ -1,5 +1,9 @@
 # Detección de fraude bancario
 
+> **¿Viene a instalar, probar o evaluar el proyecto?** Siga `GUIA-PROFESOR.md`: comandos en
+> orden, resultado esperado de cada uno y la lista de verificación. Este archivo es para quien
+> va a modificar el código.
+
 ## Qué es esto
 
 Proyecto de curso (no un reto semanal): detección de fraude transaccional bancario.

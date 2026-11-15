@@ -136,8 +136,8 @@
         "monto_24h"
       ]
     },
-    "verificado_por": null,
-    "como_se_verifico": null
+    "verificado_por": "Jhoan David Gruezo Gutiérrez (2026-11-15)",
+    "como_se_verifico": "Revisado a mano en la app (Casos → SPK-000104): 5 compras en la ventana y las 5 sobre el umbral de bloqueo, tarjeta terminada en 2826, primera compra de 967,23, recomendación de la regla: bloquear la tarjeta."
   },
   {
     "id": "D4",
@@ -177,8 +177,8 @@
         "ritmo_24h"
       ]
     },
-    "verificado_por": null,
-    "como_se_verifico": null
+    "verificado_por": "Jhoan David Gruezo Gutiérrez (2026-11-15)",
+    "como_se_verifico": "Revisado a mano en la app (Casos → SPK-000179): 2 compras (18,44 y 8,32), solo una sobre el umbral de bloqueo; recomendación de la regla: verificar con el cliente, no bloquear."
   },
   {
     "id": "D5",
@@ -227,8 +227,8 @@
         "ubicacion"
       ]
     },
-    "verificado_por": null,
-    "como_se_verifico": null
+    "verificado_por": "Jhoan David Gruezo Gutiérrez (2026-11-15)",
+    "como_se_verifico": "Revisado a mano en la app (Casos → SIN-000026): compra de 361.143,19 en Cali con la cuenta que opera casi siempre en Barranquilla (97,6 % del perfil); recomendación de la regla: bloquear el acceso a la cuenta por viaje imposible."
   },
   {
     "id": "D6",
@@ -273,8 +273,8 @@
         "historial"
       ]
     },
-    "verificado_por": null,
-    "como_se_verifico": null
+    "verificado_por": "Jhoan David Gruezo Gutiérrez (2026-11-15)",
+    "como_se_verifico": "Revisado a mano en la app (Casos → SPK-000171): tarjeta terminada en 7373 con solo 2 compras previas (el perfil marca sin historial), 4 compras sobre el umbral de bloqueo, la primera de 1.038,53; recomendación de la regla: bloquear la tarjeta."
   },
   {
     "id": "D7",

@@ -38,10 +38,10 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CARPETA_EN_ZIP = "fraude-bancario"
 
 CARPETAS_PERMITIDAS = ["app", "src", "scripts", "semilla", "eval", "docs", "requisitos", "diseno", "validacion"]
-ARCHIVOS_PERMITIDOS = ["README.md", "docker-compose.yml", "run.sh", "run.ps1", ".env.example", ".dockerignore",
+ARCHIVOS_PERMITIDOS = ["README.md", "GUIA-PROFESOR.md", "AGENTS.md", "docker-compose.yml", "run.sh", "run.ps1", ".env.example", ".dockerignore",
                        ".gitattributes", "decisiones.md", "CLAUDE.md", "PLAN.md", "plan-construccion.md"]
 # Lo que es obligatorio según la página de la entrega: si falta, el ZIP no se arma.
-OBLIGATORIOS = ["README.md", "docker-compose.yml", "run.sh", "run.ps1", ".env.example", "docs/decisiones.md",
+OBLIGATORIOS = ["README.md", "GUIA-PROFESOR.md", "docker-compose.yml", "run.sh", "run.ps1", ".env.example", "docs/decisiones.md",
                 "eval/casos_dorados.json", "app/Dockerfile", "app/restricciones.txt", "semilla/casos_sparkov.json",
                 "semilla/modelo_riesgo_sparkov.joblib", "semilla/simulador_sparkov.json.gz",
                 "docs/SPEC.md", "docs/seguridad.md", "docs/gobernanza.md", "docs/respuesta_auditoria.md"]
