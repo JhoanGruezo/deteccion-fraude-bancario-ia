@@ -12,16 +12,22 @@ bloquea la regla. **Desbloquear es siempre humano**, con sesión y motivo. Por q
 el 88 % del fraude empieza de noche, cuando no hay analistas, y cada hora de espera cuesta
 dinero ([análisis](docs/analisis-respuesta-fraude.md)).
 
-**Cifras del Momento 3** (noche real de Sparkov, 5.810 compras, LLM real; detalle en
+**Cifras del Momento 3** (noche real de Sparkov, 5.810 compras y 9 tarjetas robadas, LLM real,
+medidas el 2026-11-15; detalle, método e intervalos en
 [`docs/decisiones.md` §13](docs/decisiones.md#13-momento-3-2026-11-08-bloqueo-automático-cifras-finales-y-qué-empeoró)):
 
-| | |
-|---|---|
-| Fraude detenido | **71,4 %** (la regla del Momento 2, en la práctica: 29-35 %; con la IA caída: 61,8 %) |
-| Compra sospechosa → tarjeta bloqueada | **5,7 s** de mediana (meta: menos de 5 minutos) |
-| Bloqueos | precisión 0,90 · recall 1,00 · 0,17 falsos por cada 1.000 compras |
-| Costo del LLM | 0,054 USD toda la noche (el LLM solo se llama al abrirse un caso) |
-| Seguridad | 12 de 12 ataques resistidos, 267 pruebas automáticas |
+| | Con el agente | Solo la regla (IA caída) |
+|---|---|---|
+| Fraude detenido (monto, a tiempo real) | **76,1 %** | **61,8 %** |
+| Compra que dispara el caso → tarjeta bloqueada | **3,7 s** de mediana | 14 s |
+| Bloqueos (por tarjeta) | precisión 0,64 · recall 1,00 · 0,86 falsos por cada 1.000 compras | precisión 0,90 · recall 1,00 · 0,17 falsos por cada 1.000 |
+| Costo del LLM | 0,051 USD toda la noche (el LLM solo se llama al abrirse un caso) | 0 |
+
+La regla del Momento 2 (esperar al analista) detenía el 29 a 35 % en la práctica. El agente suma 14
+puntos de fraude detenido a cambio de 4 bloqueos de clientes honestos más en la noche; cada uno se
+levanta con una llamada. **Seguridad:** 12 de 12 ataques resistidos y 279 pruebas automáticas.
+Las cifras que se publicaron antes del 2026-11-15 (71,4 %) se retiraron: el agente veía compras
+posteriores durante la medición ([§14](docs/decisiones.md#14-auditoría-del-2026-11-14-y-lo-que-se-corrigió)).
 
 **Documentación**
 

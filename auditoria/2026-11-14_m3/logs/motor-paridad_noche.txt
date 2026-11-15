@@ -1,0 +1,2 @@
+compras comparadas: 5810; diferencia máx 5.00e-07; > 0,001: 0; cambios de banda: 0
+latencia de puntuar (esta máquina): mediana 2.37 ms, p99 5.31 ms

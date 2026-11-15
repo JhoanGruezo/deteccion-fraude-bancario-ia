@@ -1,0 +1,11 @@
+########## FLAGS DE COOKIE (login) ##########
+set-cookie: sesion=[REDACTADO]; HttpOnly; Max-Age=28800; Path=/; SameSite=strict
+
+########## IDOR / gobernanza del desbloqueo ##########
+[analista] desbloquear bloqueo 999999 (motivo valido) -> {"error":"Ese bloqueo ya no está activo (otro analista lo levantó o no existe)."}
+[analista] desbloquear sin motivo (<10) -> {"error":"Escribe por qué desbloqueas (al menos 10 caracteres): queda en la auditoría del caso."}
+[analista] confirmar propuesta 999999 -> {"error":"Propuesta no encontrada"}
+[analista] confirmar propuesta id='abc' (no entero) -> 422
+
+########## CORS (origen ajeno) ##########
+HTTP/1.1 200 OK

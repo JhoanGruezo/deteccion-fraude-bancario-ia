@@ -4,7 +4,8 @@
   token CSRF (lo revisa el middleware de sesión) y un motivo escrito de al menos 10 caracteres.
   Queda firmada con el usuario de la sesión, no con un nombre que escriba el navegador.
 - **Responder un aviso** simula al titular en el buzón de la app ("fui yo" / "no fui yo"). No
-  desbloquea nada: "fui yo" sube el bloqueo al primer lugar de la cola de desbloqueo.
+  desbloquea nada: "fui yo" sube el bloqueo al primer lugar de la cola de desbloqueo y "no fui
+  yo" bloquea la tarjeta si todavía no lo estaba.
 - **Ajustes** (autonomía del agente, tope de bloqueos por hora) y **alertas**: solo supervisor.
 """
 
@@ -77,7 +78,9 @@ def responder_aviso(aviso_id: int, cuerpo: CuerpoRespuesta):
     id_caso = acciones().responder_notificacion(aviso_id, cuerpo.respuesta)
     if id_caso is None:
         raise HTTPException(409, "Ese aviso ya tiene respuesta o no existe.")
-    return {"id_caso": id_caso, "respuesta": cuerpo.respuesta}
+    efecto = importlib.import_module("app.riesgo.acciones").respuesta_del_titular(id_caso, cuerpo.respuesta)
+    return depurar_para_interfaz({"id_caso": id_caso, "respuesta": cuerpo.respuesta,
+                                  "bloqueo": (efecto or {}).get("resultado")})
 
 
 @router.get("/supervision")

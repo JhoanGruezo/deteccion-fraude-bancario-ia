@@ -1,0 +1,47 @@
+== 2026-11-14T22:36:33-05:00
+HEAD: 01c429e0d5543ccb91af0401100df54ae3cfaa8b
+?? auditoria/2026-11-14_m3/
+Contenedor creado 2026-11-09T02:13:34.495097988Z imagen sha256:4a14d68d3d34659f0e41577ca8b78e0081646cc4842922d62b1b62e01438cd47 montajes []
+Imagen creada 2026-11-09T01:58:26.664337525Z
+== diferencias de hash (repo vs contenedor) en app src semilla eval (excluye pycache, resultados)
+== Comparación con finales de línea normalizados (el contenedor tiene CRLF; el árbol de trabajo, LF)
+80c80
+< 2f313259d6b66ecf14cbaf833c820c20 app/web/js/principal.js
+---
+> 4377a6b0f3a5526ad97127300cb8111e app/web/js/principal.js
+== diferencias reales tras normalizar:
+80c80
+< 2f313259d6b66ecf14cbaf833c820c20 app/web/js/principal.js
+---
+> 4377a6b0f3a5526ad97127300cb8111e app/web/js/principal.js
+161,162d160
+<     tokens_entrada: "Tokens de entrada", tokens_salida: "Tokens de salida", desde: "Medido desde",
+<     tareas_con_fallo: "Tareas con alguna falla", recuperadas: "Recuperadas",
+Conclusión: la imagen (01:58Z = 20:58 local del 8-nov) es anterior al commit 1268648 (20:59:51) que agregó esas etiquetas. Se reconstruye.
+== 2026-11-14T22:37:28-05:00 docker compose up -d --build app
+#15 naming to docker.io/library/proyecto-fraude-bancario-app:latest done
+#15 unpacking to docker.io/library/proyecto-fraude-bancario-app:latest
+#15 unpacking to docker.io/library/proyecto-fraude-bancario-app:latest 3.9s done
+#15 DONE 13.6s
+
+#16 resolving provenance for metadata file
+#16 DONE 0.0s
+ Image proyecto-fraude-bancario-app Built 
+ Container proyecto-fraude-bancario-db-1 Running 
+ Container proyecto-fraude-bancario-app-1 Recreate 
+ Container proyecto-fraude-bancario-app-1 Recreated 
+ Container proyecto-fraude-bancario-db-1 Waiting 
+ Container proyecto-fraude-bancario-db-1 Healthy 
+ Container proyecto-fraude-bancario-app-1 Starting 
+ Container proyecto-fraude-bancario-app-1 Started 
+== 2026-11-14T22:38:29-05:00 salud tras reconstruir: {"estado":"ok","base":{"disponible":true,"casos_cargados":339,"mensaje":null,"roles_minimo_privilegio":true},"proveedores":[{"nombre":"claude","principal":true,"etiqueta":"Claude","modelo":"claude-haiku-5-5","con_llave":true},{"nombre":"gemini","principal":false,"etiqueta":"Gemini","modelo":"gemini-3.5-flash-lite","con_llave":true}],"modo_plantilla":false,"falla_forzada":"","panel_demo":true}
+principal.js ahora igual
+Contenedor nuevo creado 2026-11-15T03:38:24.606836701Z
+app-1  | INFO:     Started server process [1]
+app-1  | INFO:     Waiting for application startup.
+app-1  | 2026-11-15 03:38:27,579 INFO app.db.roles: Roles de mínimo privilegio listos: fraude_app, fraude_agente.
+app-1  | 2026-11-15 03:38:27,580 INFO app.db.migrar: Base lista: semilla ya_cargada, 339 casos, 2140 transacciones de caso, 107692 filas de historial (0.16 s).
+app-1  | 2026-11-15 03:38:28,855 INFO app.principal: Triaje automático y red de seguridad (90 s) activos.
+app-1  | INFO:     Application startup complete.
+app-1  | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+app-1  | INFO:     172.18.0.1:38130 - "GET /api/salud HTTP/1.1" 200 OK

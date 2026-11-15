@@ -1,0 +1,10 @@
+########## AUTH / SESION ##########
+[sin sesion] GET /api/casos -> 401[sin sesion] GET /api/metricas -> 401[sin sesion] GET /api/supervision -> 401[sin sesion] GET /api/bloqueos -> 401[sin sesion] POST /api/demo/falla -> 401[sin sesion] GET /api/salud (publica) -> 200
+########## CSRF ##########
+[analista sin csrf] POST /api/ajustes -> 403[analista csrf ok  ] POST /api/ajustes (clave invalida->422 esperado) -> 403[analista csrf mal ] POST /api/bloqueos/1/desbloquear -> 403
+########## ESCALADA analista -> supervisor ##########
+[analista+csrf] POST /api/ajustes autonomia=false (espero 403) -> 403[analista+csrf] POST /api/demo/falla tipo=todo (espero 403) -> 403[analista+csrf] POST /api/simulador/detener (espero 403) -> 403[analista+csrf] POST /api/alertas/1/atender (espero 403) -> 403[analista] GET /api/supervision (lectura, espero 200=fuga?) -> 200[analista] GET /api/simulador (lectura) -> 200
+########## METODOS NO ESPERADOS ##########
+[analista] DELETE /api/casos -> 405[analista] PUT /api/ajustes -> 403[analista] TRACE / -> 405
+########## DOCS / OPENAPI ##########
+GET /docs -> 404GET /openapi.json -> 404

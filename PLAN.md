@@ -152,12 +152,16 @@ del resto.
       con la traza completa y el antes y el después de cada defensa.
       2026-11-09: `eval/ataques_momento3.py`: resisten 12 de 12 (`eval/resultados/ataques_momento3_2026-11-09.json`).
 - [x] **T5.3** Cifras finales de §7 de la SPEC contra la línea base, con fecha
-      (`docs/decisiones/semana14.md`).
+      (`docs/decisiones.md` §13).
       2026-11-09: `eval/resultados/momento3_2026-11-09_{base,ia_caida}.json`. A tiempo real, M3
       detiene el 71,4 % del fraude (M2: 29,3 % de noche sin turno, 34,9 % con cola de 90 min y
       61,8 % con un analista instantáneo). Con la IA caída, 61,8 %. Bloqueo a 5,7 s de la compra
       (mediana). LLM: 0,054 USD por la noche completa. La simulación a 3600x distorsiona el dinero:
       se mide trasladando cada bloqueo a tiempo real (ver el docstring del script).
+      **2026-11-15: cifras retiradas y repetidas.** La auditoría del 14-nov encontró que el agente veía
+      compras posteriores durante esta medición. Corregido el historial y con el reloj detenido durante
+      cada triaje: 76,1 % con el agente (precisión 0,64), 61,8 % con la IA caída (precisión 0,90),
+      bloqueo a 3,7 s. Detalle en `docs/decisiones.md` §13.1 y §14.
 - [x] **T5.4** Auditoría con los agentes `probador-fraude`, `validador-fraude` y
       `jefe-fraude`, y corrección de lo que encuentren.
       2026-11-08: en su lugar se respondió y cerró la auditoría interna del 31-oct

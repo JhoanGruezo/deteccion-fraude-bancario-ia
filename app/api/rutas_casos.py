@@ -72,6 +72,17 @@ def validar_analista(analista, comentario):
     return nombre, texto
 
 
+def acciones_en_vivo(caso):
+    """El módulo de acciones sobre la tarjeta, solo si el caso es del flujo en vivo (si no, None).
+
+    Los casos de la semilla del Momento 2 no tienen tarjeta que bloquear: su decisión solo
+    cambia el estado del caso, como antes.
+    """
+    if not caso or caso.get("origen") != "en_vivo":
+        return None
+    return importlib.import_module("app.riesgo.acciones")
+
+
 def caso_o_404(id_caso):
     """Carga el caso o responde 404 en español; lo usan también las rutas del agente."""
     caso = repositorio().obtener_caso(id_caso)
@@ -186,9 +197,16 @@ def registrar_decision(id_caso: str, cuerpo: CuerpoDecision, request: Request):
     if cuerpo.accion not in ACCIONES:
         raise HTTPException(422, "Elige una acción válida: confirmar bloqueo, descartar o escalar.")
     analista, comentario = validar_analista(firma_de(request) or cuerpo.analista, cuerpo.comentario)
-    caso_o_404(id_caso)
+    caso = caso_o_404(id_caso)
+    # Casos en vivo (Momento 3): la decisión tiene efecto sobre la tarjeta (auditoría 2026-11-14).
+    acciones = acciones_en_vivo(caso)
+    if acciones:
+        problema = acciones.validar_decision(caso, cuerpo.accion, comentario)
+        if problema:
+            raise HTTPException(409 if "bloqueada" in problema else 422, problema)
     try:
         decision = repositorio().registrar_decision(id_caso, cuerpo.accion, analista, comentario)
     except LookupError:  # CasoNoEncontrado del repositorio: el caso desapareció entre consultas
         raise HTTPException(404, "Caso no encontrado")
-    return depurar_para_interfaz({"decision": decision})
+    efecto = acciones.aplicar_decision(id_caso, cuerpo.accion, analista) if acciones else None
+    return depurar_para_interfaz({"decision": decision, "bloqueo": (efecto or {}).get("resultado")})

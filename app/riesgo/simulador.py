@@ -52,6 +52,12 @@ class Simulador:
         self.contadores = {"procesadas": 0, "repetidas": 0, "rechazadas": 0, "monto_rechazado": 0.0,
                            "casos_abiertos": 0, "errores": 0}
         self.reloj_dataset: str | None = None
+        # Modo medición (auditoría 2026-11-14, H2): con el reloj acelerado, los segundos que tarda un
+        # triaje son horas del dataset, y en ese lapso artificial llegan compras que en tiempo real
+        # todavía no existían; el agente decidía viéndolas. Con esperar_triajes el reloj del dataset
+        # se detiene mientras haya un triaje en curso. `ocupado` lo conecta la app al despachador.
+        self.esperar_triajes = False
+        self.ocupado = lambda: False
 
     # --- Datos ------------------------------------------------------------------------------
     def disponible(self) -> bool:
@@ -64,7 +70,7 @@ class Simulador:
         return self._datos
 
     # --- Control ------------------------------------------------------------------------------
-    def iniciar(self, velocidad: int | None = None) -> dict:
+    def iniciar(self, velocidad: int | None = None, esperar_triajes: bool = False) -> dict:
         with self._candado:
             if self.estado in ("corriendo", "pausado"):
                 raise RuntimeError("El simulador ya está en marcha.")
@@ -72,6 +78,7 @@ class Simulador:
                 raise FileNotFoundError("No está la semilla del simulador (semilla/simulador_sparkov.json.gz).")
             self._cargar()
             self.cambiar_velocidad(velocidad or self.velocidad)
+            self.esperar_triajes = bool(esperar_triajes)
             self.indice = 0
             self.contadores = {k: 0 if k != "monto_rechazado" else 0.0 for k in self.contadores}
             self._detener.clear()
@@ -123,6 +130,11 @@ class Simulador:
                 self._continuar.wait()
                 self._recalibrar = True
                 continue
+            if self.esperar_triajes and self.ocupado():
+                # El reloj del dataset queda quieto: al seguir, se ancla de nuevo en esta compra.
+                self._dormir(0.05)
+                self._recalibrar = True
+                continue
             t = transacciones[self.indice]
             momento = _fecha(t["fecha_hora"])
             if self._recalibrar:
@@ -161,6 +173,7 @@ class Simulador:
         resumen_semilla = datos.get("resumen", {})
         total = resumen_semilla.get("transacciones") or len(datos.get("transacciones", []))
         return {"estado": self.estado, "velocidad": self.velocidad, "velocidades": list(VELOCIDADES),
+                "esperar_triajes": self.esperar_triajes,
                 "indice": self.indice, "total": total, "reloj_dataset": self.reloj_dataset,
                 "inicio_dataset": resumen_semilla.get("inicio"), "fin_dataset": resumen_semilla.get("fin"),
                 "disponible": self.disponible(), **self.contadores,

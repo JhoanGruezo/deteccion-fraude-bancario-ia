@@ -74,17 +74,29 @@ def _caso_para_actuar(cur, id_caso):
     return _fila(cur.fetchone())
 
 
-def bloquear(id_caso, tipo, actor, motivo, tarea_id=None, usuario=None):
-    """Bloquea la tarjeta (o el acceso) del caso si las guardas lo permiten. Ver docstring del módulo."""
+def bloquear(id_caso, tipo, actor, motivo, tarea_id=None, usuario=None, reabrir=False):
+    """Bloquea la tarjeta (o el acceso) del caso si las guardas lo permiten. Ver docstring del módulo.
+
+    `reabrir=True` permite bloquear un caso ya descartado o desbloqueado: solo lo usa la
+    respuesta "no fui yo" del titular, que pesa más que la decisión anterior.
+    """
     if tipo not in ("tarjeta", "acceso_cuenta"):
         raise ValueError(f"Tipo de bloqueo desconocido: {tipo}")
     with cursor() as cur:
         caso = _caso_para_actuar(cur, id_caso)
         if caso is None:
             return {"resultado": "no_permitido", "detalle": "El caso no existe."}
-        if caso["estado"] in ESTADOS_CERRADOS:
+        if caso["estado"] in ESTADOS_CERRADOS and not reabrir:
             return {"resultado": "no_permitido", "detalle": f"El caso está {caso['estado']}."}
         if actor == "agente":
+            # Una sola acción de bloqueo del agente por caso (auditoría 2026-11-14, A2): si el caso
+            # ya tiene un bloqueo activo de cualquier tipo, un segundo no suma protección y sí
+            # un segundo aviso al titular.
+            cur.execute("select id from bloqueos where id_caso = %s and estado = 'activo' limit 1", (id_caso,))
+            activo = cur.fetchone()
+            if activo:
+                return {"resultado": "ya_bloqueada", "bloqueo_id": activo["id"],
+                        "detalle": "El caso ya tiene un bloqueo activo: no hace falta otra acción."}
             if caso["banda"] not in BANDAS_QUE_EL_AGENTE_PUEDE_BLOQUEAR:
                 return {"resultado": "no_permitido",
                         "detalle": f"En banda {caso['banda'] or 'sin banda'} el agente solo puede pedir verificación."}
@@ -116,7 +128,15 @@ def bloquear(id_caso, tipo, actor, motivo, tarea_id=None, usuario=None):
             # Carrera con otro actor (agente y red de seguridad a la vez): ganó el otro.
             return {"resultado": "ya_bloqueada"}
         nuevo = _fila(cur.fetchone())
-        cur.execute("update casos set estado = 'bloqueado' where id_caso = %s", (id_caso,))
+        # La recomendación del caso pasa a ser la acción tomada: así la explicación que pida el
+        # analista argumenta el bloqueo vigente y no la verificación que sugería la regla del M2.
+        nivel = "bloquear_tarjeta" if tipo == "tarjeta" else "bloquear_acceso_cuenta"
+        quien = {"agente": "el agente de triaje", "regla": "la regla del sistema",
+                 "analista": "un analista"}.get(actor, actor)
+        cur.execute("""update casos set estado = 'bloqueado', nivel_recomendacion = %s, motivo_recomendacion = %s
+                       where id_caso = %s""",
+                    (nivel, f"Bloqueada por {quien}; el desbloqueo lo decide una persona con sesión iniciada.",
+                     id_caso))
     return {"resultado": "bloqueada", "bloqueo_id": nuevo["id"],
             "segundos_hasta_bloqueo": nuevo["segundos_hasta_bloqueo"],
             "tarjeta_enmascarada": enmascarar_tarjeta(caso["id_cuenta"]), "banda": caso["banda"]}
@@ -177,6 +197,14 @@ def responder_notificacion(notificacion_id, respuesta):
                        where id = %s and respuesta_titular is null returning id_caso""", (respuesta, notificacion_id))
         fila = cur.fetchone()
     return fila["id_caso"] if fila else None
+
+
+def bloqueo_activo_del_caso(id_caso):
+    """Id del bloqueo activo del caso, o None."""
+    with cursor() as cur:
+        cur.execute("select id from bloqueos where id_caso = %s and estado = 'activo' limit 1", (id_caso,))
+        fila = cur.fetchone()
+    return fila["id"] if fila else None
 
 
 def bloqueos_del_caso(id_caso):

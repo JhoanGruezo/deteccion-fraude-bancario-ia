@@ -1,0 +1,9 @@
+alertas en prueba: 14,153 en 879 tarjetas (2.55 % de las compras); de ellas fraude: 190
+pares con 0 segundos y distancia > 0 (el detector los IGNORA por 'horas > 0'): 44 en todo Sparkov
+distancia mediana de las alertas 128 km, separación mediana 3.6 min
+en la noche del 19-jul: 200 alertas en 162 tarjetas (si abrieran caso crítico serían bloqueos obligatorios)
+
+Intervalos de la noche (Wilson para proporciones, Poisson exacto para 1 evento):
+  precisión de bloqueos 9/10: (np.float64(0.596), np.float64(0.982)); recall 9/9: (np.float64(0.701), np.float64(1.0))
+  agente en banda alta: precisión 3/3 (np.float64(0.438), np.float64(1.0)), recall 3/5 (np.float64(0.231), np.float64(0.882)), 'bloquear siempre' 5/13 (np.float64(0.177), np.float64(0.645))
+  1 bloqueo falso en 5.810 compras: 0.17 por 1.000, IC [0.004, 0.96]

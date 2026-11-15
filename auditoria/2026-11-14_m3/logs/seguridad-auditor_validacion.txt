@@ -1,0 +1,2 @@
+########## VALIDACION ENTRADA /api/transacciones (espera 422/404/413, sin LLM) ##########
+monto negativo -> 422monto 0 -> 422monto enorme 1e9 -> 422monto NaN -> 422alias inexistente -> 404alias traversal -> 404fecha rara -> 422fecha larga >25 -> 422categoria >60 -> 422lat fuera de rango -> 422JSON enorme >64KB (espera 413) -> comercio >120 -> 422ok

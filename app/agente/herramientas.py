@@ -169,7 +169,16 @@ def _obtener_caso(argumentos: dict, contexto: ContextoHerramientas) -> dict:
     if error:
         return error
     caso, error = _caso_o_error(contexto)
-    return error or resumir_caso(caso)
+    if error:
+        return error
+    resumen = resumir_caso(caso)
+    if contexto.acciones is not None:
+        # En el triaje la acción la decide el agente dentro de su banda. La recomendación de la
+        # regla del Momento 2 ("confirmar con el cliente antes de bloquear") lo sesgaba hacia la
+        # verificación en banda alta (auditoría 2026-11-14, A6), así que no se le muestra.
+        resumen.pop("nivel_recomendacion", None)
+        resumen.pop("motivo_recomendacion", None)
+    return resumen
 
 
 def _obtener_perfil_cuenta(argumentos: dict, contexto: ContextoHerramientas) -> dict:

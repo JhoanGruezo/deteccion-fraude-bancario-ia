@@ -1,0 +1,35 @@
+== 2026-11-14T23:02:30-05:00 estado final
+INFO app.db.migrar: Flujo en vivo reiniciado: {'notificaciones': 21, 'bloqueos': 10, 'alertas': 10, 'transacciones_evaluadas': 5810, 'decisiones': 0, 'propuestas_decision': 0, 'explicaciones': 0, 'trazas': 252, 'tareas_agente': 21, 'transacciones_caso': 52, 'casos': 21, 'historial': 5472, 'perfiles_tarjeta': 875, 'simulador': 'cargada'}
+{"notificaciones": 21, "bloqueos": 10, "alertas": 10, "transacciones_evaluadas": 5810, "decisiones": 0, "propuestas_decision": 0, "explicaciones": 0, "trazas": 252, "tareas_agente": 21, "transacciones_caso": 52, "casos": 21, "historial": 5472, "perfiles_tarjeta": 875, "simulador": "cargada"}
+[login] supervisor: 200 (intento 1)
+[simulador] HTTP 200: {"estado":"terminado","velocidad":3600,"velocidades":[60,120,300,600,1800,3600],"indice":5810,"total":5810,"reloj_dataset":"2020-07-21 07:59:55","inicio_dataset":"2020-07-19 20:00:00","fin_dataset":"2020-07-21 08:00:00","disponible":true,"procesadas":5810,"repetidas":0,"rechazadas":23,"monto_rechazado":9846.22,"casos_abiertos":21,"errores":0}
+[falla vacía] HTTP 200: {"falla_forzada":null}
+ajustes: {"autonomia_agente": {"valor": true, "actualizado_por": "reinicio", "actualizado_en": "2026-11-15T04:00:01.956140+00:00"}, "tope_bloqueos_autonomos_por_hora": {"valor": 30, "actualizado_por": "evaluador", "actualizado_en": "2026-11-15T04:01:52.507611+00:00"}}
+cifras: {"bloqueos_agente_hora": 0, "bloqueos_activos": 0, "esperan_desbloqueo": 0, "casos_en_cola": 0, "transacciones_evaluadas": 0, "monto_detenido": 0.0, "compras_detenidas": 0, "mediana_s_hasta_bloqueo": null, "maximo_s_hasta_bloqueo": null, "bloqueos_por_agente": 0, "bloqueos_por_regla": 0, "mediana_s_hasta_desbloqueo": null, "mediana_ms_decision": null, "p99_ms_decision": null}
+alertas: 0
+bloqueos: 0 avisos: 0
+[salir] HTTP 200: {"ok":true}
+usuarios: [('analista', 'analista', True), ('atacante_analista', 'analista', False), ('evaluador', 'supervisor', False), ('supervisor', 'supervisor', True)]
+sesiones vigentes por usuario: [{'usuario': 'analista', 'n': 3}, {'usuario': 'atacante_analista', 'n': 1}, {'usuario': 'evaluador', 'n': 4}, {'usuario': 'supervisor', 'n': 8}]
+rm: cannot remove '/tmp/cli_api.py': Operation not permitted
+rm: cannot remove '/tmp/flujo.py': Operation not permitted
+rm: cannot remove '/tmp/fallas.py': Operation not permitted
+rm: cannot remove '/tmp/autonomia.py': Operation not permitted
+rm: cannot remove '/tmp/caida_critica.py': Operation not permitted
+rm: cannot remove '/tmp/explorar.py': Operation not permitted
+rm: cannot remove '/tmp/estado_final.py': Operation not permitted
+rm: cannot remove '/tmp/recalcular.py': Operation not permitted
+{"estado":"ok","base":{"disponible":true,"casos_cargados":339,"mensaje":null,"roles_minimo_privilegio":true},"proveedores":[{"nombre":"claude","principal":true,"etiqueta":"Claude","modelo":"claude-haiku-5-5","con_llave":true},{"nombre":"gemini","principal":false,"etiqueta":"Gemini","modelo":"gemini-3.5-flash-lite","con_llave":true}],"modo_plantilla":false,"falla_forzada":"","panel_demo":true}
+
+== 2026-11-14T23:02:57-05:00 Hallazgo: tras --reiniciar-en-vivo el simulador sigue 'terminado' con contadores viejos (estado en memoria del proceso uvicorn). Se reinicia el contenedor app (la base se conserva).
+ Container proyecto-fraude-bancario-app-1 Restarting 
+ Container proyecto-fraude-bancario-app-1 Started 
+salud: {"estado":"ok","base":{"disponible":true,"casos_cargados":339,"mensaje":null,"roles_minimo_privilegio":true},"proveedores":[{"nombre":"claude","principal":true,"etiqueta":"Claude","modelo":"claude-haiku-5-5","con_llave":true},{"nombre":"gemini","principal":false,"etiqueta":"Gemini","modelo":"gemini-3.5-flash-lite","con_llave":true}],"modo_plantilla":false,"falla_forzada":"","panel_demo":true}
+[login] supervisor: 200 (intento 1)
+[simulador] HTTP 200: {"estado":"detenido","velocidad":300,"velocidades":[60,120,300,600,1800,3600],"indice":0,"total":5810,"reloj_dataset":null,"inicio_dataset":"2020-07-19 20:00:00","fin_dataset":"2020-07-21 08:00:00","disponible":true,"procesadas":0,"repetidas":0,"rechazadas":0,"monto_rechazado":0.0,"casos_abiertos":0,"errores":0}
+[falla vacía] HTTP 200: {"falla_forzada":null}
+ajustes: {"autonomia_agente": {"valor": true, "actualizado_por": "reinicio", "actualizado_en": "2026-11-15T04:00:01.956140+00:00"}, "tope_bloqueos_autonomos_por_hora": {"valor": 30, "actualizado_por": "evaluador", "actualizado_en": "2026-11-15T04:01:52.507611+00:00"}}
+cifras: {"bloqueos_agente_hora": 0, "bloqueos_activos": 0, "esperan_desbloqueo": 0, "casos_en_cola": 0, "transacciones_evaluadas": 0, "monto_detenido": 0.0, "compras_detenidas": 0, "mediana_s_hasta_bloqueo": null, "maximo_s_hasta_bloqueo": null, "bloqueos_por_agente": 0, "bloqueos_por_regla": 0, "mediana_s_hasta_desbloqueo": null, "mediana_ms_decision": null, "p99_ms_decision": null}
+alertas: 0
+bloqueos: 0 avisos: 0
+[salir] HTTP 200: {"ok":true}

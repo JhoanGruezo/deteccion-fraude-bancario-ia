@@ -116,6 +116,8 @@ def iniciar_flujo_automatico(app: FastAPI | None = None) -> dict | None:
 
     despachador = triaje.Despachador(triar=triar)
     flujo.al_cambiar_caso(despachador.al_cambiar_caso)
+    # Para el modo medición del simulador (esperar a que terminen los triajes).
+    importlib.import_module("app.riesgo.simulador").simulador().ocupado = despachador.ocupado
     red = triaje.RedDeSeguridad()
     red.start()
     registro.info("Triaje automático y red de seguridad (%.0f s) activos.", red.segundos)

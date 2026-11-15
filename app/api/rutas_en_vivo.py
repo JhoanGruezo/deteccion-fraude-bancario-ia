@@ -80,6 +80,7 @@ def simulador():
 
 class CuerpoSimulador(BaseModel):
     velocidad: int | None = None
+    esperar_triajes: bool = False     # modo medición: el reloj del dataset se detiene durante cada triaje
 
 
 @router.get("/simulador")
@@ -93,7 +94,7 @@ def controlar_simulador(accion: str, cuerpo: CuerpoSimulador | None = None):
     velocidad = cuerpo.velocidad if cuerpo else None
     try:
         if accion == "iniciar":
-            return sim.iniciar(velocidad)
+            return sim.iniciar(velocidad, esperar_triajes=bool(cuerpo and cuerpo.esperar_triajes))
         if accion == "pausar":
             return sim.pausar()
         if accion == "reanudar":

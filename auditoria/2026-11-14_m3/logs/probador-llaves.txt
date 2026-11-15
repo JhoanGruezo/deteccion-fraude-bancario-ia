@@ -1,0 +1,15 @@
+== 2026-11-14T22:38:57-05:00 llamada mínima a cada proveedor desde el contenedor app (script en el scratchpad, por stdin; la llave nunca se imprime)
+llave claude presente: True longitud>20: True
+llave gemini presente: True longitud>20: True
+CLAUDE claude-haiku-5-5: HTTP 200 en 0.97 s; cuerpo: {"model":"claude-haiku-5-5","id":"msg_011Ch41yhvFv38JWwGW68xLk","type":"message","role":"assistant","content":[{"type":"text","text":"ok"}],"container":null,"stop_reason":"end_turn","stop_sequence":null,"stop_details":null,"usage":{"input_tokens":16,"cache_creation_input_tokens":0,"cache_read_input_
+GEMINI gemini-3.5-flash-lite: HTTP 200 en 1.09 s; cuerpo: {
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "ok",
+            "thoughtSignature": "EmAKXgFpFH0To8Z0bWNO/TDTlwSwBUmph/QMYg/r0Yl64Gacmh4x0puYPtgG7WzcLNXJQEEqEiyhfm06J6Jtm9zdVKm/nDbxgtEkX7j2T4nkB9C034fqs22ME36CyKrrTmU="
+          }
+        ],
+        

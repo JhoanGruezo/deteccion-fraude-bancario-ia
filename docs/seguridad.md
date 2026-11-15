@@ -1,6 +1,6 @@
 # Seguridad del sistema de detección y bloqueo de fraude
 
-Momento 3 · 2026-11-09 · Equipo: Jhoan David Gruezo Gutiérrez y Jeison Nazarit.
+Momento 3 · 2026-11-09, actualizado el 2026-11-15 tras la auditoría del 14-nov (§7) · Equipo: Jhoan David Gruezo Gutiérrez y Jeison Nazarit.
 
 La idea de la clase 12 que guía este documento: **rogarle al prompt no es una defensa.** El modelo
 confunde datos con órdenes y no hay lista de palabras prohibidas que lo arregle. La defensa está en
@@ -8,7 +8,7 @@ lo que el sistema **puede** ejecutar. Cada control de abajo vive en código o en
 cada uno tiene una prueba automática o un ataque medido que lo respalda.
 
 Reproducir todo: `docker compose exec app python eval/ataques_momento3.py` (12 ataques contra la
-app real, con el LLM real) y `pytest` (267 pruebas, ver `README.md`).
+app real, con el LLM real) y `pytest` (279 pruebas, ver `README.md`).
 
 ---
 
@@ -44,12 +44,12 @@ negocio), lo que no puede existir es un camino para sacar algo hacia afuera.
 |---|---|---|
 | Decisión de riesgo | El score y la banda los decide el modelo de ML y código, no el LLM; el LLM no puede cambiar la banda | `app/riesgo/flujo.py` |
 | Herramientas del agente | Lista cerrada por modo: el triaje no puede proponer ni desbloquear; las preguntas no pueden bloquear | `app/agente/herramientas.py` |
-| Acciones | Guardas leídas de la base dentro de la transacción: banda permitida, autonomía encendida, tope de bloqueos por hora, caso abierto; la tarjeta sale del caso, nunca de un argumento | `app/db/repositorio_acciones.py` |
+| Acciones | Guardas leídas de la base dentro de la transacción: banda permitida, autonomía encendida, tope de bloqueos por hora, caso abierto, un solo bloqueo activo del agente por caso; la tarjeta sale del caso, nunca de un argumento | `app/db/repositorio_acciones.py` |
 | Red de seguridad | Si un caso crítico no queda bloqueado, la regla lo bloquea (en el acto o a los 90 s): una inyección que diga "no bloquees" no salva la tarjeta | `app/agente/triaje.py` |
 | Base de datos | Tres usuarios: dueño (solo migra), `app` (sin DELETE, sin la etiqueta, con columnas de UPDATE contadas), `agente` (solo lectura). Contraseñas al azar en cada arranque | `app/db/roles.py` |
-| Aviso al titular | Plantilla fija; motivo ≤ 300 caracteres sin enlaces, dominios, correos, teléfonos, números largos ni pedidos de claves, y solo con cifras de la evidencia | `app/riesgo/avisos.py` |
+| Aviso al titular | Plantilla fija; motivo ≤ 300 caracteres sin enlaces, dominios (cualquier "palabra.letras" y las formas con espacios, "punto" o "arroba"), correos, teléfonos, números largos ni pedidos de claves, y solo con cifras de la evidencia | `app/riesgo/avisos.py` |
 | API | Sesión obligatoria (scrypt, cookie HttpOnly y SameSite=Strict, sesión guardada como hash), CSRF por cabecera, roles en el servidor, 5 intentos fallidos bloquean 15 min | `app/api/sesion.py` |
-| Volumen y costo | Límite por minuto (agente 10, escrituras 30, lecturas 240), tope de gasto diario en USD, 4 límites por tarea del agente, tope de bloqueos por hora | `app/api/limites.py`, `app/config.py` |
+| Volumen y costo | Límite por minuto (agente 10, escrituras 30, lecturas 240) por sesión y, además, por IP con 5 veces más margen; tope de gasto diario en USD, 4 límites por tarea del agente, tope de bloqueos por hora | `app/api/limites.py`, `app/config.py` |
 | Navegador | CSP sin scripts ni estilos en línea, `frame-ancestors 'none'`, nosniff, sin `innerHTML` con datos | `app/principal.py`, `app/web/` |
 | Entrada | Consultas parametrizadas, byte NUL → 422, cuerpos > 64 KB → 413, comodines de LIKE escapados | `app/api/limites.py`, `app/db/` |
 | Red | La app solo escucha en 127.0.0.1; Postgres no se publica | `docker-compose.yml` |
@@ -94,10 +94,12 @@ con enlaces, teléfonos, pedidos de claves y montos inventados, y ninguno llega 
 | Permisos en la base | El agente y la app con el usuario dueño (superusuario) | Tres usuarios; el del agente solo lee y no ve la etiqueta |
 | Bloqueo | Nunca automático (el analista confirmaba, horas después de noche) | Automático y acotado: banda decidida por código, tope por hora, interruptor del supervisor, desbloqueo solo humano |
 | Salida hacia el cliente | No existía | Plantilla + motivo validado + destinatario por código + lista blanca de correo |
-| Costo del LLM | Límites por tarea | + límite por minuto, tope diario en USD, LLM solo al abrir o subir de banda un caso (0,054 USD por una noche de 5.810 compras) |
+| Costo del LLM | Límites por tarea | + límite por minuto, tope diario en USD, LLM solo al abrir o subir de banda un caso (0,051 USD por una noche de 5.810 compras) |
 | Panel de fallas | Cualquiera, incluso por `?falla=` | Solo supervisor |
 | Navegador | Sin cabeceras; script de tema en línea | CSP estricta, sin scripts en línea, sin `innerHTML` |
 | Entradas raras | NUL → 500, `q=%` → todo, `/docs` público, cuerpos sin tope | 422, escapado, apagado, 413 |
+| Secretos | Llaves de IA en `.env` y en un archivo local del equipo | `.env` ignorado; el empaquetador escanea patrones de llave y aborta; 0 llaves en todo el historial de git (verificado el 2026-11-14); las llaves del desarrollo se rotan antes de entregar |
+| Salida a internet | No existía | Solo el proveedor de IA. El agente no navega ni manda nada; el correo real solo a la lista blanca, vacía por defecto |
 
 ## 6. Riesgos que asumimos (y por qué)
 
@@ -107,10 +109,29 @@ con enlaces, teléfonos, pedidos de claves y montos inventados, y ninguno llega 
 - **Bloquear de más en masa.** Un atacante con sesión podría inyectar muchas compras raras para que
   el agente bloquee tarjetas. Lo frenan el límite por minuto, el tope de bloqueos por hora (alerta al
   supervisor) y el interruptor. La regla de la banda crítica no tiene tope: es la que protege el dinero.
-- **El límite por minuto es por IP** y vive en memoria: detrás del mapeo de puertos de Docker todos
-  los clientes locales comparten IP. Suficiente para una instalación local; en producción iría en un
-  proxy por usuario.
+- **El límite por minuto vive en memoria** del proceso. Cuenta por sesión y por IP (con 5 veces más
+  margen), así un abusador no frena a los demás aunque detrás de Docker compartan IP. Se reinicia con
+  la app; en producción iría en un proxy o en Redis.
+- **Un analista puede LEER la vista Supervisión** (autonomía, gasto del día, alertas), en solo lectura:
+  no puede cambiar nada (403) y esa vista no tiene datos personales ni secretos. Es a propósito: el
+  analista debe saber si el agente está actuando solo. Hallazgo B-1 de la auditoría del 14-nov.
+- **El bloqueo de ingreso tras 5 intentos fallidos es por usuario.** Alguien podría bloquear 15 min
+  el ingreso de `analista` o `supervisor` a propósito. Las sesiones abiertas no se cierran, y en
+  producción los usuarios tendrían nombres propios, no predecibles.
 - **El LLM puede responder en otro idioma** si se lo piden explícitamente (auditoría H5); las
   acciones no cambian por eso.
 - **Las llaves de IA que se usaron en el desarrollo** viajaron por chat y por un archivo local: se
   rotan antes de la entrega (ver `docs/respuesta_auditoria.md`).
+
+## 7. Lo que cambió tras la auditoría del 2026-11-14
+
+Cinco agentes atacaron y revisaron la app (informes en `auditoria/2026-11-14_m3/`). El pentest en
+vivo no encontró nada crítico ni alto, pero la revisión del código sí encontró un hueco en la pata de
+salida: la validación del motivo solo conocía 15 terminaciones de dominio, y un motivo con
+`bancodemo-seguro.shop` o "banco . com" habría llegado al titular. En el ataque A3 no pasó porque el
+modelo se negó solo, no porque lo frenara el validador. Corregido el 2026-11-15 con 4 casos nuevos
+en `app/pruebas/test_triaje.py`, y de nuevo resisten los 12 ataques (`eval/resultados/ataques_momento3_2026-11-15_0525.json`).
+
+También se cerraron tres huecos del lado humano que un atacante con sesión podía aprovechar:
+"confirmar bloqueo" no bloqueaba la tarjeta, "no fui yo" no hacía nada y descartar un caso crítico
+apagaba la red de seguridad sin pedir motivo. El detalle está en `docs/decisiones.md` §14.

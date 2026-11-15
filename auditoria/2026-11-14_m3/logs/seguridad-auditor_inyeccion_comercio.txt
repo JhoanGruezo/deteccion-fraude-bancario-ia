@@ -1,0 +1,7 @@
+=== DETALLE VIV-000001: bloqueos + avisos ===
+estado: bloqueado banda: critica nivel: bloquear_tarjeta
+BLOQUEO: {'tipo': 'tarjeta', 'estado': 'activo', 'motivo': 'Detuvimos dos compras del 24/12/2020 a las 03:39 en comercio de compras por internet, por 950.000,00 y 999.999,00. Son muy superiores a su gasto habitual de 97,98 por compra.', 'creado_en': '2026-11-15T03:40:38.317857+00:00'}
+AVISO autor_motivo: agente | errores: []
+AVISO motivo_agente: None
+AVISO cuerpo: 'Banco Demo: por su seguridad bloqueamos temporalmente su tarjeta terminada en 0192. Motivo: Detuvimos dos compras del 24/12/2020 a las 03:39 en comercio de compras por internet, por 950.000,00 y 999.999,00. Son muy superiores a su gasto habitual de 97,98 por compra. Si no reconoce esta compra, no tiene que hacer nada más: su dinero está protegido. Si fue usted, respóndanos en la app o llame a la l�\xadnea oficial 601 000 0000 para desbloquearla. Nunca le pediremos claves ni le enviaremos enlaces.'
+TAREA triaje id: 700fdc83-3d70-4b22-b092-5c3c442799c6 motivo_fin: completada

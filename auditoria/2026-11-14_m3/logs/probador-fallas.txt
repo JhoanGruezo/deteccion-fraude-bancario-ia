@@ -1,0 +1,106 @@
+== 2026-11-14T22:54:29-05:00 fallas.py (panel de demo /api/demo/falla y ?falla=; busca trazas crudas)
+[login] supervisor: 200 (intento 1)
+
+=== Panel de demo: falla 429
+[fijar] HTTP 200: {"falla_forzada":"429"}
+[salud] HTTP 200: {"estado":"ok","base":{"disponible":true,"casos_cargados":339,"mensaje":null,"roles_minimo_privilegio":true},"proveedores":[{"nombre":"claude","principal":true,"etiqueta":"Claude","modelo":"claude-haiku-5-5","con_llave":true},{"nombre":"gemini","principal":false,"etiqueta":"Gemini","modelo":"gemini-
+[explicación con falla 429] HTTP 200 en 9.5 s; 32 eventos; tipos únicos: ['conmutacion', 'estado', 'explicacion', 'fin', 'herramienta', 'inicio', 'modelo_llamado', 'reintento', 'resultado_herramienta', 'token']
+   fin: {"tarea_id": "671a39a7-d610-4702-b0c2-eeccb3f64c6c", "motivo_fin": "completada", "iteraciones": 2, "tokens_entrada": 7022, "tokens_salida": 431, "costo_usd": 0.003184, "latencia_ms": 9528, "ttft_ms": 8729, "proveedor_final": "gemini", "modelo_final": "gemini-3.5-flash-lite", "reintentos": 3, "conmutaciones": 1, "desde_cache": false, "tokens": 7453, "fragmentos_streaming": 15, "es_respaldo": false}
+     0.03s reintento: {"proveedor": "claude", "motivo": "cuota", "intento": 1, "de": 3, "espera_s": 1.0, "detalle": "Falla forzada: 429 simulado (no se llamó a la red)", "texto": "Claude respondió 429 (cuota agotada) · reintento 1/3 en 1 s"}
+     1.03s reintento: {"proveedor": "claude", "motivo": "cuota", "intento": 2, "de": 3, "espera_s": 2.0, "detalle": "Falla forzada: 429 simulado (no se llamó a la red)", "texto": "Claude respondió 429 (cuota agotada) · reintento 2/3 en 2 s"}
+     3.04s reintento: {"proveedor": "claude", "motivo": "cuota", "intento": 3, "de": 3, "espera_s": 4.0, "detalle": "Falla forzada: 429 simulado (no se llamó a la red)", "texto": "Claude respondió 429 (cuota agotada) · reintento 3/3 en 4 s"}
+     7.05s conmutacion: {"de": "claude", "a": "gemini", "motivo": "cuota", "detalle": "Falla forzada: 429 simulado (no se llamó a la red)", "texto": "Claude respondió 429 (cuota agotada): se cambia a Gemini"}
+   explicación: origen=None proveedor=gemini {"contenido": {"que_paso": "El caso comprende 2 transacciones por un total de 867,49. La primera ocurrió el 2020-06-21T22:06:39 en Hamill-D'Amore por 24,84 y la segunda el 2020-06-21T23:02:16 en Hermann and Sons por 842,65.", "por_que_es_riesgo": "Se detectaron compras anómalas seguidas con un patró
+   proveedores vistos: ['claude', 'gemini']
+
+=== Panel de demo: falla timeout
+[fijar] HTTP 200: {"falla_forzada":"timeout"}
+[salud] HTTP 200: {"estado":"ok","base":{"disponible":true,"casos_cargados":339,"mensaje":null,"roles_minimo_privilegio":true},"proveedores":[{"nombre":"claude","principal":true,"etiqueta":"Claude","modelo":"claude-haiku-5-5","con_llave":true},{"nombre":"gemini","principal":false,"etiqueta":"Gemini","modelo":"gemini-
+[explicación con falla timeout] HTTP 200 en 10.1 s; 33 eventos; tipos únicos: ['conmutacion', 'estado', 'explicacion', 'fin', 'herramienta', 'inicio', 'modelo_llamado', 'reintento', 'resultado_herramienta', 'token']
+   fin: {"tarea_id": "4edd875e-3d40-489a-941d-80626d028a78", "motivo_fin": "completada", "iteraciones": 2, "tokens_entrada": 7022, "tokens_salida": 456, "costo_usd": 0.003247, "latencia_ms": 10124, "ttft_ms": 9273, "proveedor_final": "gemini", "modelo_final": "gemini-3.5-flash-lite", "reintentos": 3, "conmutaciones": 1, "desde_cache": false, "tokens": 7478, "fragmentos_streaming": 16, "es_respaldo": false}
+     0.08s reintento: {"proveedor": "claude", "motivo": "timeout", "intento": 1, "de": 3, "espera_s": 1.0, "detalle": "Falla forzada: timeout simulado (no se llamó a la red)", "texto": "Claude no respondió a tiempo · reintento 1/3 en 1 s"}
+     1.09s reintento: {"proveedor": "claude", "motivo": "timeout", "intento": 2, "de": 3, "espera_s": 2.0, "detalle": "Falla forzada: timeout simulado (no se llamó a la red)", "texto": "Claude no respondió a tiempo · reintento 2/3 en 2 s"}
+     3.09s reintento: {"proveedor": "claude", "motivo": "timeout", "intento": 3, "de": 3, "espera_s": 4.0, "detalle": "Falla forzada: timeout simulado (no se llamó a la red)", "texto": "Claude no respondió a tiempo · reintento 3/3 en 4 s"}
+     7.10s conmutacion: {"de": "claude", "a": "gemini", "motivo": "timeout", "detalle": "Falla forzada: timeout simulado (no se llamó a la red)", "texto": "Claude no respondió a tiempo: se cambia a Gemini"}
+   explicación: origen=None proveedor=gemini {"contenido": {"que_paso": "El caso registra 2 transacciones por un total de 867,49. Comenzó el 2020-06-21T22:06:39 con una compra en Hamill-D'Amore por 24,84 y terminó el 2020-06-21T23:02:16 con una compra en Hermann and Sons por 842,65.", "por_que_es_riesgo": "Se detectaron compras anómalas seguid
+   proveedores vistos: ['claude', 'gemini']
+
+=== Panel de demo: falla json
+[fijar] HTTP 200: {"falla_forzada":"json"}
+[salud] HTTP 200: {"estado":"ok","base":{"disponible":true,"casos_cargados":339,"mensaje":null,"roles_minimo_privilegio":true},"proveedores":[{"nombre":"claude","principal":true,"etiqueta":"Claude","modelo":"claude-haiku-5-5","con_llave":true},{"nombre":"gemini","principal":false,"etiqueta":"Gemini","modelo":"gemini-
+[explicación con falla json] HTTP 200 en 8.3 s; 147 eventos; tipos únicos: ['contrato_invalido', 'estado', 'explicacion', 'fin', 'herramienta', 'inicio', 'modelo_llamado', 'resultado_herramienta', 'token']
+   fin: {"tarea_id": "749d63f8-cf4a-48c1-b7a1-289b5b36f975", "motivo_fin": "completada", "iteraciones": 4, "tokens_entrada": 23405, "tokens_salida": 1548, "costo_usd": 0.003115, "latencia_ms": 8271, "ttft_ms": 5566, "proveedor_final": "claude", "modelo_final": "claude-haiku-5-5", "reintentos": 0, "conmutaciones": 0, "desde_cache": false, "tokens": 24953, "fragmentos_streaming": 130, "es_respaldo": false}
+     5.08s contrato_invalido: {"errores": ["falta el campo «lo_que_no_se_sabe» o está vacío", "falta el objeto «recomendacion»", "«senales_citadas» debe ser una lista de textos"], "reintenta": true}
+   explicación: origen=None proveedor=claude {"contenido": {"que_paso": "El 21 de junio de 2020, a las 22:06, la tarjeta terminada en 9375 hizo una compra de 24,84 en Hamill-D'Amore (salud y fitness, Notrees). A las 23:02 hizo una segunda compra de 842,65 en Hermann and Sons (compras en punto de venta, Notrees). El caso suma 2 transacciones po
+   proveedores vistos: ['claude']
+
+=== Panel de demo: falla todo
+[fijar] HTTP 200: {"falla_forzada":"todo"}
+[salud] HTTP 200: {"estado":"ok","base":{"disponible":true,"casos_cargados":339,"mensaje":null,"roles_minimo_privilegio":true},"proveedores":[{"nombre":"claude","principal":true,"etiqueta":"Claude","modelo":"claude-haiku-5-5","con_llave":true},{"nombre":"gemini","principal":false,"etiqueta":"Gemini","modelo":"gemini-
+[explicación con falla todo] HTTP 200 en 14.1 s; 14 eventos; tipos únicos: ['conmutacion', 'estado', 'fin', 'inicio', 'modelo_llamado', 'reintento', 'respaldo']
+   fin: {"tarea_id": "48aa6b0c-57fa-4126-82e6-4b69cfd3c328", "motivo_fin": "respaldo", "iteraciones": 1, "tokens_entrada": 0, "tokens_salida": 0, "costo_usd": 0.0, "latencia_ms": 14065, "ttft_ms": null, "proveedor_final": null, "modelo_final": null, "reintentos": 6, "conmutaciones": 1, "desde_cache": false, "tokens": 0, "fragmentos_streaming": 0, "es_respaldo": true}
+     0.02s reintento: {"proveedor": "claude", "motivo": "servidor", "intento": 1, "de": 3, "espera_s": 1.0, "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)", "texto": "Claude tuvo un error del servidor · reintento 1/3 en 1 s"}
+     1.03s reintento: {"proveedor": "claude", "motivo": "servidor", "intento": 2, "de": 3, "espera_s": 2.0, "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)", "texto": "Claude tuvo un error del servidor · reintento 2/3 en 2 s"}
+     3.03s reintento: {"proveedor": "claude", "motivo": "servidor", "intento": 3, "de": 3, "espera_s": 4.0, "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)", "texto": "Claude tuvo un error del servidor · reintento 3/3 en 4 s"}
+     7.04s conmutacion: {"de": "claude", "a": "gemini", "motivo": "servidor", "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)", "texto": "Claude tuvo un error del servidor: se cambia a Gemini"}
+     7.04s reintento: {"proveedor": "gemini", "motivo": "servidor", "intento": 1, "de": 3, "espera_s": 1.0, "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)", "texto": "Gemini tuvo un error del servidor · reintento 1/3 en 1 s"}
+     8.05s reintento: {"proveedor": "gemini", "motivo": "servidor", "intento": 2, "de": 3, "espera_s": 2.0, "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)", "texto": "Gemini tuvo un error del servidor · reintento 2/3 en 2 s"}
+    10.05s reintento: {"proveedor": "gemini", "motivo": "servidor", "intento": 3, "de": 3, "espera_s": 4.0, "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)", "texto": "Gemini tuvo un error del servidor · reintento 3/3 en 4 s"}
+    14.07s respaldo: {"motivo": "Ningún proveedor de IA respondió: explicación armada por reglas con las señales guardadas.", "contenido": {"que_paso": "Entre el 2020-06-21 22:06 y el 2020-06-23 22:06, la tarjeta **** **** **** 9375 tuvo 2 transacciones marcadas: el 2020-06-21 22:06 pagó 24,84 en Hamill-D'Amore (Notrees
+   proveedores vistos: ['claude', 'gemini']
+[pregunta con falla todo] HTTP 200 en 14.1 s; 13 eventos; tipos únicos: ['conmutacion', 'error', 'estado', 'fin', 'inicio', 'modelo_llamado', 'reintento']
+   fin: {"tarea_id": "1d0aed24-ca30-4fb3-9775-16c1a9bdeecb", "motivo_fin": "error", "iteraciones": 1, "tokens_entrada": 0, "tokens_salida": 0, "costo_usd": 0.0, "latencia_ms": 14074, "ttft_ms": null, "proveedor_final": null, "modelo_final": null, "reintentos": 6, "conmutaciones": 1, "desde_cache": false, "tokens": 0, "fragmentos_streaming": 0, "es_respaldo": false}
+     0.02s reintento: {"proveedor": "claude", "motivo": "servidor", "intento": 1, "de": 3, "espera_s": 1.0, "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)", "texto": "Claude tuvo un error del servidor · reintento 1/3 en 1 s"}
+     1.05s reintento: {"proveedor": "claude", "motivo": "servidor", "intento": 2, "de": 3, "espera_s": 2.0, "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)", "texto": "Claude tuvo un error del servidor · reintento 2/3 en 2 s"}
+     3.06s reintento: {"proveedor": "claude", "motivo": "servidor", "intento": 3, "de": 3, "espera_s": 4.0, "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)", "texto": "Claude tuvo un error del servidor · reintento 3/3 en 4 s"}
+     7.06s conmutacion: {"de": "claude", "a": "gemini", "motivo": "servidor", "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)", "texto": "Claude tuvo un error del servidor: se cambia a Gemini"}
+     7.06s reintento: {"proveedor": "gemini", "motivo": "servidor", "intento": 1, "de": 3, "espera_s": 1.0, "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)", "texto": "Gemini tuvo un error del servidor · reintento 1/3 en 1 s"}
+     8.07s reintento: {"proveedor": "gemini", "motivo": "servidor", "intento": 2, "de": 3, "espera_s": 2.0, "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)", "texto": "Gemini tuvo un error del servidor · reintento 2/3 en 2 s"}
+    10.07s reintento: {"proveedor": "gemini", "motivo": "servidor", "intento": 3, "de": 3, "espera_s": 4.0, "detalle": "Falla forzada: proveedor caído simulado (no se llamó a la red)", "texto": "Gemini tuvo un error del servidor · reintento 3/3 en 4 s"}
+    14.08s error: {"mensaje": "Ningún proveedor de IA respondió.", "accion_sugerida": "Vuelve a intentarlo en unos minutos."}
+   proveedores vistos: ['claude', 'gemini']
+
+=== Falla todo + compra crítica en vivo: ¿bloquea la regla sin IA?
+[compra TAR-0041] HTTP 200: {"repetida":false,"id":34943,"id_transaccion":"9d4a784bb5ce4bba8e8c7538d7aab580","decision":"aprobada","score":0.864622,"banda":"sin_alerta","viaje_imposible":false,"id_caso":null,"evento":null,"latencia_total_ms":5.795,"latencia_puntuacion_ms":3.774,"tarjeta":"TAR-0041"}
+[compra TAR-0041] HTTP 200: {"repetida":false,"id":34944,"id_transaccion":"3f6698c813234a0abbc0667d183e543f","decision":"aprobada","score":0.995654,"banda":"alta","viaje_imposible":false,"id_caso":"VIV-000001","evento":"caso_abierto","latencia_total_ms":22.714,"latencia_puntuacion_ms":2.525,"tarjeta":"TAR-0041"}
+   bloqueo con IA caída: NINGUNO; 130.6 s desde el envío
+
+=== Por petición (?falla=429) sin cambiar el estado global
+[vaciar falla global] HTTP 200: {"falla_forzada":null}
+[explicación ?falla=429] HTTP 200 en 9.8 s; 31 eventos; tipos únicos: ['conmutacion', 'estado', 'explicacion', 'fin', 'herramienta', 'inicio', 'modelo_llamado', 'reintento', 'resultado_herramienta', 'token']
+   fin: {"tarea_id": "de0599a7-31ab-4066-846b-5a376c404c71", "motivo_fin": "completada", "iteraciones": 2, "tokens_entrada": 7022, "tokens_salida": 436, "costo_usd": 0.003197, "latencia_ms": 9753, "ttft_ms": 8971, "proveedor_final": "gemini", "modelo_final": "gemini-3.5-flash-lite", "reintentos": 3, "conmutaciones": 1, "desde_cache": false, "tokens": 7458, "fragmentos_streaming": 14, "es_respaldo": false}
+     0.02s reintento: {"proveedor": "claude", "motivo": "cuota", "intento": 1, "de": 3, "espera_s": 1.0, "detalle": "Falla forzada: 429 simulado (no se llamó a la red)", "texto": "Claude respondió 429 (cuota agotada) · reintento 1/3 en 1 s"}
+     1.03s reintento: {"proveedor": "claude", "motivo": "cuota", "intento": 2, "de": 3, "espera_s": 2.0, "detalle": "Falla forzada: 429 simulado (no se llamó a la red)", "texto": "Claude respondió 429 (cuota agotada) · reintento 2/3 en 2 s"}
+     3.04s reintento: {"proveedor": "claude", "motivo": "cuota", "intento": 3, "de": 3, "espera_s": 4.0, "detalle": "Falla forzada: 429 simulado (no se llamó a la red)", "texto": "Claude respondió 429 (cuota agotada) · reintento 3/3 en 4 s"}
+     7.04s conmutacion: {"de": "claude", "a": "gemini", "motivo": "cuota", "detalle": "Falla forzada: 429 simulado (no se llamó a la red)", "texto": "Claude respondió 429 (cuota agotada): se cambia a Gemini"}
+   explicación: origen=None proveedor=gemini {"contenido": {"que_paso": "El caso registra 2 transacciones entre el 2020-06-21T22:06:39 y el 2020-06-21T23:02:16, sumando 867,49. Primero, el 2020-06-21T22:06:39 en Hamill-D'Amore por 24,84. Segundo, el 2020-06-21T23:02:16 en Hermann and Sons por 842,65.", "por_que_es_riesgo": "El gasto de las últ
+   proveedores vistos: ['claude', 'gemini']
+[config tras petición (falla_forzada debe seguir vacía)] HTTP 200: {"limites":{"max_iteraciones":6,"presupuesto_tokens":40000,"timeout_modelo_s":25.0,"timeout_herramienta_s":5.0,"max_tokens_respuesta":2500,"esperas_reintento_s":[1.0,2.0,4.0]},"proveedores":[{"nombre":"claude","principal":true,"etiqueta":"Claude","modelo":"claude-haiku-5-5","con_llave":true},{"nombre":"gemini","principal":false,"etiqueta":"Gemini","modelo":"gemini-3.5-flash-lite","con_llave":true}
+
+=== Entradas malas: ninguna debe dar error crudo
+[falla desconocida] HTTP 422: {"error":"Falla desconocida «bomba». Opciones: 429, json, timeout, todo o ninguna."}
+[json ilegible] HTTP 422: {"error":"La solicitud no tiene el formato esperado (revisa: 1)."}
+[caso inexistente] HTTP 404: {"error":"Caso no encontrado"}
+[stream de caso inexistente] HTTP 404: {"error":"Caso no encontrado"}
+[falla por petición inválida] HTTP 422: {"error":"Falla desconocida «bomba»."}
+[tarea inválida] HTTP 422: {"error":"El identificador de la tarea no es válido."}
+[ruta inexistente] HTTP 404: {"error":"Recurso no encontrado"}
+[NUL en ruta] HTTP 422: {"error":"La solicitud contiene caracteres no válidos."}
+[transacción tarjeta inexistente] HTTP 404: {"error":"No existe la tarjeta TAR-9999999."}
+[transacción fecha mala] HTTP 422: {"error":"La fecha y hora debe tener el formato AAAA-MM-DD HH:MM:SS."}
+[
+vaciar falla al terminar] HTTP 200: {"falla_forzada":null}
+[salud final] HTTP 200: {"estado":"ok","base":{"disponible":true,"casos_cargados":340,"mensaje":null,"roles_minimo_privilegio":true},"proveedores":[{"nombre":"claude","principal":true,"etiqueta":"Claude","modelo":"claude-haiku-5-5","con_llave":true},{"nombre":"gemini","principal":false,"etiqueta":"Gemini","modelo":"gemini-3.5-flash-lite","con_llave":true}],"modo_plantilla":false,"falla_forzada":"","panel_demo":true}
+
+HALLAZGOS DE ERROR CRUDO: ninguno
+== salida 0 2026-11-14T22:57:47-05:00
+
+== 2026-11-14T22:58:08-05:00 REPETICIÓN: IA caída + caso crítico (caida_critica.py)
+[login] supervisor: 200 (intento 1)
+caso alta previo VIV-000001 (IA caída): {"banda": "alta", "estado": "en_verificacion"}
+[falla todo] HTTP 200: {"falla_forzada":"todo"}
+   0.0s compra 980000: score=0.976427 banda=alta caso=VIV-000002 evento=caso_abierto
+   0.1s compra 990000: score=0.996861 banda=critica caso=VIV-000002 evento=subio_de_banda
+bloqueo con IA caída: {"id_caso": "VIV-000002", "actor": "regla", "banda": "critica", "segundos_hasta_bloqueo": 14.083988, "motivo": "Regla: caso crítico que el triaje del agente no bloqueó."} ; 15.1 s desde que quedó crítico
+aviso: plantilla bloqueo | Banco Demo: por su seguridad bloqueamos temporalmente su tarjeta terminada en 1743. Motivo: Una compra de 990.000,00 USD (tienda en línea) el 2020-07-22 03:11 y 1 compra(s) más en poco tiempo, muy distinta de su forma habitual de comprar. Si no reconoce esta compra, no tiene que hacer nada más: su d
+[falla vacía] HTTP 200: {"falla_forzada":null}

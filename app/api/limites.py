@@ -16,12 +16,16 @@ Tres categorías, cada una con su ventana deslizante de 60 s por cliente:
 Los archivos estáticos no se limitan. Al pasarse, la respuesta es 429 con un mensaje en
 español y la cabecera `Retry-After`, que la interfaz usa para decir cuánto esperar.
 
-El cliente se identifica por la IP. Cuando exista inicio de sesión (T4.1), se usará
-además el usuario, porque detrás del mapeo de puertos de Docker todas las peticiones
-locales llegan con la misma IP. Todo vive en memoria del proceso: la app corre en un
-solo proceso, y un límite que se reinicia con la app es aceptable para este alcance.
+Cada petición cuenta dos veces (auditoría 2026-11-14): contra el cupo de su **sesión** (la
+cookie, guardada solo como hash) y contra el cupo de su **IP**, que es `FACTOR_IP` veces más
+grande. Detrás del mapeo de puertos de Docker todas las peticiones locales llegan con la misma
+IP: si el límite fuera solo por IP, un usuario que abusa frenaría a todos los demás. Con el
+cupo por sesión, el que abusa agota el suyo; y quien rote cookies inventadas para esquivarlo
+choca con el de la IP. Todo vive en memoria del proceso: la app corre en un solo proceso, y un
+límite que se reinicia con la app es aceptable para este alcance.
 """
 
+import hashlib
 import math
 import re
 import threading
@@ -34,6 +38,8 @@ from fastapi.responses import JSONResponse
 from app import config
 
 VENTANA_S = 60.0
+FACTOR_IP = 5          # el cupo por IP es 5 veces el de una sesión
+COOKIE_SESION = "sesion"
 RUTAS_AGENTE = re.compile(r"^/api/casos/[^/]+/(explicacion|preguntas)/stream$")
 METODOS_LECTURA = {"GET", "HEAD", "OPTIONS"}
 MENSAJES = {
@@ -70,9 +76,9 @@ class LimitadorDePeticiones:
         self._candado = threading.Lock()
         self._ultima_limpieza = reloj()
 
-    def registrar(self, cliente: str, categoria: str) -> float | None:
+    def registrar(self, cliente: str, categoria: str, factor: int = 1) -> float | None:
         """Anota la petición si cabe y devuelve None; si no cabe, devuelve los segundos de espera."""
-        limite = self.limites.get(categoria, 0)
+        limite = self.limites.get(categoria, 0) * factor
         if limite <= 0:   # 0 = sin límite para esa categoría
             return None
         ahora = self.reloj()
@@ -103,8 +109,16 @@ def instalar(app, limitador: LimitadorDePeticiones | None = None):
     async def limitar_peticiones(request: Request, siguiente):
         categoria = categoria_de(request.method, request.url.path)
         if categoria is not None:
-            cliente = request.client.host if request.client else "desconocido"
-            espera = request.app.state.limitador.registrar(cliente, categoria)
+            limitador = request.app.state.limitador
+            ip = request.client.host if request.client else "desconocido"
+            cookie = request.cookies.get(COOKIE_SESION)
+            if cookie:
+                sesion = "sesion:" + hashlib.sha256(cookie.encode("utf-8", "replace")).hexdigest()[:24]
+                espera = limitador.registrar(sesion, categoria)
+                if espera is None:
+                    espera = limitador.registrar("ip:" + ip, categoria, factor=FACTOR_IP)
+            else:
+                espera = limitador.registrar("ip:" + ip, categoria)
             if espera is not None:
                 segundos = max(1, math.ceil(espera))
                 return JSONResponse(

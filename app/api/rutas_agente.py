@@ -16,7 +16,7 @@ from fastapi import APIRouter, HTTPException, Query, Request
 from pydantic import BaseModel
 
 from app import config
-from app.api.rutas_casos import caso_o_404, repositorio, validar_analista
+from app.api.rutas_casos import acciones_en_vivo, caso_o_404, repositorio, validar_analista
 from app.api.rutas_sistema import falla_vigente
 from app.api.sesion import firma_de, usuario_de
 from app.api.sse import depurar_para_interfaz, respuesta_sse, transmitir
@@ -113,6 +113,13 @@ def _resolver(propuesta_id: int, confirmar: bool, cuerpo: CuerpoResolucion, requ
     """
     analista, comentario = validar_analista(firma_de(request) or cuerpo.analista, cuerpo.comentario)
     repo = repositorio()
+    propuesta = repo.obtener_propuesta(propuesta_id) if confirmar and hasattr(repo, "obtener_propuesta") else None
+    caso = repo.obtener_caso(propuesta["id_caso"]) if propuesta else None
+    acciones = acciones_en_vivo(caso)
+    if acciones:
+        problema = acciones.validar_decision(caso, propuesta["accion"], comentario)
+        if problema:
+            raise HTTPException(409 if "bloqueada" in problema else 422, problema)
     ya_resuelta = tuple(c for c in (getattr(repo, "PropuestaYaResuelta", None), ValueError) if isinstance(c, type))
     try:
         resultado = repo.resolver_propuesta(propuesta_id, confirmar, analista, comentario)
@@ -124,6 +131,9 @@ def _resolver(propuesta_id: int, confirmar: bool, cuerpo: CuerpoResolucion, requ
         raise HTTPException(404, "Propuesta no encontrada")
     if isinstance(resultado, dict) and resultado.get("error"):
         raise HTTPException(409, MENSAJE_YA_RESUELTA)
+    if acciones and isinstance(resultado, dict) and resultado.get("decision"):
+        efecto = acciones.aplicar_decision(resultado["id_caso"], resultado["accion"], analista)
+        resultado = {**resultado, "bloqueo": (efecto or {}).get("resultado")}
     return depurar_para_interfaz({"resultado": resultado})
 
 

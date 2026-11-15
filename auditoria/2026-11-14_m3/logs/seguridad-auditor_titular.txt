@@ -1,0 +1,7 @@
+########## VECTOR RESPUESTA DEL TITULAR (buzon) ##########
+responder con texto libre de inyeccion -> {"error":"La respuesta debe ser «fui_yo» o «no_fui_yo»."}
+responder fui_yo (valido, sube en cola, NO desbloquea) -> {"error":"Ese aviso ya tiene respuesta o no existe."}
+estado del bloqueo tras fui_yo: []
+
+########## caso con explicacion cacheada (para rate-limit sin LLM) ##########
+con explicacion: ['SIN-000018', 'SIN-000020', 'SPK-000104', 'SPK-000266', 'SPK-000059'] ...total 11

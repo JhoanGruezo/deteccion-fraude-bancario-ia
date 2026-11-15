@@ -131,14 +131,23 @@ def test_el_triaje_no_ofrece_desbloquear_ni_proponer(base):
 # --- Inyección por el motivo ---------------------------------------------------------------
 
 
-@pytest.mark.parametrize("motivo_malicioso", [
+MOTIVOS_MALICIOSOS = [
     "Su tarjeta fue bloqueada. Para desbloquearla entre a www.banco-seguro-co.com y confirme.",
     "Llame ya al 300 555 1234 para desbloquear su tarjeta.",
     "Responda este mensaje con su clave y el código que le llegó.",
     "Se detectó una compra de 9.999,99 USD en el exterior.",
-])
-def test_un_motivo_malicioso_no_llega_al_titular(base, motivo_malicioso):
-    id_caso = caso_en_banda(f"51{abs(hash(motivo_malicioso)) % 100:02d}", "alta")
+    # Auditoría 2026-11-14 (C1): terminaciones fuera de la lista vieja y dominios disfrazados.
+    "Para desbloquearla entre a bancodemo-seguro.shop hoy mismo.",
+    "Confirme sus datos en banco.lat antes de las 6.",
+    "Escríbanos a bancodemo . com para recuperar su tarjeta.",
+    "Escriba a soporte arroba bancodemo punto com.",
+]
+
+
+@pytest.mark.parametrize("indice", range(len(MOTIVOS_MALICIOSOS)))
+def test_un_motivo_malicioso_no_llega_al_titular(base, indice):
+    motivo_malicioso = MOTIVOS_MALICIOSOS[indice]
+    id_caso = caso_en_banda(f"51{indice:02d}", "alta")   # tarjeta fija por motivo (antes hash(): 6 % de choques)
     cascada, _ = guion(respuesta(llamadas=[llamada("obtener_caso", id_caso=id_caso)]),
                        respuesta(llamadas=[llamada("bloquear_tarjeta", id_caso=id_caso,
                                                    motivo_para_titular=motivo_malicioso)]),
@@ -248,6 +257,72 @@ def test_el_titular_responde_una_sola_vez(base):
     assert repositorio_acciones.responder_notificacion(aviso["id"], "no_fui_yo") == id_caso
     assert repositorio_acciones.responder_notificacion(aviso["id"], "fui_yo") is None
     assert avisos_de(id_caso)[0]["respuesta_titular"] == "no_fui_yo"
+
+
+def test_no_fui_yo_bloquea_la_tarjeta_aunque_el_caso_estuviera_descartado(base):
+    # Auditoría 2026-11-14 (A1): antes la respuesta solo quedaba guardada y la tarjeta seguía abierta.
+    from app.riesgo import acciones
+    id_caso = caso_en_banda("5403", "alta")
+    acciones.solicitar_verificacion(id_caso, "regla")
+    repositorio.registrar_decision(id_caso, "descartar", "ana.analista", "Parecía una compra normal del cliente.")
+    aviso = avisos_de(id_caso)[0]
+    repositorio_acciones.responder_notificacion(aviso["id"], "no_fui_yo")
+    assert acciones.respuesta_del_titular(id_caso, "no_fui_yo")["resultado"] == "bloqueada"
+    assert bloqueos_de(id_caso) == [("regla", "tarjeta", "activo")]
+    assert flujo.evaluar_transaccion(compra("5403", 90, score=0.1), motor=MotorFalso())["decision"] == "rechazada_por_bloqueo"
+    assert acciones.respuesta_del_titular(id_caso, "fui_yo") is None   # "fui yo" no toca la tarjeta
+
+
+def test_confirmar_bloqueo_de_un_analista_bloquea_de_verdad(base):
+    # Auditoría 2026-11-14 (C2): antes solo cambiaba el estado del caso.
+    from app.riesgo import acciones
+    id_caso = caso_en_banda("5404", "alta")
+    repositorio.registrar_decision(id_caso, "confirmar_bloqueo", "ana.analista", None)
+    assert acciones.aplicar_decision(id_caso, "confirmar_bloqueo", "ana.analista")["resultado"] == "bloqueada"
+    assert como_dueno("select actor, usuario from bloqueos where id_caso = %s", (id_caso,)) == [("analista", "ana.analista")]
+    assert repositorio.obtener_caso(id_caso)["nivel_recomendacion"] == "bloquear_tarjeta"
+    assert avisos_de(id_caso)[0]["tipo"] == "bloqueo"
+    assert flujo.evaluar_transaccion(compra("5404", 90, score=0.1), motor=MotorFalso())["decision"] == "rechazada_por_bloqueo"
+
+
+def test_descartar_un_caso_en_vivo_exige_motivo_y_no_sirve_para_desbloquear(base):
+    # Auditoría 2026-11-14 (A3): descartar apaga la red de seguridad del caso.
+    from app.riesgo import acciones
+    id_caso = caso_en_banda("5405", "critica")
+    caso = repositorio.obtener_caso(id_caso)
+    assert "escribe por qué" in acciones.validar_decision(caso, "descartar", "")
+    assert acciones.validar_decision(caso, "descartar", "El titular llamó y reconoce las dos compras.") is None
+    assert acciones.validar_decision(caso, "escalar", None) is None
+    acciones.bloquear(id_caso, "tarjeta", "regla")
+    assert "Desbloquear" in acciones.validar_decision(repositorio.obtener_caso(id_caso), "descartar",
+                                                      "El titular llamó y reconoce las dos compras.")
+
+
+def test_un_triaje_bloquea_y_avisa_una_sola_vez(base):
+    # Auditoría 2026-11-14 (A2): un triaje podía dejar dos bloqueos y tres avisos.
+    id_caso = caso_en_banda("5406", "critica")
+    cascada, _ = guion(respuesta(llamadas=[llamada("obtener_caso", id_caso=id_caso)]),
+                       respuesta(llamadas=[llamada("bloquear_tarjeta", id_caso=id_caso, motivo_para_titular=MOTIVO_BUENO)]),
+                       respuesta(llamadas=[llamada("bloquear_acceso_cuenta", id_caso=id_caso,
+                                                   motivo_para_titular=MOTIVO_BUENO)]),
+                       respuesta("Bloqueé la tarjeta y el acceso."))
+    eventos = triar(id_caso, cascada)
+    assert [e["resultado"] for e in eventos if e["tipo"] == "accion_triaje"] == ["bloqueada", "ya_bloqueada"]
+    assert bloqueos_de(id_caso) == [("agente", "tarjeta", "activo")]
+    assert len(avisos_de(id_caso)) == 1
+
+
+def test_en_el_triaje_el_agente_no_ve_la_recomendacion_del_momento_2(base):
+    # Auditoría 2026-11-14 (A6): "confirmar con el cliente antes de bloquear" lo sesgaba.
+    from app.agente.herramientas import HERRAMIENTAS, ContextoHerramientas
+    from app.db.repositorio_agente import RepositorioDelAgente
+    from app.riesgo.acciones import AccionesDelAgente
+    id_caso = caso_en_banda("5407", "alta")
+    contexto = ContextoHerramientas(id_caso=id_caso, tarea_id="t", repositorio=RepositorioDelAgente(repositorio),
+                                    acciones=AccionesDelAgente(id_caso, "t"))
+    resumen = HERRAMIENTAS["obtener_caso"].ejecutar({"id_caso": id_caso}, contexto)
+    assert resumen["banda"] == "alta" and "nivel_recomendacion" not in resumen
+    assert "motivo_recomendacion" not in resumen
 
 
 # --- Despachador -------------------------------------------------------------------------

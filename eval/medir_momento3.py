@@ -285,6 +285,9 @@ def main():
     argumentos.add_argument("--falla", default="", choices=["", "429", "timeout", "json", "todo"])
     argumentos.add_argument("--velocidad", type=int, default=3600)
     argumentos.add_argument("--espera-maxima", type=float, default=1800)
+    argumentos.add_argument("--sin-esperar-triajes", action="store_true",
+                            help="método anterior al 2026-11-14: el reloj del dataset sigue corriendo durante "
+                                 "cada triaje y el agente alcanza a ver compras que en tiempo real no existían")
     argumentos.add_argument("--solo-calcular", action="store_true",
                             help="no reproduce la noche: recalcula las cifras con lo que ya está en la base")
     opciones = argumentos.parse_args()
@@ -298,9 +301,11 @@ def main():
     enviar_json(f"{URL}/api/demo/falla", {"tipo": opciones.falla or None})
     enviar_json(f"{URL}/api/ajustes", {"clave": "autonomia_agente", "valor": True})
     enviar_json(f"{URL}/api/ajustes", {"clave": "tope_bloqueos_autonomos_por_hora", "valor": 500})
-    print(f"2. Reproduciendo la noche a {opciones.velocidad}x (falla forzada: {opciones.falla or 'ninguna'})…")
+    esperar_triajes = not opciones.sin_esperar_triajes
+    print(f"2. Reproduciendo la noche a {opciones.velocidad}x (falla forzada: {opciones.falla or 'ninguna'}; "
+          f"reloj detenido durante cada triaje: {'sí' if esperar_triajes else 'no'})…")
     inicio = time.monotonic()
-    enviar_json(f"{URL}/api/simulador/iniciar", {"velocidad": opciones.velocidad})
+    enviar_json(f"{URL}/api/simulador/iniciar", {"velocidad": opciones.velocidad, "esperar_triajes": esperar_triajes})
     esperar_fin(opciones.espera_maxima)
     enviar_json(f"{URL}/api/demo/falla", {"tipo": None})
     enviar_json(f"{URL}/api/ajustes", {"clave": "tope_bloqueos_autonomos_por_hora", "valor": 30})
@@ -312,6 +317,7 @@ def guardar(opciones):
 
     from app.riesgo.motor_en_vivo import motor
     resultado = {"nombre": opciones.nombre, "falla_forzada": opciones.falla or None, "velocidad": opciones.velocidad,
+                 "reloj_detenido_durante_triajes": not getattr(opciones, "sin_esperar_triajes", False),
                  "modelo_llm": config.CLAUDE_MODELO if "claude" in config.ORDEN_PROVEEDORES[:1] else config.GEMINI_MODELO,
                  **calcular(motor().umbral_bloqueo)}
     carpeta = carpeta_de_resultados()

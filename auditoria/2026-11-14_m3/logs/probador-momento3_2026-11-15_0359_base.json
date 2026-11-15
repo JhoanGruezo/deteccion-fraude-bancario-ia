@@ -1,0 +1,106 @@
+{
+  "nombre": "base",
+  "falla_forzada": null,
+  "velocidad": 3600,
+  "modelo_llm": "claude-haiku-5-5",
+  "fecha": "2026-11-15 03:59",
+  "transacciones": 5810,
+  "compras_fraudulentas": 54,
+  "tarjetas_con_fraude": 9,
+  "decision_ms": {
+    "puntuacion_mediana": 2.954,
+    "puntuacion_p99": 7.228,
+    "camino_completo_mediana": 4.79,
+    "camino_completo_p99": 23.109
+  },
+  "casos_por_banda": {
+    "media": 3,
+    "alta": 8,
+    "critica": 10
+  },
+  "bloqueos_por_actor": {
+    "agente": 10
+  },
+  "segundos_hasta_bloqueo": {
+    "mediana": 7.464,
+    "p95": 29.028,
+    "maximo": 33.722
+  },
+  "dinero_usd_a_tiempo_real": {
+    "fraude_total": 28367.23,
+    "m3_fraude_que_pasa": 8114.82,
+    "m3_porcentaje_detenido": 71.4,
+    "m2_analista_al_instante_fraude_que_pasa": 10844.38,
+    "m2_cola_90_min_fraude_que_pasa": 18458.41,
+    "m2_noche_sin_turno_fraude_que_pasa": 20050.73,
+    "m2_analista_al_instante_porcentaje_detenido": 61.8,
+    "m2_cola_90_min_porcentaje_detenido": 34.9,
+    "m2_noche_sin_turno_porcentaje_detenido": 29.3,
+    "segundos_reales_desde_la_compra_hasta_el_bloqueo": {
+      "mediana": 6.793,
+      "maximo": 9.413
+    },
+    "compras_fraudulentas_que_pasan_por_tarjeta_robada": {
+      "mediana": 2,
+      "maximo": 3
+    }
+  },
+  "artefacto_simulacion_acelerada": {
+    "nota": "a 3600x cada segundo real son 1 h del dataset: el triaje (~5 s) deja pasar horas de compras. No es una cifra del sistema; se deja para mostrar por qué se mide a tiempo real.",
+    "fraude_que_paso_medido": 20043.45,
+    "compras_legitimas_rechazadas_usd": 3547.16,
+    "compras_fraudulentas_aprobadas_por_tarjeta_robada_mediana": 5
+  },
+  "bloqueos_por_tarjeta": {
+    "bloqueadas": 10,
+    "con_fraude": 9,
+    "precision": 0.9,
+    "recall": 1.0,
+    "falsos_por_1000_compras": 0.17
+  },
+  "prueba_de_necesidad_banda_alta": {
+    "triajes_en_banda_alta": 13,
+    "con_fraude": 5,
+    "detalle_[con_fraude,sin_fraude]": {
+      "agente_bloquea": [
+        3,
+        0
+      ],
+      "agente_verifica": [
+        2,
+        8
+      ],
+      "agente_deja": [
+        0,
+        0
+      ],
+      "otra": [
+        0,
+        0
+      ]
+    },
+    "agente_precision_al_bloquear": 1.0,
+    "agente_recall_al_bloquear": 0.6,
+    "regla_siempre_bloquear_precision": 0.385
+  },
+  "llm": {
+    "triajes": 23,
+    "costo_total_usd": 0.0545,
+    "costo_por_triaje_usd": 0.00237,
+    "costo_por_1000_compras_usd": 0.0094,
+    "latencia_triaje_ms_mediana": 4938.0,
+    "motivo_fin": {
+      "completada": 23
+    },
+    "proveedor": {
+      "claude": 23
+    },
+    "con_reintento_o_conmutacion": 0
+  },
+  "avisos": {
+    "total": 23,
+    "motivo_del_agente": 21,
+    "motivo_de_plantilla": 2,
+    "rechazados_por_validacion": 2
+  }
+}

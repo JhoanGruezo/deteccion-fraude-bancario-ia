@@ -87,14 +87,15 @@ export function crearDialogoDesbloqueo() {
       const tarjeta = [bloqueo.alias, bloqueo.tarjeta_enmascarada ? f.tarjetaCorta(bloqueo.tarjeta_enmascarada) : null].filter(Boolean).join(" · ");
       titulo.textContent = bloqueo.tipo === "acceso_cuenta" ? "Devolver el acceso a la cuenta" : "Desbloquear la tarjeta";
       const actor = f.actor(bloqueo.actor);
-      vaciar(resumen).append(
+      // append(null) escribe el texto "null" en el DOM: los elementos opcionales se filtran antes.
+      vaciar(resumen).append(...[
         el("div", {}, el("dt", { texto: "Tarjeta" }), el("dd", { texto: tarjeta || "—" })),
         el("div", {}, el("dt", { texto: "Caso" }), el("dd", { clase: "mono", texto: bloqueo.id_caso || "—" })),
         el("div", {}, el("dt", { texto: "Bloqueó" }), el("dd", { texto: `${actor.etiqueta}${bloqueo.usuario ? ` (${bloqueo.usuario})` : ""}` })),
         bloqueo.respuesta_titular
           ? el("div", {}, el("dt", { texto: "El titular dice" }), el("dd", { texto: f.RESPUESTAS_TITULAR[bloqueo.respuesta_titular] || bloqueo.respuesta_titular }))
           : null,
-      );
+      ].filter(Boolean));
       firma.textContent = sesion.firma;
       campo.value = "";
       mostrarError("");

@@ -1,0 +1,4 @@
+########## LIMITE DE TASA AGENTE (10/min) - explicacion cacheada SPK-000104 ##########
+req1=200 req2=200 req3=200 req4=200 req5=200 req6=200 req7=200 req8=200 req9=200 req10=200 req11=429 req12=429 req13=429 
+(nota: el stream SSE devuelve 200 aunque luego limite; miro el cuerpo del #11+ )
+{"error":"Demasiadas consultas al asistente de IA en poco tiempo. Intenta de nuevo en 57 s.","categoria":"agente","reintentar_en_s":57}

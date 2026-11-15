@@ -1,0 +1,48 @@
+########## GIT: repo y secretos en TODO el historial ##########
+true
+remote:
+origin	https://github.com/JhoanGruezo/deteccion-fraude-bancario-ia.git (fetch)
+origin	https://github.com/JhoanGruezo/deteccion-fraude-bancario-ia.git (push)
+HEAD:
+01c429e Guiones de la presentación fuera del repositorio y del ZIP
+
+=== escaneo de patrones de llave en git log -p --all (solo commit/archivo, NUNCA valor) ===
+6107:+| **A1** (alto) Llaves reales en un archivo del repo público | **Lo arreglamos** en el repositorio y **falta rotar** | La versión versionada de `docs/prueba-companero-jeison.txt` no tiene llaves (verificado en el historial); la copia local queda con `skip-worktree`. El escáner del ZIP detecta los formatos `sk-ant-`, `AQ.Ab` y `apikey_`. Las llaves usadas en el desarrollo se rotan antes de entregar (acción manual del equipo en las consolas de Anthropic y Google) |
+17581:+      llaves ampliado a `apikey_…` y `AQ.…` en `empaquetar_entrega.py` (RS7, RS9).
+18885:+| RS7 | Secretos | Llaves solo en `.env`; escaneo antes de cada push y en el ZIP (ampliado a los formatos `apikey_…` y `AQ.…`); contraseñas generadas si no se definen |
+19311:-| 11 | Conseguir una llave de Anthropic válida (`sk-ant-…`) y repetir la suite y el lote: la del 24-oct dio 401 y todo cayó a Gemini (`auditoria/2026-10-24_1343/`) | Jhoan | `eval/resultados/`, `docs/decisiones.md` §9 | [ ] |
+19312:+| 11 | Conseguir una llave de Anthropic válida (`sk-ant-…`) y repetir la suite y el lote: la del 24-oct dio 401 y todo cayó a Gemini (`auditoria/2026-10-24_1343/`) | Jhoan | `eval/resultados/`, `docs/decisiones.md` §9 | [x] 2026-10-31 (llave nueva `sustentacion-31oct` en `.env`; suite 8/8 con Claude) |
+19314:-| 13 | Agregar los formatos `apikey_` y `AQ.` al escáner de `scripts/empaquetar_entrega.py` | Jhoan | `scripts/` | [ ] |
+19316:+| 13 | Agregar los formatos `apikey_` y `AQ.` al escáner de `scripts/empaquetar_entrega.py` | Jhoan | `scripts/` | [x] 2026-10-31 (`apikey_`; `AQ.Ab` ya estaba) |
+22650:    - Escáner del ZIP reconoce el formato apikey_<REDACTADO>
+23002:+**Método.** 33 ataques: 31 preguntas por SSE (`/preguntas/stream`) y 2 de validación de entrada. A eso se suman 2 controles legítimos: una pregunta normal y una explicación regenerada. Por cada tarea se leyó la traza (`/api/tareas/{id}/trazas`) para sacar las herramientas que se llamaron y las propuestas creadas, y además se compararon las propuestas del caso antes y después. Ninguna respuesta ni traza contiene llaves de API, cadenas de conexión ni variables de entorno: se buscaron los patrones `sk-ant`, `AIza` y `postgres://` y hubo 0 coincidencias.
+23171:+- En la copia de trabajo, el diff contiene 1 línea con patrón de llave. Los patrones del empaquetador encuentran 1 coincidencia `apikey_…` y 1 `AQ.Ab…`.
+23256:+| 1 | A1: que el archivo con llaves no se pueda commitear | `git update-index --skip-worktree docs/prueba-companero-jeison.txt`, o mover las llaves a un archivo `.local.txt` ignorado. Antes de cada commit de hoy: `git diff --cached \| grep -cE "apikey_<REDACTADO>|AQ\.Ab\|sk-ant-<REDACTADO>|AIza"` debe dar 0 | Nulo: no toca la app |
+23288:+  - Revisé `/api/metricas`, el detalle de los casos y las trazas de 8 tareas buscando `sk-ant-`, `apikey_`, `AQ.Ab`, `AIza`, `postgresql://`, `fraude_dev`, rutas internas y `Traceback`: 0 coincidencias.
+23292:+  - El empaquetador busca 5 patrones (incluidos `apikey_` y `AQ.Ab`), descomprime los `.gz`, aborta sin escribir el ZIP y nunca imprime la llave.
+23404:+   # abre .env y llena ANTHROPIC_API_KEY=sk-ant-… y GEMINI_API_KEY=…
+23429:+A=$(grep '^ANTHROPIC_API_KEY=' .env | cut -d= -f2-)
+23434:+G=$(grep '^GEMINI_API_KEY=' .env | cut -d= -f2-)
+33213:     "Google OAuth/Vertex (AQ.Ab…)": re.compile(rb"AQ\.Ab[0-9A-Za-z_\-]{20,}"),
+33214:     "Anthropic (sk-ant-…)": re.compile(rb"sk-ant-[0-9A-Za-z_\-]{20,}"),
+33216:+    "Genérica (apikey_…)": re.compile(rb"apikey_[0-9A-Za-z_\-]{20,}"),
+33317:+- **Secretos**: `git grep -n -I -E "sk-ant-|apikey_|AIza|AQ\.Ab" -- .` sobre lo
+(si vacio: 0 coincidencias de valores de llave en el historial)
+
+=== prueba-companero-jeison.txt: versionado? skip-worktree? contenido en HEAD/ramas ===
+149:docs/prueba-companero-jeison.txt
+S docs/prueba-companero-jeison.txt
+-- buscar el archivo con llaves en todo el historial de todas las ramas --
+775a704 Pendientes, alcance del Momento 3 y lista de verificación de la app
+-- contenido del archivo en HEAD (conteo de patrones de llave) --
+0
+no existe en HEAD o 0
+
+=== ramas remotas ===
+  main
+* momento3
+  momento3-respaldo
+  sesion-2026-10-24
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/main
+  remotes/origin/sesion-2026-10-24

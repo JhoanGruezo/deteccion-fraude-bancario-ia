@@ -1,0 +1,15 @@
+puntuado en 24 s; umbral_verificacion=0.947687 umbral_bloqueo=0.966408
+entrenamiento 2019-01-01 00:00:18 a 2020-03-20 23:58:44; validacion 2020-03-21 00:00:20 a 2020-06-21 12:13:37; prueba 2020-06-21 12:14:25 a 2020-12-31 23:59:34
+¿19-jul-2020 está en prueba? True
+
+GB en prueba al umbral de bloqueo: {'precision': 0.7864, 'recall': 0.8378, 'f1': 0.8113, 'auc_pr': 0.8841}
+  IC 95 % bootstrap por tarjeta (200): AUC-PR [0.867, 0.901], F1 [0.792, 0.829]
+
+Regla reportada (monto > 196.45 O hora < 6): {'precision': 0.014, 'recall': 0.8448, 'f1': 0.0275, 'auc_pr': 0.0124} marca 23.3 % de las compras
+  GB a recall 0.845: precisión 0.774 (la regla: 0.014)
+Regla A (monto > p95 Y hora 22-04): {'precision': 0.1853, 'recall': 0.6359, 'f1': 0.2869, 'auc_pr': 0.1192}
+Regla B (monto > 277.54 elegido por F1 en validación, Y hora 22-04): {'precision': 0.3264, 'recall': 0.6042, 'f1': 0.4239, 'auc_pr': 0.1988}
+Regla C (solo monto > 703.77, F1 en validación): {'precision': 0.289, 'recall': 0.4452, 'f1': 0.3505, 'auc_pr': 0.1308}
+AUC-PR del monto solo como score continuo: 0.1369
+
+caché: C:/Users/Jhoan/AppData/Local/Temp/claude/b3f7846d8f8bead5/39649491-73ed-479e-9412-4797394f9a25/scratchpad/sparkov_puntuado.pkl (78 s)

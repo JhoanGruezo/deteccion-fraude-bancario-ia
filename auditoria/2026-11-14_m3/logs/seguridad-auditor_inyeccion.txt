@@ -1,0 +1,7 @@
+########## SQLi EN FILTROS (GET /api/casos) ##########
+q=' OR '1'='1 -> {"casos":[],"total":0,"contadores":{"total":339,"por_nivel":{"verificar_cliente":38,"bloquear_acceso_cuenta":33,"bloquea
+q=%25 (comodin) total -> "total":0
+q=0000 (oraculo 4 dig) total -> "total":151
+orden=score;select 1 -> 422fuente=sparkov' or 1=1-- -> 422limite=1 or 1=1 -> 422########## id_caso raro ##########
+GET /api/casos/%00 -> 422GET /api/casos/..%2F..%2Fetc -> 404GET /api/casos/' OR 1=1-- -> 404GET /api/casos/SPK-000104/historial?dias=-1 -> 422GET /api/casos/SPK-000104/historial?dias=99999 -> 422########## tarjetas disponibles ##########
+{"tarjetas":[{"alias":"TAR-0001","fuente":"sparkov","tarjeta_enmascarada":"**** **** **** 0192","n_compras":2201},{"alias":"TAR-0002","fuente":"sparkov","tarjeta_enmascarada":"**** **** **** 9255","n_compras":1084},{"alias":"TAR-0003","fuente":"sparkov","tarjeta_enmascarada":"**** **** **** 0269","n_compras":1093},{"alias":"TAR-0004","fuente":"sparkov","tarjeta_enmascarada":"**** **** **** 9178","n_compras":1608},{"alias":"TAR-0005","fuente":"sparkov","tarjeta_enmascarada":"**** **** **** 1743","n_compras":2697},{"alias":"TAR-0006","fuente":"sparkov","tarjeta_enmascarada":"**** **** **** 9979"

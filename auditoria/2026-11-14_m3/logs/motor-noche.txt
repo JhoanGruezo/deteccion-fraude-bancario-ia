@@ -1,0 +1,58 @@
+[1] ventana: 5810 compras, 875 tarjetas, 54 fraudulentas, 28,367.23 USD, 9 tarjetas con fraude
+[3] contrafactuales con scores fuera de línea (% del monto fraudulento detenido): {'fraude_total': np.float64(28367.23), 'm2_instante': np.float64(61.8), 'm2_cola90': np.float64(34.9), 'm2_noche': np.float64(29.3), 'bloquear_1a_marca': np.float64(79.6)}
+    JSON del M3: m2_instante 61.8, m2_cola90 34.9, m2_noche 29.3, M3 71.4, IA caída 61.8
+
+[2] episodios de las tarjetas con fraude en la ventana
+  ...9419 episodio 2020-07-20 00:00:52 a 2020-07-21 01:43:05: antes 0 (0 USD), dentro 3 (2,369 USD), despues 0 (0 USD); score 1.a fraudulenta en ventana 0.966; marcas>=UB 3; 1.a marca 2020-07-20 00:00:52
+  ...3217 episodio 2020-07-18 00:21:09 a 2020-07-19 23:01:40: antes 8 (4,629 USD), dentro 3 (841 USD), despues 0 (0 USD); score 1.a fraudulenta en ventana 0.999; marcas>=UB 3; 1.a marca 2020-07-19 22:15:59
+  ...2095 episodio 2020-07-18 01:48:20 a 2020-07-19 23:35:50: antes 6 (3,972 USD), dentro 5 (527 USD), despues 0 (0 USD); score 1.a fraudulenta en ventana 0.763; marcas>=UB 4; 1.a marca 2020-07-19 22:17:40
+  ...7879 episodio 2020-07-18 21:00:49 a 2020-07-19 23:25:55: antes 6 (3,436 USD), dentro 6 (3,726 USD), despues 0 (0 USD); score 1.a fraudulenta en ventana 0.999; marcas>=UB 6; 1.a marca 2020-07-19 22:00:56
+  ...3984 episodio 2020-07-19 22:38:32 a 2020-07-20 22:57:29: antes 0 (0 USD), dentro 13 (7,263 USD), despues 0 (0 USD); score 1.a fraudulenta en ventana 0.989; marcas>=UB 13; 1.a marca 2020-07-19 22:38:32
+  ...2579 episodio 2020-07-20 00:57:58 a 2020-07-21 23:49:05: antes 0 (0 USD), dentro 5 (3,800 USD), despues 4 (2,365 USD); score 1.a fraudulenta en ventana 0.345; marcas>=UB 4; 1.a marca 2020-07-20 22:14:53
+  ...7331 episodio 2020-07-19 02:10:34 a 2020-07-20 23:35:37: antes 3 (605 USD), dentro 9 (7,039 USD), despues 0 (0 USD); score 1.a fraudulenta en ventana 0.998; marcas>=UB 10; 1.a marca 2020-07-19 22:05:33
+  ...8262 episodio 2020-07-21 00:49:22 a 2020-07-22 23:26:45: antes 0 (0 USD), dentro 3 (1,080 USD), despues 11 (2,895 USD); score 1.a fraudulenta en ventana 0.997; marcas>=UB 4; 1.a marca 2020-07-20 12:39:09
+  ...9125 episodio 2020-07-20 01:36:36 a 2020-07-21 01:54:47: antes 0 (0 USD), dentro 7 (1,723 USD), despues 0 (0 USD); score 1.a fraudulenta en ventana 0.988; marcas>=UB 3; 1.a marca 2020-07-20 01:36:36
+  totales del episodio: antes 12,642 USD, dentro 28,367 USD, despues 5,260 USD
+  episodios que empiezan dentro de la ventana: 5 de 9
+
+[4] todas las ventanas de 36 h que empiezan a las 20:00 en el tramo de prueba
+  184 ventanas con fraude. Episodios que empiezan: max 6, 19-jul = 5 (ventanas con más: 2, empatadas: 11)
+  m2_instante       : p10/mediana/p90 = [34.1, 55.6, 70.1]; 19-jul = 61.8
+  bloquear_1a_marca : p10/mediana/p90 = [59.1, 74.5, 85.6]; 19-jul = 79.6
+  m2_cola90         : p10/mediana/p90 = [7.0, 35.2, 56.5]; 19-jul = 34.9
+  m2_noche          : p10/mediana/p90 = [0.0, 25.8, 52.2]; 19-jul = 29.3
+  margen máximo atribuible al agente (1.a marca - 2.a marca): mediana 19.2 pts, p10 9.4, p90 30.1; 19-jul = 17.8
+
+[5] población: tarjetas con fraude del tramo de prueba, episodio completo (sin truncar)
+  bloquear en la 1.a marca (techo del M3: el agente bloquea toda la banda alta): 85.8 % detenido [IC 95 % 84.3, 87.3]
+  bloquear en la 2.a marca al instante (= IA caída = M2 con analista instantáneo): 73.3 % detenido [IC 95 % 71.1, 75.3]
+  M2 con cola de 90 min: 61.0 % detenido [IC 95 % 57.5, 64.3]
+  M2 de noche sin turno: 54.4 % detenido [IC 95 % 50.6, 58.2]
+  tarjetas con fraude: 218; con alguna marca: 214; que llegan a crítica: 212
+  tarjetas honestas con >=1 marca: 236; con 2 marcas en 48 h (bloqueo obligatorio falso): 24; compras del tramo 555,719 -> 0.043 tarjetas falsas por 1.000 compras (la noche: 0,17)
+  precisión por tarjeta de la banda crítica: 0.898; recall por tarjeta: 0.972
+  'bloquear siempre en alta': precisión por tarjeta 0.476, falsos 0.425 por 1.000
+
+[6] fuga de futuro en obtener_historial (repositorio.py:278-281): filas del historial M2 en (t_apertura, t_apertura + 48 h]
+  ...5055 abre caso 2020-07-20 22:53:37 (1.a marca de bloqueo None) compras fraudulentas en ventana=0: 7 filas futuras visibles para el agente, 0 fraudulentas
+  ...9344 abre caso 2020-07-20 02:17:24 (1.a marca de bloqueo 2020-07-20 02:17:24) compras fraudulentas en ventana=0: 0 filas futuras visibles para el agente, 0 fraudulentas
+  ...9419 abre caso 2020-07-20 00:00:52 (1.a marca de bloqueo 2020-07-20 00:00:52) compras fraudulentas en ventana=3: 2 filas futuras visibles para el agente, 2 fraudulentas
+  ...3217 abre caso 2020-07-19 22:15:59 (1.a marca de bloqueo 2020-07-19 22:15:59) compras fraudulentas en ventana=3: 2 filas futuras visibles para el agente, 2 fraudulentas
+  ...2095 abre caso 2020-07-19 22:17:40 (1.a marca de bloqueo 2020-07-19 22:17:40) compras fraudulentas en ventana=5: 4 filas futuras visibles para el agente, 3 fraudulentas
+  ...0970 abre caso 2020-07-21 03:13:44 (1.a marca de bloqueo None) compras fraudulentas en ventana=0: 0 filas futuras visibles para el agente, 0 fraudulentas
+  ...7663 abre caso 2020-07-20 15:21:56 (1.a marca de bloqueo 2020-07-20 15:21:56) compras fraudulentas en ventana=0: 0 filas futuras visibles para el agente, 0 fraudulentas
+  ...3051 abre caso 2020-07-21 03:01:31 (1.a marca de bloqueo 2020-07-21 03:01:31) compras fraudulentas en ventana=0: 0 filas futuras visibles para el agente, 0 fraudulentas
+  ...7879 abre caso 2020-07-19 22:00:56 (1.a marca de bloqueo 2020-07-19 22:00:56) compras fraudulentas en ventana=6: 11 filas futuras visibles para el agente, 5 fraudulentas
+  ...2797 abre caso 2020-07-20 06:55:07 (1.a marca de bloqueo 2020-07-20 06:55:07) compras fraudulentas en ventana=0: 0 filas futuras visibles para el agente, 0 fraudulentas
+  ...3984 abre caso 2020-07-19 22:38:32 (1.a marca de bloqueo 2020-07-19 22:38:32) compras fraudulentas en ventana=13: 19 filas futuras visibles para el agente, 12 fraudulentas
+  ...1683 abre caso 2020-07-20 05:57:14 (1.a marca de bloqueo 2020-07-20 05:57:14) compras fraudulentas en ventana=0: 0 filas futuras visibles para el agente, 0 fraudulentas
+  ...6792 abre caso 2020-07-20 22:45:52 (1.a marca de bloqueo 2020-07-20 22:45:52) compras fraudulentas en ventana=0: 0 filas futuras visibles para el agente, 0 fraudulentas
+  ...2579 abre caso 2020-07-20 22:14:53 (1.a marca de bloqueo 2020-07-20 22:14:53) compras fraudulentas en ventana=5: 8 filas futuras visibles para el agente, 7 fraudulentas
+  ...7331 abre caso 2020-07-19 22:05:33 (1.a marca de bloqueo 2020-07-19 22:05:33) compras fraudulentas en ventana=9: 9 filas futuras visibles para el agente, 8 fraudulentas
+  ...0532 abre caso 2020-07-19 20:11:40 (1.a marca de bloqueo 2020-07-19 20:11:40) compras fraudulentas en ventana=0: 9 filas futuras visibles para el agente, 0 fraudulentas
+  ...8262 abre caso 2020-07-20 12:39:09 (1.a marca de bloqueo 2020-07-20 12:39:09) compras fraudulentas en ventana=3: 15 filas futuras visibles para el agente, 12 fraudulentas
+  ...9125 abre caso 2020-07-20 01:36:36 (1.a marca de bloqueo 2020-07-20 01:36:36) compras fraudulentas en ventana=7: 6 filas futuras visibles para el agente, 6 fraudulentas
+  ...5498 abre caso 2020-07-19 23:04:21 (1.a marca de bloqueo None) compras fraudulentas en ventana=0: 0 filas futuras visibles para el agente, 0 fraudulentas
+  ...3523 abre caso 2020-07-20 12:30:53 (1.a marca de bloqueo 2020-07-20 12:30:53) compras fraudulentas en ventana=0: 0 filas futuras visibles para el agente, 0 fraudulentas
+  ...0710 abre caso 2020-07-20 23:43:48 (1.a marca de bloqueo 2020-07-20 23:43:48) compras fraudulentas en ventana=0: 11 filas futuras visibles para el agente, 0 fraudulentas
+  tarjetas que abren caso: 21; con filas futuras visibles: 12

@@ -2,7 +2,9 @@
 
 Momento 3 · 2026-11-09 · Equipo: Jhoan David Gruezo Gutiérrez y Jeison Nazarit.
 
-**Qué auditoría se responde.** La auditoría interna del 2026-10-31, hecha antes de sustentar el
+**Qué auditoría se responde.** En la clase 12 no se asignó una auditoría cruzada entre equipos, así
+que este documento responde nuestras dos auditorías internas: la del 2026-10-31 y, al final, la del
+2026-11-14. La del 2026-10-31, hecha antes de sustentar el
 Momento 2 con tres auditores independientes (agentes con instrucciones de atacar, no de defender):
 `auditoria/2026-10-31_demo/seguridad-app.md` (la app y la API), `seguridad-agente.md` (33 ataques
 al agente) y `probador-interfaz.md` (la interfaz como la usaría un tercero). El profesor hará su
@@ -59,3 +61,31 @@ Cada hallazgo tiene una de tres respuestas: **lo arreglamos** (con la evidencia)
 1. **Rotar las llaves de IA** usadas durante el desarrollo, antes del 19-nov.
 2. Ninguno más del lado de la auditoría interna. La auditoría del profesor se responde en vivo con
    `docs/seguridad.md` y, si encuentra algo, se agrega aquí después de la presentación.
+
+## Auditoría interna del 2026-11-14 (`auditoria/2026-11-14_m3/`)
+
+Cinco auditores en paralelo (pruebas en vivo, seguridad en vivo, motor y medición, agente y backend,
+documentos y entrega) y un auditor jefe que volvió a comprobar lo más grave. Veredicto: listo con
+condiciones. Respondida el 2026-11-15:
+
+| Hallazgo | Respuesta | Evidencia |
+|---|---|---|
+| **H1** (crítico) El agente veía compras posteriores durante la medición | **Lo arreglamos** y **retiramos la cifra** | Historial cortado en la última compra recibida (`test_el_historial_de_un_caso_en_vivo_no_muestra_compras_futuras`); 71,4 % retirado; nueva medición en `docs/decisiones.md` §13.1: 76,1 % con más bloqueos falsos |
+| **H2** (crítico) La simulación a 3600x también filtraba | **Lo arreglamos** | Reloj del dataset detenido durante cada triaje (`test_con_esperar_triajes_…`) |
+| **C1** (crítico) El aviso dejaba pasar dominios fuera de 15 terminaciones | **Lo arreglamos** | 4 motivos nuevos en `test_un_motivo_malicioso_no_llega_al_titular` |
+| **C2** (crítico) "Confirmar bloqueo" no bloqueaba en vivo | **Lo arreglamos** | `test_confirmar_bloqueo_de_un_analista_bloquea_de_verdad` |
+| **A1** (alto) "No fui yo" sin efecto | **Lo arreglamos** | `test_no_fui_yo_bloquea_la_tarjeta_aunque_el_caso_estuviera_descartado` |
+| **A2** (alto) Dos bloqueos y tres avisos en un triaje | **Lo arreglamos** | `test_un_triaje_bloquea_y_avisa_una_sola_vez` |
+| **A3** (alto) Descartar sin motivo apagaba la red de seguridad | **Lo arreglamos** | `test_descartar_un_caso_en_vivo_exige_motivo_y_no_sirve_para_desbloquear` |
+| **A6** (alto) La recomendación del M2 sesgaba el triaje | **Lo arreglamos** | `test_en_el_triaje_el_agente_no_ve_la_recomendacion_del_momento_2`; sin ese sesgo el agente bloquea más, y la medición nueva lo muestra |
+| **A4** (alto) No hay plazo total por tarea; con la cola llena un bloqueo tardó 137 s | **Lo asumimos** | Cada llamada tiene timeout y la tarea tiene 6 iteraciones; en la medición limpia el máximo fue 53 s desde la apertura del caso. La meta es 5 minutos |
+| **A5** (alto) Un reinicio pierde los triajes en curso | **Lo asumimos** | La red de seguridad vuelve a revisar los críticos al arrancar; los casos de banda alta quedan en la cola humana |
+| **H3** (alto) Una sola noche, 9 tarjetas | **Lo asumimos y lo declaramos** | Intervalos de confianza en `docs/decisiones.md` §13.1 |
+| **H4** (medio) La regla de comparación es débil | **Lo asumimos y lo declaramos** | El modelo sigue ganando contra una regla de dos umbrales ajustada (F1 0,811 contra 0,424) |
+| **B-1** (bajo) Un analista lee la vista Supervisión | **No estamos de acuerdo** | Es solo lectura a propósito: `docs/seguridad.md` §6 |
+| **B-2** (bajo) Bloquear el ingreso de otro usuario con 5 intentos | **Lo asumimos** | `docs/seguridad.md` §6 |
+| Límite por IP compartido detrás de Docker | **Lo arreglamos** | Cupo por sesión y por IP (`test_el_limite_es_por_sesion_y_un_abusador_no_frena_a_los_demas`) |
+| `run.ps1` abortaba en PowerShell 5.1 | **Lo arreglamos** | Probado en Windows PowerShell 5.1 el 2026-11-15 |
+| Documentos del M2 (`decisiones.md`, `comandos-demo.md`) | **Lo arreglamos** | `docs/decisiones.md` §1, §2, §6, §11, §13 y §14 |
+| Casos dorados sin firmar, prueba con un tercero, llaves sin rotar | **Pendiente del equipo** | Antes del 19-nov |
+

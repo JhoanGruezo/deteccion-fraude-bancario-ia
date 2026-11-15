@@ -84,7 +84,7 @@ desactualizada, y esa justificación es la parte que el profesor va a revisar pr
   `docker-compose`, ver `decisiones.md` 2026-10-21 (2)). Capas: `app/db/` (única
   puerta a Postgres), `app/agente/` (bucle, herramientas, contrato, plantilla,
   `riesgo_en_palabras.py`), `app/proveedores/` (Claude Haiku 5.5 principal, Gemini
-  3.1 Flash-Lite de respaldo, ver 2026-10-21 (3)), `app/api/` y `app/web/`. Pruebas en
+  3.5 Flash-Lite de respaldo desde el 2026-10-31, ver `docs/decisiones.md` §4), `app/api/` y `app/web/`. Pruebas en
   `app/pruebas/`; validación en `validacion/app-analista.md`.
 - `app/` va separada de `src/` (que se queda dedicada al motor de riesgo: ML clásico
   + el detector determinista) para no mezclar ese pipeline con el código que llama al

@@ -322,8 +322,15 @@ a nivel básico, porque el profesor puede preguntarle a cualquiera.
 - *"Si el modelo obedece una inyección, ¿qué pasa?"* Puede, como mucho, no bloquear un caso de banda
   alta (la regla bloquea cuando pasa a crítica) o escribir un mal motivo (la validación lo cambia por
   la plantilla). No puede bloquear otra tarjeta, desbloquear ni escribirle a nadie más.
-- *"¿Por qué 71,4 % y no 100 %?"* Las primeras compras de cada robo no superan el umbral: ningún
-  diseño las detiene. En mediana pasan 2 por tarjeta robada.
+- *"¿Por qué 76,1 % y no 100 %?"* Las primeras compras de cada robo no superan el umbral: ningún
+  diseño las detiene. En mediana pasa 1 por tarjeta robada.
+- *"¿Antes no decían 71,4 %?"* Sí, y lo retiramos. En nuestra auditoría del 14-nov encontramos que,
+  durante la medición, el agente podía leer compras posteriores a la que abrió el caso (la base
+  traía compras futuras de la semilla y el reloj acelerado dejaba llegar compras mientras el triaje
+  esperaba). Lo corregimos, repetimos la medición y salió 76,1 %, pero con 5 bloqueos de clientes
+  honestos en vez de 1: el agente suma 14 puntos de fraude detenido y cuesta 4 bloqueos falsos más.
+- *"¿Y si el agente no estuviera?"* La regla sola detiene el 61,8 %, con precisión 0,90. Es la cifra
+  que no depende de la IA.
 - *"¿Por qué bajó la tasa de éxito de las explicaciones?"* Por el respaldo Gemini 3.5 Flash-Lite con
   fallas forzadas; Claude pasó todas sus tareas.
 

@@ -79,6 +79,19 @@ def test_pausar_reanudar_y_detener():
     assert simulador.detener()["estado"] == "detenido"
 
 
+def test_con_esperar_triajes_no_suelta_compras_mientras_hay_un_triaje(sin_esperas):
+    # Auditoría 2026-11-14 (H2): en modo medición el reloj del dataset se detiene durante el triaje.
+    flujo, triaje_en_curso = FlujoFalso(), {"si": True}
+    simulador = sin_esperas(flujo)
+    simulador.ocupado = lambda: triaje_en_curso["si"]
+    simulador.iniciar(3600, esperar_triajes=True)
+    time.sleep(0.3)
+    assert simulador.resumen()["procesadas"] == 0 and simulador.resumen()["esperar_triajes"] is True
+    triaje_en_curso["si"] = False
+    assert esperar(simulador) == "terminado"
+    assert simulador.resumen()["procesadas"] == len(flujo.recibidas) > 0
+
+
 def test_velocidad_invalida_se_rechaza():
     simulador = Simulador(config.CARPETA_SEMILLA, evaluar=FlujoFalso())
     with pytest.raises(ValueError):

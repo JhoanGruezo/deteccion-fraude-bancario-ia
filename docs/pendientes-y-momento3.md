@@ -1,5 +1,10 @@
 # Pendientes y alcance del Momento 3
 
+> **Documento histórico de planeación (2026-10-21 a 2026-11-07).** Varias casillas abiertas ya se
+> cumplieron y algunas frases describen el estado de entonces (por ejemplo, "hoy la app usa un
+> superusuario": ya no, ver `docs/seguridad.md`). El estado vigente está en `PLAN.md`,
+> `docs/SPEC.md` §8 y `docs/decisiones.md` §13 y §14.
+
 Estado al **2026-10-21**. Este documento junta en un solo lugar lo que falta antes de
 sustentar el Momento 2 (31 de octubre), lo que hay que recoger después de esa
 sustentación y el plan para el Momento 3 (semana 14, 40 % de la nota). Se actualiza

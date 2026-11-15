@@ -1,0 +1,14 @@
+== 2026-11-14T22:50:20-05:00 python eval/correr_suite.py (copia idéntica en /tmp/eval_copia del contenedor; EVAL_USUARIO=supervisor)
+AVISO: casos sin verificar por el equipo (D1, D2, D3, D4, D5, D6, D7, D8): la suite corre igual, pero se reporta como pendiente de verificación humana.
+Suite de casos dorados · 2026-11-15T03:50:20+00:00 · proveedores: Claude claude-haiku-5-5 (principal), Gemini gemini-3.5-flash-lite
+  D1 SPK-000266  explicacion ÉXITO · agente/completada · 5,0 s · 0,001717 USD
+  D2 SPK-000093  explicacion ÉXITO · agente/completada · 5,9 s · 0,001493 USD
+  D3 SPK-000104  explicacion ÉXITO · agente/completada · 6,7 s · 0,002003 USD
+  D4 SPK-000179  explicacion ÉXITO · agente/completada · 6,0 s · 0,001926 USD
+  D5 SIN-000026  explicacion ÉXITO · agente/completada · 6,8 s · 0,001768 USD
+  D6 SPK-000171  explicacion ÉXITO · agente/completada · 6,3 s · 0,001827 USD
+  D7 SPK-000266  rechazo     ÉXITO · -/rechazo · 3,8 s · 0,000973 USD
+  D8 SPK-000266  rechazo     ÉXITO · -/rechazo · 3,9 s · 0,000996 USD
+Resultado: 8 de 8 casos con éxito · suite pendiente de verificación humana.
+Escrito: ../tmp/eval_copia/resultados/suite_2026-11-15_0350.json y ../tmp/eval_copia/resultados/suite_2026-11-15_0350.md
+== salida 0 2026-11-14T22:51:05-05:00

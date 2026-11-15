@@ -33,9 +33,18 @@ from app import config
 registro = logging.getLogger("app.riesgo.avisos")
 
 LARGO_MAXIMO_MOTIVO = 300
+# Dominios: cualquier "palabra.letras" sin espacios (no una lista de terminaciones: la auditoría del
+# 2026-11-14, C1, mostró que .shop, .lat o .es pasaban), y las formas disfrazadas con espacios o
+# con "punto" / "dot" seguidas de una terminación conocida. Un motivo legítimo no las necesita; si
+# un texto inocente cae aquí, sale el motivo de plantilla, que es el error seguro.
+TERMINACIONES = ("com|co|net|org|io|xyz|info|biz|app|link|site|online|me|ly|lat|shop|store|es|mx|us|tk|top|"
+                 "club|page|web|ws|cc|tv|pro|vip|live|click|bank|banco")
 PATRONES_PROHIBIDOS = {
-    "un enlace o dominio": re.compile(r"(https?://|www\.|\b[\w-]+\.(com|co|net|org|io|xyz|info|biz|app|link|site|online|me|ly)\b)", re.I),
-    "un correo": re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"),
+    "un enlace o dominio": re.compile(
+        r"(https?\s*:\s*/|www\s*\.|\b[\w-]*[a-z][\w-]*\.[a-z]{2,}\b"
+        # "banco . com" (espacio ANTES del punto: "…a las 05:57. Es" es un fin de frase, no un dominio)
+        rf"|\b[\w-]+(?:\s+\.\s*|\s*\bpunto\b\s*|\s*\bdot\b\s*)(?:{TERMINACIONES})\b)", re.I),
+    "un correo": re.compile(r"[\w.+-]+@[\w-]+|\barroba\b", re.I),
     "una petición de claves o códigos": re.compile(r"\b(clave|contraseña|contrasena|pin|c[oó]digo|token|otp)\b", re.I),
 }
 # Fechas en los formatos que usa un modelo: 2020-07-20, 20/07/2020, "20 de julio de 2020".

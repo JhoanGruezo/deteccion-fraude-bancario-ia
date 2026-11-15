@@ -1,0 +1,26 @@
+== 2026-11-14T22:38:42-05:00 comando del encargo (código montado):
+MSYS_NO_PATHCONV=1 docker compose run --rm --no-deps -v "$(pwd -W)/app:/srv/app" app python -m pytest app/pruebas -q -p no:cacheprovider -rs
+ Container proyecto-fraude-bancario-app-run-101c36ebba2d Creating 
+ Container proyecto-fraude-bancario-app-run-101c36ebba2d Created 
+........................................................................ [ 26%]
+........................................................................ [ 53%]
+......................s................................................. [ 80%]
+....................................................                     [100%]
+=============================== warnings summary ===============================
+../usr/local/lib/python3.12/site-packages/starlette/testclient.py:37
+  /usr/local/lib/python3.12/site-packages/starlette/testclient.py:37: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+SKIPPED [1] app/pruebas/test_plantilla.py:93: no están los casos_marcados.json del motor
+267 passed, 1 skipped, 1 warning in 24.92s
+== salida: 0 2026-11-14T22:39:08-05:00
+
+== 2026-11-14T22:39:17-05:00 comando literal del README §6: docker compose exec app python -m pytest app/pruebas -q -p no:cacheprovider -rs
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+SKIPPED [1] app/pruebas/test_plantilla.py:93: no están los casos_marcados.json del motor
+267 passed, 1 skipped, 1 warning in 22.12s

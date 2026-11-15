@@ -551,6 +551,24 @@ def test_pasar_el_limite_responde_429_en_espanol_con_retry_after(cliente):
     assert cliente.get("/api/casos").status_code == 200
 
 
+def test_el_limite_es_por_sesion_y_un_abusador_no_frena_a_los_demas(cliente):
+    # Auditoría 2026-11-14: detrás de Docker todos comparten IP; el cupo cuenta por sesión.
+    cliente.app.state.limitador = limites.LimitadorDePeticiones({"escritura": 0, "lectura": 2, "agente": 0})
+    try:
+        cliente.cookies.set("sesion", "abusador")
+        assert [cliente.get("/api/casos").status_code for _ in range(3)][-1] == 429
+        cliente.cookies.set("sesion", "otra-persona")
+        assert cliente.get("/api/casos").status_code == 200        # misma IP, otra sesión: pasa
+        # Rotar cookies no sirve: el cupo de la IP (5 veces el de una sesión) también cuenta.
+        estados = []
+        for i in range(12):
+            cliente.cookies.set("sesion", f"inventada-{i}")
+            estados.append(cliente.get("/api/casos").status_code)
+        assert 429 in estados
+    finally:
+        cliente.cookies.clear()
+
+
 def test_cabeceras_de_seguridad_en_html_api_y_429(cliente):
     from app.principal import CABECERAS_SEGURIDAD
     cliente.app.state.limitador = limites.LimitadorDePeticiones({"escritura": 0, "lectura": 1, "agente": 0})

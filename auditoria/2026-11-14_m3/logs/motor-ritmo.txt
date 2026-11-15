@@ -1,0 +1,31 @@
+tarjetas con fraude 976, compras 9651, monto 5,121,413.29
+
+[episodios con separación 7 días] n=976
+  episodios que empiezan 22-06: 88.2 %  (22-04: 86.7 %)
+  bloqueo a     0 min de la 1.a compra: se pierde   7.5 %
+  bloqueo a     5 min de la 1.a compra: se pierde   7.8 %
+  bloqueo a    15 min de la 1.a compra: se pierde   8.6 %
+  bloqueo a    60 min de la 1.a compra: se pierde  11.6 %
+  bloqueo a    90 min de la 1.a compra: se pierde  13.4 %
+  bloqueo a   120 min de la 1.a compra: se pierde  14.8 %
+  bloqueo a   480 min de la 1.a compra: se pierde  21.2 %
+  bloqueo a  1440 min de la 1.a compra: se pierde  58.2 %
+
+[episodios con separación None días] n=976
+  episodios que empiezan 22-06: 88.2 %  (22-04: 86.7 %)
+  bloqueo a     0 min de la 1.a compra: se pierde   7.5 %
+  bloqueo a     5 min de la 1.a compra: se pierde   7.8 %
+  bloqueo a    15 min de la 1.a compra: se pierde   8.6 %
+  bloqueo a    60 min de la 1.a compra: se pierde  11.6 %
+  bloqueo a    90 min de la 1.a compra: se pierde  13.4 %
+  bloqueo a   120 min de la 1.a compra: se pierde  14.8 %
+  bloqueo a   480 min de la 1.a compra: se pierde  21.2 %
+  bloqueo a  1440 min de la 1.a compra: se pierde  58.2 %
+
+compras fraudulentas 22-06: 86.1 %; monto fraudulento 22-06: 85.3 %
+compras legítimas 22-06 (referencia): 29.7 %
+
+Regla M2 (287 casos): min entre 1.a y 2.a marca mediana 100.4, p25 30.4
+  monto entre 1.a marca (excl.) y 2.a marca (incl.): 148,267 USD = 13.0 % del monto de las compras marcadas de los casos
+  sin contar la 2.a marca misma: 1,956 USD = 0.2 %
+  solo fraude: 131,763 USD = 12.2 % del monto fraudulento marcado

@@ -262,6 +262,12 @@ def obtener_historial(id_caso, dias=30, limite=60):
     score cuando lo es. Si hay más de `limite`, se devuelven las más cercanas a la
     ventana (las más antiguas son las que menos dicen de la alerta). Lista vacía si
     la tarjeta no tiene historial (tarjeta nueva) o el caso no existe.
+
+    En un caso en vivo el historial termina en la última compra que el sistema ya
+    recibió para ese caso, no en el fin de su ventana de 48 h: la base guarda compras
+    del dataset con fecha posterior (la semilla del Momento 2) y el agente no puede
+    ver el futuro (auditoría 2026-11-14, hallazgo H1). Un caso de la semilla es un
+    caso cerrado y conserva su ventana completa.
     """
     dias = max(0, int(dias))
     limite = max(1, int(limite))
@@ -269,7 +275,12 @@ def obtener_historial(id_caso, dias=30, limite=60):
         cur.execute(
             """
             with caso as (
-                select id_caso, fuente, id_cuenta, inicio_ventana, fin_ventana from casos where id_caso = %(id_caso)s
+                select c.id_caso, c.fuente, c.id_cuenta, c.inicio_ventana,
+                       case when c.origen = 'en_vivo'
+                            then coalesce((select max(t.fecha_hora) from transacciones_caso t
+                                           where t.id_caso = c.id_caso), c.inicio_ventana)
+                            else c.fin_ventana end as fin_ventana
+                from casos c where c.id_caso = %(id_caso)s
             ),
             -- Historial de la tarjeta, más las transacciones del caso por si alguna no
             -- estuviera en el historial (la semilla las incluye, pero no se asume).
@@ -460,6 +471,13 @@ def crear_propuesta(id_caso, tarea_id, accion, argumento):
             """,
             (id_caso, str(tarea_id) if tarea_id else None, accion, argumento),
         )
+        return _fila(cur.fetchone())
+
+
+def obtener_propuesta(propuesta_id):
+    """La propuesta por su id (o None), para validar la decisión antes de resolverla."""
+    with cursor() as cur:
+        cur.execute(f"select {_COLUMNAS_PROPUESTA} from propuestas_decision where id = %s", (propuesta_id,))
         return _fila(cur.fetchone())
 
 

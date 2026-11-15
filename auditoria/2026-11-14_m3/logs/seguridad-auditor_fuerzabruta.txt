@@ -1,0 +1,9 @@
+########## ENUMERACION DE USUARIOS (mismo 401 y mensaje) ##########
+[usuario existe, clave mala] analista -> {"error":"Usuario o contraseña incorrectos."}
+[usuario NO existe]        nadie123 -> {"error":"Usuario o contraseña incorrectos."}
+
+########## FUERZA BRUTA / BLOQUEO (usuario FICTICIO para no bloquear cuentas reales) ##########
+intento1=401 intento2=401 intento3=401 intento4=401 intento5=401 intento6=429 intento7=429 
+mensaje en el intento bloqueado: {"error":"Demasiados intentos fallidos. Espera 15 minutos o pide ayuda a un supervisor."}
+
+NOTA: bloqueo = 5 fallos / 15 min por usuario, dura 15 min (app/api/sesion.py: INTENTOS_MAXIMOS=5, VENTANA_INTENTOS_S=900). Es por nombre de usuario y en memoria del proceso.

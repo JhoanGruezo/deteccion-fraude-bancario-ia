@@ -1,6 +1,6 @@
 """Cliente propio de Claude (Messages API) con tool use y streaming SSE.
 
-Es el proveedor de respaldo de la cascada (diseno/agente.md). Igual que gemini.py,
+Es el proveedor principal de la cascada desde el 2026-10-21 (docs/decisiones.md §4). Igual que gemini.py,
 se escribe a mano con httpx para que el formato quede a la vista:
 
 - de ida: Mensaje neutro → `messages` de Claude (rol "user"/"assistant", bloques

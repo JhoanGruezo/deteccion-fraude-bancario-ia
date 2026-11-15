@@ -5,7 +5,10 @@
 # Crea .env desde .env.example si falta, avisa si no hay llaves de IA (la app funciona igual
 # con la explicación de plantilla), construye y levanta los contenedores, espera a que
 # /api/salud responda y muestra las credenciales del primer arranque.
-$ErrorActionPreference = "Stop"
+# "Continue" y no "Stop": en Windows PowerShell 5.1, redirigir la salida de error de un programa
+# (docker info *> $null) la vuelve un error de PowerShell, y con "Stop" cualquier aviso de Docker
+# abortaba el script con un error rojo. Cada comando de Docker se revisa con $LASTEXITCODE.
+$ErrorActionPreference = "Continue"
 Set-Location -Path $PSScriptRoot
 $Url = "http://localhost:8000"
 $EsperaMaximaS = 180

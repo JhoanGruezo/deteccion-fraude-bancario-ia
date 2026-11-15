@@ -1,0 +1,262 @@
+== 2026-11-14T22:58:32-05:00 docker compose exec app python eval/medir_momento3.py --nombre base
+1. Reiniciando los datos en vivo…
+2. Reproduciendo la noche a 3600x (falla forzada: ninguna)…
+
+
+{
+  "nombre": "base",
+  "falla_forzada": null,
+  "velocidad": 3600,
+  "modelo_llm": "claude-haiku-5-5",
+  "fecha": "2026-11-15 03:59",
+  "transacciones": 5810,
+  "compras_fraudulentas": 54,
+  "tarjetas_con_fraude": 9,
+  "decision_ms": {
+    "puntuacion_mediana": 2.954,
+    "puntuacion_p99": 7.228,
+    "camino_completo_mediana": 4.79,
+    "camino_completo_p99": 23.109
+  },
+  "casos_por_banda": {
+    "media": 3,
+    "alta": 8,
+    "critica": 10
+  },
+  "bloqueos_por_actor": {
+    "agente": 10
+  },
+  "segundos_hasta_bloqueo": {
+    "mediana": 7.464,
+    "p95": 29.028,
+    "maximo": 33.722
+  },
+  "dinero_usd_a_tiempo_real": {
+    "fraude_total": 28367.23,
+    "m3_fraude_que_pasa": 8114.82,
+    "m3_porcentaje_detenido": 71.4,
+    "m2_analista_al_instante_fraude_que_pasa": 10844.38,
+    "m2_cola_90_min_fraude_que_pasa": 18458.41,
+    "m2_noche_sin_turno_fraude_que_pasa": 20050.73,
+    "m2_analista_al_instante_porcentaje_detenido": 61.8,
+    "m2_cola_90_min_porcentaje_detenido": 34.9,
+    "m2_noche_sin_turno_porcentaje_detenido": 29.3,
+    "segundos_reales_desde_la_compra_hasta_el_bloqueo": {
+      "mediana": 6.793,
+      "maximo": 9.413
+    },
+    "compras_fraudulentas_que_pasan_por_tarjeta_robada": {
+      "mediana": 2,
+      "maximo": 3
+    }
+  },
+  "artefacto_simulacion_acelerada": {
+    "nota": "a 3600x cada segundo real son 1 h del dataset: el triaje (~5 s) deja pasar horas de compras. No es una cifra del sistema; se deja para mostrar por qué se mide a tiempo real.",
+    "fraude_que_paso_medido": 20043.45,
+    "compras_legitimas_rechazadas_usd": 3547.16,
+    "compras_fraudulentas_aprobadas_por_tarjeta_robada_mediana": 5
+  },
+  "bloqueos_por_tarjeta": {
+    "bloqueadas": 10,
+    "con_fraude": 9,
+    "precision": 0.9,
+    "recall": 1.0,
+    "falsos_por_1000_compras": 0.17
+  },
+  "prueba_de_necesidad_banda_alta": {
+    "triajes_en_banda_alta": 13,
+    "con_fraude": 5,
+    "detalle_[con_fraude,sin_fraude]": {
+      "agente_bloquea": [
+        3,
+        0
+      ],
+      "agente_verifica": [
+        2,
+        8
+      ],
+      "agente_deja": [
+        0,
+        0
+      ],
+      "otra": [
+        0,
+        0
+      ]
+    },
+    "agente_precision_al_bloquear": 1.0,
+    "agente_recall_al_bloquear": 0.6,
+    "regla_siempre_bloquear_precision": 0.385
+  },
+  "llm": {
+    "triajes": 23,
+    "costo_total_usd": 0.0545,
+    "costo_por_triaje_usd": 0.00237,
+    "costo_por_1000_compras_usd": 0.0094,
+    "latencia_triaje_ms_mediana": 4938.0,
+    "motivo_fin": {
+      "completada": 23
+    },
+    "proveedor": {
+      "claude": 23
+    },
+    "con_reintento_o_conmutacion": 0
+  },
+  "avisos": {
+    "total": 23,
+    "motivo_del_agente": 21,
+    "motivo_de_plantilla": 2,
+    "rechazados_por_validacion": 2
+  }
+}
+
+Guardado en /tmp/resultados/momento3_2026-11-15_0359_base.json
+== salida 0 2026-11-14T22:59:33-05:00
+
+== 2026-11-14T22:59:44-05:00 recálculo independiente (recalcular.py: JSON + base con el usuario dueño)
+== Desde el JSON /tmp/resultados/momento3_2026-11-15_0359_base.json
+  % detenido = 1 - 8114.82/28367.23 = 71.39 % (JSON dice 71.4)
+  mediana compra→bloqueo (segundos reales) = {'mediana': 6.793, 'maximo': 9.413}
+  segundos_hasta_bloqueo (desde que se abre el caso) = {'mediana': 7.464, 'p95': 29.028, 'maximo': 33.722}
+  precisión = 9/10 = 0.900; recall = 9/9 = 1.000
+  costo LLM = 0.0545 USD en 23 triajes; motivo_fin {'completada': 23}; proveedor {'claude': 23}
+  observado a 3600x (artefacto): fraude que pasó 20043.45 → 29.3 % detenido de verdad en la simulación
+== Desde la base (independiente)
+  compras=5810 fraudulentas=54 tarjetas con fraude=9
+  tarjetas bloqueadas=10 con fraude=9 → precisión 0.900 recall 1.000; falsos/1000 = 0.17
+  bloqueos por actor: {'agente': 10}
+  segundos caso→bloqueo: mediana 7.46, máx 33.72
+  segundos reales desde la PRIMERA compra del caso hasta el bloqueo: mediana 7.46, máx 33.72
+  fraude total 28367.23; aprobado de verdad en la simulación 20043.45 → detenido observado 29.3 %
+  costo triajes 0.0545 USD (23 tareas); costo de todas las tareas en la base 0.4612 USD (308)
+
+== 2026-11-14T22:59:58-05:00 docker compose exec app python eval/medir_momento3.py --nombre ia_caida --falla todo
+1. Reiniciando los datos en vivo…
+2. Reproduciendo la noche a 3600x (falla forzada: todo)…
+
+
+{
+  "nombre": "ia_caida",
+  "falla_forzada": "todo",
+  "velocidad": 3600,
+  "modelo_llm": "claude-haiku-5-5",
+  "fecha": "2026-11-15 04:01",
+  "transacciones": 5810,
+  "compras_fraudulentas": 54,
+  "tarjetas_con_fraude": 9,
+  "decision_ms": {
+    "puntuacion_mediana": 3.33,
+    "puntuacion_p99": 7.962,
+    "camino_completo_mediana": 5.342,
+    "camino_completo_p99": 24.588
+  },
+  "casos_por_banda": {
+    "media": 3,
+    "alta": 8,
+    "critica": 10
+  },
+  "bloqueos_por_actor": {
+    "regla": 10
+  },
+  "segundos_hasta_bloqueo": {
+    "mediana": 32.796,
+    "p95": 59.398,
+    "maximo": 62.414
+  },
+  "dinero_usd_a_tiempo_real": {
+    "fraude_total": 28367.23,
+    "m3_fraude_que_pasa": 10844.38,
+    "m3_porcentaje_detenido": 61.8,
+    "m2_analista_al_instante_fraude_que_pasa": 10844.38,
+    "m2_cola_90_min_fraude_que_pasa": 18458.41,
+    "m2_noche_sin_turno_fraude_que_pasa": 20050.73,
+    "m2_analista_al_instante_porcentaje_detenido": 61.8,
+    "m2_cola_90_min_porcentaje_detenido": 34.9,
+    "m2_noche_sin_turno_porcentaje_detenido": 29.3,
+    "segundos_reales_desde_la_compra_hasta_el_bloqueo": {
+      "mediana": 26.922,
+      "maximo": 62.365
+    },
+    "compras_fraudulentas_que_pasan_por_tarjeta_robada": {
+      "mediana": 2,
+      "maximo": 3
+    }
+  },
+  "artefacto_simulacion_acelerada": {
+    "nota": "a 3600x cada segundo real son 1 h del dataset: el triaje (~5 s) deja pasar horas de compras. No es una cifra del sistema; se deja para mostrar por qué se mide a tiempo real.",
+    "fraude_que_paso_medido": 21535.86,
+    "compras_legitimas_rechazadas_usd": 3014.85,
+    "compras_fraudulentas_aprobadas_por_tarjeta_robada_mediana": 5
+  },
+  "bloqueos_por_tarjeta": {
+    "bloqueadas": 10,
+    "con_fraude": 9,
+    "precision": 0.9,
+    "recall": 1.0,
+    "falsos_por_1000_compras": 0.17
+  },
+  "prueba_de_necesidad_banda_alta": {
+    "triajes_en_banda_alta": 11,
+    "con_fraude": 3,
+    "detalle_[con_fraude,sin_fraude]": {
+      "agente_bloquea": [
+        0,
+        0
+      ],
+      "agente_verifica": [
+        0,
+        0
+      ],
+      "agente_deja": [
+        0,
+        0
+      ],
+      "otra": [
+        3,
+        8
+      ]
+    },
+    "agente_precision_al_bloquear": null,
+    "agente_recall_al_bloquear": 0.0,
+    "regla_siempre_bloquear_precision": 0.273
+  },
+  "llm": {
+    "triajes": 21,
+    "costo_total_usd": 0,
+    "costo_por_triaje_usd": 0,
+    "costo_por_1000_compras_usd": 0.0,
+    "latencia_triaje_ms_mediana": 14075.0,
+    "motivo_fin": {
+      "respaldo": 21
+    },
+    "proveedor": {
+      "null": 21
+    },
+    "con_reintento_o_conmutacion": 21
+  },
+  "avisos": {
+    "total": 21,
+    "motivo_del_agente": 0,
+    "motivo_de_plantilla": 21,
+    "rechazados_por_validacion": 0
+  }
+}
+
+Guardado en /tmp/resultados/momento3_2026-11-15_0401_ia_caida.json
+== salida ia_caida 0 2026-11-14T23:01:54-05:00
+== recálculo ia_caida
+== Desde el JSON /tmp/resultados/momento3_2026-11-15_0401_ia_caida.json
+  % detenido = 1 - 10844.38/28367.23 = 61.77 % (JSON dice 61.8)
+  mediana compra→bloqueo (segundos reales) = {'mediana': 26.922, 'maximo': 62.365}
+  segundos_hasta_bloqueo (desde que se abre el caso) = {'mediana': 32.796, 'p95': 59.398, 'maximo': 62.414}
+  precisión = 9/10 = 0.900; recall = 9/9 = 1.000
+  costo LLM = 0 USD en 21 triajes; motivo_fin {'respaldo': 21}; proveedor {'null': 21}
+  observado a 3600x (artefacto): fraude que pasó 21535.86 → 24.1 % detenido de verdad en la simulación
+== Desde la base (independiente)
+  compras=5810 fraudulentas=54 tarjetas con fraude=9
+  tarjetas bloqueadas=10 con fraude=9 → precisión 0.900 recall 1.000; falsos/1000 = 0.17
+  bloqueos por actor: {'regla': 10}
+  segundos caso→bloqueo: mediana 32.80, máx 62.41
+  segundos reales desde la PRIMERA compra del caso hasta el bloqueo: mediana 32.80, máx 62.41
+  fraude total 28367.23; aprobado de verdad en la simulación 21535.86 → detenido observado 24.1 %
+  costo triajes 0.0000 USD (21 tareas); costo de todas las tareas en la base 0.4067 USD (306)

@@ -131,6 +131,23 @@ def test_la_misma_compra_dos_veces_no_se_duplica(base, eventos):
     assert repositorio_en_vivo.estado_de("sparkov", "1010")["n"] == 1
 
 
+def test_el_historial_de_un_caso_en_vivo_no_muestra_compras_futuras(base, eventos):
+    # Auditoría 2026-11-14 (H1): la semilla trae compras del dataset con fecha posterior a la
+    # compra que abrió el caso; el agente no puede verlas, pero sí las que ya llegaron.
+    abierta = evaluar(compra("1013", 0, score=0.98))
+    futura = INICIO + timedelta(hours=5)
+    with repositorio_en_vivo.transaccion() as cur:
+        cur.execute("""insert into historial (fuente, id_cuenta, id_transaccion, fecha_hora, monto, origen)
+                       values ('sparkov', '1013', 'futura-1013', %s, 999.0, 'semilla')""", (futura,))
+    ids = {t["id_transaccion"] for t in repositorio.obtener_historial(abierta["id_caso"], dias=3, limite=40)}
+    assert "futura-1013" not in ids
+    segunda = evaluar(compra("1013", 60, score=0.99))
+    vistas = repositorio.obtener_historial(abierta["id_caso"], dias=3, limite=40)
+    assert segunda["id_caso"] == abierta["id_caso"]
+    assert max(t["fecha_hora"] for t in vistas) == (INICIO + timedelta(minutes=60)).isoformat()
+    assert "futura-1013" not in {t["id_transaccion"] for t in vistas}
+
+
 def test_la_etiqueta_se_guarda_pero_la_app_no_la_lee(base, eventos):
     resultado = evaluar(compra("1011", 0), etiqueta=1)
     assert como_dueno("select es_fraude_dataset from transacciones_evaluadas where id = %s",

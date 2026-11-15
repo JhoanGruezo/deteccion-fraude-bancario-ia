@@ -69,7 +69,10 @@ modelo, despliegue en la nube.
 - **Paridad:** en las transacciones de prueba de Sparkov, ninguna cambia de banda entre el
   score en vivo y el del motor fuera de línea, y al menos el 99,99 % difiere en ≤ 0,001
   (`scripts/validar_paridad_en_vivo.py`; el motivo del 0,01 % está en su docstring).
-- El detector de viaje imposible corre en cada transacción (código determinista).
+- El detector de viaje imposible corre en cada transacción (código determinista). En Sparkov
+  solo se mide y no abre casos: el dataset ubica los comercios al azar alrededor del domicilio y
+  el detector daba 14.153 falsas alarmas (decisión del 2026-10-21). En los datos sintéticos sí
+  abre casos en banda crítica.
 - La puntuación no depende del LLM ni de la red.
 
 ### RF2. Bandas y apertura del caso
@@ -209,7 +212,7 @@ Tablas nuevas o ampliadas (detalle en `diseno/` cuando se construya):
 
 ## 7. Métricas
 
-Se reportan con fecha en `docs/decisiones/semana14.md` y se comparan contra la línea base
+Se reportan con fecha en `docs/decisiones.md` §13 y se comparan contra la línea base
 del Momento 2 (2026-10-21 y 2026-10-31):
 
 1. Tiempo de puntuación por transacción (mediana y p99, en ms).
@@ -242,16 +245,16 @@ del Momento 2 (2026-10-21 y 2026-10-31):
       falla por permisos.
 - [x] Más peticiones por minuto que el límite reciben 429 con un mensaje en español.
 - [x] Sin sesión, toda ruta que cambia estado responde 401; sin token CSRF, 403.
-- [x] La suite de pytest pasa completa y la suite de `eval/` incluye triaje y ataques. *(267
+- [x] La suite de pytest pasa completa y la suite de `eval/` incluye triaje y ataques. *(279
       pruebas; `eval/medir_momento3.py` y `eval/ataques_momento3.py`.)*
 - [x] `docs/seguridad.md`, `docs/gobernanza.md`, `docs/respuesta_auditoria.md`,
       `docs/decisiones.md` y el README quedan actualizados, con los dos integrantes.
 
-## 9. Decisiones abiertas
+## 9. Decisiones que estaban abiertas (cerradas el 2026-11-15)
 
-| Decisión | Propuesta | Quién la cierra |
-|---|---|---|
-| Canal del aviso en la demo | Simulado por defecto; correo de prueba con lista blanca solo si sobra tiempo | Equipo, antes del 15-nov |
-| Valor del tope de bloqueos autónomos por hora | Elegirlo con el simulador (p99 de bloqueos legítimos por hora × 2) | Validación |
-| Ventana de la red de seguridad | 90 s (meta de 60 s para el agente, 5 min de máximo duro) | Validación |
-| Tramo de Sparkov del simulador | Una noche con varios episodios de fraude (22:00 a 06:00) | Construcción |
+| Decisión | Cómo quedó |
+|---|---|
+| Canal del aviso en la demo | Buzón simulado dentro de la app. El correo existe pero queda apagado: lista blanca vacía |
+| Valor del tope de bloqueos autónomos por hora | 30 por hora (`ajustes_sistema`), ajustable por el supervisor. En la noche medida hubo 14 bloqueos en total, así que el tope no frena el uso legítimo y sí un bloqueo masivo |
+| Ventana de la red de seguridad | 90 s. Además, si el triaje termina sin bloquear un caso crítico, la regla bloquea en ese instante, sin esperar los 90 s |
+| Tramo de Sparkov del simulador | 19-jul-2020 desde las 20:00, 36 horas, 5.810 compras y 9 tarjetas robadas, de la partición de prueba. Se eligió por tener varios episodios de fraude; esa elección y la muestra pequeña están declaradas en `docs/decisiones.md` §13.1 |

@@ -138,7 +138,8 @@ def _respaldo_de_regla(tarea, repositorio, acciones, id_caso, motivo, decision=N
     if caso is None:
         return
     if caso.get("banda") == "critica" and caso.get("estado") != "bloqueado":
-        resultado = acciones.bloquear(id_caso, _tipo_de_bloqueo(caso), "regla", causa_regla="triaje_sin_bloqueo")
+        causa = "autonomia_apagada" if motivo == "autonomia_apagada" else "triaje_sin_bloqueo"
+        resultado = acciones.bloquear(id_caso, _tipo_de_bloqueo(caso), "regla", causa_regla=causa)
         accion = "bloqueo_por_regla"
     elif caso.get("banda") in ("alta", "media") and motivo != "autonomia_apagada" and not _es_efectiva(decision):
         resultado = acciones.solicitar_verificacion(id_caso, "regla")
